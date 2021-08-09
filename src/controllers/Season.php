@@ -9,7 +9,11 @@ use Elitesports\Utils;
 
 
 
-    class Season extends Connect{               
+    class Season extends Connect{  
+        
+        private $Season;
+        private $token;
+        private $respuestas;
 
 
         public function __construct()

@@ -7,6 +7,10 @@ use stdClass;
 
 class User {
 
+    private $user;
+    private $token;
+    private $respuestas;
+
     public function __construct()
     {
         $this->user = new \Elitelib\User();
@@ -15,9 +19,8 @@ class User {
     }
 
 
-    public function getUserPlan($json){            
-
-            $_respuestas = new Respuestas;
+    public function getUserPlan($json){  
+            
             $datos = json_decode($json, true);
 
             if( !isset($datos['token'])){
