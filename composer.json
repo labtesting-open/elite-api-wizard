@@ -1,0 +1,22 @@
+{
+    "name": "elitesports/api",
+    "description": "Aplicacion que consume libreria",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Elitesports\\": "src/controllers"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mariano Meissner",
+            "email": "marianome@gmail.com",
+            "role":"Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.20",
+        "elitelib/persistence": "dev-main"
+    }     
+}
