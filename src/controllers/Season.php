@@ -9,7 +9,7 @@ use Elitesports\Utils;
 
 
 
-    class Season extends Connect{  
+    class Season{  
         
         private $Season;
         private $token;

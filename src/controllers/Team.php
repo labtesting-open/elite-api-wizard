@@ -1,14 +1,12 @@
 <?php
 
     namespace Elitesports;
-
-    use Elitelib\Connect;
+    
     use Elitesports\Respuestas;
-    use stdClass;
-    use Elitesports\Utils;
+    use stdClass;   
 
 
-    class Team extends Connect{
+    class Team{
 
         private $table = "teams";  
         private $path ="imgs/teams/"; 
