@@ -11,9 +11,7 @@ use stdClass;
     {
         private $club;
         private $token;
-        private $respuestas;
-        private $path_flag;
-        private $folder_club;  
+        private $respuestas;       
 
         public function __construct()
         {

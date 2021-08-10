@@ -7,16 +7,11 @@
 
 
     class Team{
-
-        private $table = "teams";  
-        private $path ="imgs/teams/"; 
+        
         private $team;
         private $club;
         private $token;
-        private $respuestas;
-        private $path_flag;
-        private $folder_club;  
-        private $folder_team;
+        private $respuestas;       
 
         public function __construct()
         {
