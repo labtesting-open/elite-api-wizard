@@ -81,7 +81,7 @@ class Login {
            
             $password = $this->auth->encriptar($password); 
 
-            $datos = $this->auth->obtenerDatosUsuario($usuario);
+            $datos = $this->auth->getUserDataByUserName($usuario);
 
             if($datos){
                 if($password == $datos[0]['password']){
