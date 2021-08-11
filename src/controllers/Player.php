@@ -246,7 +246,7 @@ class Player{
             return $this->respuestas->error_401();
         }else{
                             
-            $testToken = $this->tokens->checkToken($datos['token']);               
+            $testToken = $this->token->checkToken($datos['token']);               
 
             if($testToken){
 
