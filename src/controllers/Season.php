@@ -2,7 +2,6 @@
 
 namespace Elitesports;
 
-use Elitelib\Connect;
 use Elitesports\Respuestas;
 use stdClass;
 use Elitesports\Utils;
