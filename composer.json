@@ -18,6 +18,7 @@
     "require": {
         "php": ">=5.6.20",
         "elitelib/persistence": "dev-main",
-        "guzzlehttp/guzzle": "^7.0"
+        "guzzlehttp/guzzle": "^7.0",
+        "phpunit/phpunit": "9.5.0"
     }     
 }
