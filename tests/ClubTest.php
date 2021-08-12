@@ -8,33 +8,33 @@ use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client;
 
 
-class LoginTest extends TestCase
+
+class ClubTest extends TestCase
 {
     public $user = null;
-    //public $auth_model;
+    
 
     protected function setUp(): void
-    {
-        //$this->auth_model = new Elitelib\Auth();
+    {        
         $this->user = 'elitesports17';
         $this->client = new Client();
     }
 
 
-    public function testLoginResultStatus(){
+    public function testClubResultStatus(){
 
         try{
 
-            $requestBasic = $this->client->request('POST', 'http://localhost/labtest/elite-api-wizard/v1/login.php',[
+            $requestBasic = $this->client->request('POST', 'http://localhost/labtest/elite-api-wizard/v1/club.php',[
                 'body'=>'{
-                    "user":"elitesports17",
-                    "password":"abc1234"
+                    "token":"85c6dc7d5922cb381f8eb8a82671d6e9",
+                    "club_id":"1"
                 }']
             );
         
             $response = json_decode($requestBasic->getBody()->getContents());
         
-            //var_dump($response->status);           
+            //var_dump($response->status);
 
             $this->assertEquals('ok', $response->status);
 

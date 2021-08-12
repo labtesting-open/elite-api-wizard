@@ -8,36 +8,33 @@ use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client;
 
 
-class LoginTest extends TestCase
+class LogoutTest extends TestCase
 {
     public $user = null;
-    //public $auth_model;
+    
 
     protected function setUp(): void
-    {
-        //$this->auth_model = new Elitelib\Auth();
+    {       
         $this->user = 'elitesports17';
         $this->client = new Client();
     }
 
 
-    public function testLoginResultStatus(){
+    public function testLogOutResultStatus(){
 
         try{
 
-            $requestBasic = $this->client->request('POST', 'http://localhost/labtest/elite-api-wizard/v1/login.php',[
+            $requestBasic = $this->client->request('POST', 'http://localhost/labtest/elite-api-wizard/v1/logout.php',[
                 'body'=>'{
-                    "user":"elitesports17",
-                    "password":"abc1234"
+                    "token":"4cc62325fa16c70320e4247c22f08459"
                 }']
             );
         
             $response = json_decode($requestBasic->getBody()->getContents());
         
-            //var_dump($response->status);           
+            //var_dump($response->status);  
 
-            $this->assertEquals('ok', $response->status);
-
+            $this->assertContains($response->status, array('ok','error'));
         
         
         }catch (\Throwable $th){
@@ -45,6 +42,8 @@ class LoginTest extends TestCase
         }
         
     }
+
+   
 
 
 }
