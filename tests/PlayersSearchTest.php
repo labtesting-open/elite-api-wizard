@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-require_once __DIR__."/../vendor/autoload.php";
+namespace Elitesports\Test;
 
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client;
-
-
 
 class PlayersSearchTest extends TestCase
 {
@@ -15,18 +13,21 @@ class PlayersSearchTest extends TestCase
     
 
     protected function setUp(): void
-    {        
+    {
         $this->user = 'elitesports17';
         $this->client = new Client();
     }
 
 
-    public function testPlayerSearchResultStatus(){
+    public function testPlayerSearchResultStatus()
+    {
 
-        try{
-
-            $requestBasic = $this->client->request('POST', 'http://localhost/labtest/elite-api-wizard/v1/players.search.php',[
-                'body'=>'{
+        try {
+            $requestBasic = $this->client->request(
+                'POST',
+                'http://localhost/labtest/elite-api-wizard/v1/players.search.php',
+                [
+                'body' => '{
                     "token":"85c6dc7d5922cb381f8eb8a82671d6e9",
                     "season_id":"1",
                     "club_id":"1",
@@ -41,14 +42,8 @@ class PlayersSearchTest extends TestCase
             //var_dump($response->status);
 
             $this->assertEquals('ok', $response->status);
-
-        
-        
-        }catch (\Throwable $th){
+        } catch (\Throwable $th) {
             var_dump($th->getMessage());
         }
-        
     }
-
-
 }

@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-require_once __DIR__."/../vendor/autoload.php";
+namespace Elitesports\Test;
 
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client;
-
-
 
 class UserClubTest extends TestCase
 {
@@ -15,18 +13,21 @@ class UserClubTest extends TestCase
     
 
     protected function setUp(): void
-    {        
+    {
         $this->user = 'elitesports17';
         $this->client = new Client();
     }
 
 
-    public function testUserClubResultStatus(){
+    public function testUserClubResultStatus()
+    {
 
-        try{
-
-            $requestBasic = $this->client->request('POST', 'http://localhost/labtest/elite-api-wizard/v1/user.club.php',[
-                'body'=>'{
+        try {
+            $requestBasic = $this->client->request(
+                'POST',
+                'http://localhost/labtest/elite-api-wizard/v1/user.club.php',
+                [
+                'body' => '{
                     "token":"85c6dc7d5922cb381f8eb8a82671d6e9"                      
                 }']
             );
@@ -36,14 +37,8 @@ class UserClubTest extends TestCase
             //var_dump($response->status);
 
             $this->assertEquals('ok', $response->status);
-
-        
-        
-        }catch (\Throwable $th){
+        } catch (\Throwable $th) {
             var_dump($th->getMessage());
         }
-        
     }
-
-
 }

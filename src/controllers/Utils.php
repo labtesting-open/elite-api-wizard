@@ -2,36 +2,38 @@
 
 namespace Elitesports;
 
-class Utils{
+class Utils
+{
 
-    public static function getStringArray($data, $value){
+    public static function getStringArray($data, $value)
+    {
 
         $stringArray = array();
 
-        foreach($data as $item){
+        foreach ($data as $item) {
             array_push($stringArray, $item[$value]);
-        }  
+        }
 
         return $stringArray;
-
     }
 
 
-    public static function filter($str){
+    public static function filter($str)
+    {
 
-        $toReplace = array("'","/", "\\");
-        return str_replace($toReplace, "-", $str);
-
+        $toReplace = array("'",'/', '\\');
+        return str_replace($toReplace, '-', $str);
     }
 
-    public static function checkIssetEmptyNumeric(){
-        foreach(func_get_args() as $arg)
-            if(isset($arg) && !empty($arg) && is_numeric($arg))
+    public static function checkIssetEmptyNumeric()
+    {
+        foreach (func_get_args() as $arg) {
+            if (isset($arg) && !empty($arg) && is_numeric($arg)) {
                 continue;
-            else
+            } else {
                 return false;
+            }
+        }
         return true;
     }
-
-
 }

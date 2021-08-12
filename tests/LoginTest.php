@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-require_once __DIR__."/../vendor/autoload.php";
+namespace Elitesports\Test;
 
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client;
-
 
 class LoginTest extends TestCase
 {
@@ -21,12 +20,15 @@ class LoginTest extends TestCase
     }
 
 
-    public function testLoginResultStatus(){
+    public function testLoginResultStatus()
+    {
 
-        try{
-
-            $requestBasic = $this->client->request('POST', 'http://localhost/labtest/elite-api-wizard/v1/login.php',[
-                'body'=>'{
+        try {
+            $requestBasic = $this->client->request(
+                'POST',
+                'http://localhost/labtest/elite-api-wizard/v1/login.php',
+                [
+                'body' => '{
                     "user":"elitesports17",
                     "password":"abc1234"
                 }']
@@ -34,17 +36,11 @@ class LoginTest extends TestCase
         
             $response = json_decode($requestBasic->getBody()->getContents());
         
-            //var_dump($response->status);           
+            //var_dump($response->status);
 
             $this->assertEquals('ok', $response->status);
-
-        
-        
-        }catch (\Throwable $th){
+        } catch (\Throwable $th) {
             var_dump($th->getMessage());
         }
-        
     }
-
-
 }
