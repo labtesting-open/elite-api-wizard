@@ -38,7 +38,7 @@ class Search
                 if (isset($datos['find'])) {
                     $find = $datos['find'];
 
-                    $language_id = (!isset($datos['language_id'])) ? 'GB' : $datos['language_id'];
+                    $languageId = (!isset($datos['language_id'])) ? 'GB' : $datos['language_id'];
 
                     $page = (isset($datos['page'])) ? $datos['page'] : 1;
 
@@ -50,11 +50,11 @@ class Search
                     $resultClubs   = array();
 
                     if (!$modeFast) {
-                        $resultPlayers = $this->player->findPlayers($find, $language_id, $page);
-                        $resultClubs   = $this->club->findClubs($find, $language_id, $page);
+                        $resultPlayers = $this->player->findPlayers($find, $languageId, $page);
+                        $resultClubs   = $this->club->findClubs($find, $languageId, $page);
                     } elseif (isset($find) && !empty($find)) {
-                        $resultPlayers = $this->player->findPlayersFast($find, $language_id, $limit);
-                        $resultClubs   = $this->club->findClubsFast($find, $language_id, $page);
+                        $resultPlayers = $this->player->findPlayersFast($find, $languageId, $limit);
+                        $resultClubs   = $this->club->findClubsFast($find, $languageId, $page);
                     }
                        
                     $resultado = new stdClass();
