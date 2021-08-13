@@ -31,12 +31,12 @@ class UserClub
             $testToken = $this->token->checkToken($datos['token']);
 
             if ($testToken) {
-                    $club_id = $this->userClub->getUserClub($testToken[0]['user_id']);
+                    $clubId = $this->userClub->getUserClub($testToken[0]['user_id']);
 
                     $resultado = new stdClass();
                     $resultado->status = 'ok';
                     $resultado->result = new stdClass();
-                    $resultado->result = $club_id;
+                    $resultado->result = $clubId;
                         
                     return $resultado;
             } else {
