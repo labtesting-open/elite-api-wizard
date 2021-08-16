@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="PHP Coding Standards" namespace="Pleets\CS\Standard">
+<ruleset name="PHP Coding Standards" namespace="Elitesports">
 
     <file>./src</file>
     <file>./tests</file>

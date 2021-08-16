@@ -11,7 +11,7 @@ class Respuestas
     ];
 
 
-    public function error_405()
+    public function error405()
     {
         
         $this->response['status'] = 'error';
@@ -24,7 +24,7 @@ class Respuestas
         return $this->response;
     }
 
-    public function error_200($valor = 'Datos incorrectos')
+    public function error200($valor = 'Datos incorrectos')
     {
         
         $this->response['status'] = 'error';
@@ -38,7 +38,7 @@ class Respuestas
     }
 
 
-    public function error_400()
+    public function error400()
     {
         
         $this->response['status'] = 'error';
@@ -51,7 +51,7 @@ class Respuestas
         return $this->response;
     }
 
-    public function error_500($valor = 'Error interno del servidor')
+    public function error500($valor = 'Error interno del servidor')
     {
         
         $this->response['status'] = 'error';
@@ -64,7 +64,7 @@ class Respuestas
         return $this->response;
     }
 
-    public function error_401($valor = 'No autorizado')
+    public function error401($valor = 'No autorizado')
     {
         
         $this->response['status'] = 'error';

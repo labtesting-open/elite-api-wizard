@@ -17,7 +17,7 @@ header('content-type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == "GET"){
 
-    $datosArray = $_respuestas->error_405();
+    $datosArray = $_respuestas->error405();
     echo json_encode($datosArray); 
    
 
@@ -30,17 +30,17 @@ if ($_SERVER['REQUEST_METHOD'] == "GET"){
 
 }else if($_SERVER['REQUEST_METHOD'] == "PUT"){
 
-    $datosArray = $_respuestas->error_405();
+    $datosArray = $_respuestas->error405();
     echo json_encode($datosArray); 
 
 }else if($_SERVER['REQUEST_METHOD'] == "DELETE"){
 
-    $datosArray = $_respuestas->error_405();
+    $datosArray = $_respuestas->error405();
     echo json_encode($datosArray); 
 
 }else{
    
-    $datosArray = $_respuestas->error_405();
+    $datosArray = $_respuestas->error405();
     echo json_encode($datosArray); 
 
 }

@@ -16,8 +16,8 @@ class Club
         $this->club = new \Elitelib\Club();
         $this->token = new \Elitelib\Token();
         $this->respuestas  = new Respuestas();
-        $this->path_flag   = 'imgs/svg/';
-        $this->folder_club = 'imgs/clubs_logo/';
+        $this->pathFlag   = 'imgs/svg/';
+        $this->folderClub = 'imgs/clubs_logo/';
     }
 
     public function getInfo($json)
@@ -26,7 +26,7 @@ class Club
         $datos = json_decode($json, true);
 
         if (!isset($datos['token'])) {
-            return $this->respuestas->error_401();
+            return $this->respuestas->error401();
         } else {
             $testToken = $this->token->checkToken($datos['token']);
 
@@ -41,10 +41,10 @@ class Club
                         
                     return $resultado;
                 } else {
-                    return $this->respuestas->error_200('Data incorrect or incomplete');
+                    return $this->respuestas->error200('Data incorrect or incomplete');
                 }
             } else {
-                return $this->respuestas->error_401('Token invalid or expired');
+                return $this->respuestas->error401('Token invalid or expired');
             }
         }
     }
@@ -69,35 +69,53 @@ class Club
         $datos = json_decode($json, true);
 
         if (!isset($datos['token'])) {
-            return $this->respuestas->error_401();
+            return $this->respuestas->error401();
         } else {
             $testToken = $this->token->checkToken($datos['token']);
 
             if ($testToken) {
-                    $continent_code = ( isset($datos['continent_code']) && !empty($datos['continent_code']) ) ? $datos['continent_code'] : null;
-                    $country_code   = ( isset($datos['country_code']) && !empty($datos['country_code']) ) ? $datos['country_code'] : null;
-                    $division_id    = ( isset($datos['division_id']) && !empty($datos['division_id']) ) ? $datos['division_id'] : null;
-                    $category_id    = ( isset($datos['category_id']) && !empty($datos['category_id']) ) ? $datos['category_id'] : null;
-                    $page           = ( isset($datos['page']) && is_numeric($datos['page']) ) ? $datos['page'] : 1;
-                    $cant           = ( isset($datos['cant']) && is_numeric($datos['cant']) ) ? $datos['cant'] : 100;
+                $continentCode = null;
+                if (isset($datos['continent_code']) &&  !empty($datos['continent_code'])) {
+                    $continentCode = $datos['continent_code'];
+                }
+                $countryCode = null;
+                if (isset($datos['country_code']) &&  !empty($datos['country_code'])) {
+                    $countryCode = $datos['country_code'];
+                }
+                $categoryId = null;
+                if (isset($datos['category_id']) &&  !empty($datos['category_id'])) {
+                    $categoryId = $datos['category_id'];
+                }
+                $divisionId = null;
+                if (isset($datos['division_id']) &&  !empty($datos['division_id'])) {
+                    $divisionId = $datos['division_id'];
+                }
+                $page = 1;
+                if (isset($datos['page']) &&  is_numeric($datos['page'])) {
+                    $page = $datos['page'];
+                }
+                $cant = 100;
+                if (isset($datos['cant']) &&  is_numeric($datos['cant'])) {
+                    $cant = $datos['cant'];
+                }
+                
+                $info = $this->club->getClubsByFilters(
+                    $continentCode,
+                    $countryCode,
+                    $categoryId,
+                    $divisionId,
+                    $page,
+                    $cant
+                );
 
-                    $info = $this->club->getClubsByFilters(
-                        $continent_code,
-                        $country_code,
-                        $category_id,
-                        $division_id,
-                        $page,
-                        $cant
-                    );
-
-                    $resultado = new stdClass();
-                    $resultado->status = 'ok';
-                    $resultado->result = new stdClass();
-                    $resultado->result = $info;
+                $resultado = new stdClass();
+                $resultado->status = 'ok';
+                $resultado->result = new stdClass();
+                $resultado->result = $info;
                         
-                    return $resultado;
+                return $resultado;
             } else {
-                return $this->respuestas->error_401('Token invalid or expired');
+                return $this->respuestas->error401('Token invalid or expired');
             }
         }
     }
