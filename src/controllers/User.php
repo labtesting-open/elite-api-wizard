@@ -32,7 +32,7 @@ class User
 
             if ($arrayToken) {
                    $userData = $this->user->getUserInfo($arrayToken[0]['user_id']);
-                   $plan_services = $this->user->getPlanServices($userData[0]['plan_id']);
+                   $planServices = $this->user->getPlanServices($userData[0]['plan_id']);
                        
                    $resultado = new stdClass();
                    $resultado->status = 'ok';
@@ -50,7 +50,7 @@ class User
                    $resultado->result->plan->name = $userData[0]['plan_name'];
                    $resultado->result->plan->active = $userData[0]['active'];
                    $resultado->result->plan->services = new stdClass();
-                   $resultado->result->plan->services = $plan_services;
+                   $resultado->result->plan->services = $planServices;
                        
                    return $resultado;
             } else {
