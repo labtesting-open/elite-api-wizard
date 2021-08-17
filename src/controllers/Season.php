@@ -31,7 +31,7 @@ class Season
         $datos = json_decode($json, true);
 
         if (!isset($datos['token'])) {
-            return $this->respuestas->error_401();
+            return $this->respuestas->error401();
         } else {
             $arrayToken = $this->token->checkToken($datos['token']);
 
@@ -46,10 +46,10 @@ class Season
                         
                     return $resultado;
                 } else {
-                    return $this->respuestas->error_200('Data incorrect or incomplete');
+                    return $this->respuestas->error200('Data incorrect or incomplete');
                 }
             } else {
-                return $this->respuestas->error_401('Token invalid or expired');
+                return $this->respuestas->error401('Token invalid or expired');
             }
         }
     }

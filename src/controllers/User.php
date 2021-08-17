@@ -26,7 +26,7 @@ class User
             $datos = json_decode($json, true);
 
         if (!isset($datos['token'])) {
-            return $this->respuestas->error_401();
+            return $this->respuestas->error401();
         } else {
             $arrayToken = $this->token->checkToken($datos['token']);
 
@@ -54,7 +54,7 @@ class User
                        
                    return $resultado;
             } else {
-                return $this->respuestas->error_401('Token invalid or expired');
+                return $this->respuestas->error401('Token invalid or expired');
             }
         }
     }

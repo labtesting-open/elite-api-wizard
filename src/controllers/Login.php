@@ -25,7 +25,7 @@ class Login
 
         if (!isset($datos['token'])) {
             //error
-            return $this->respuestas->error_400();
+            return $this->respuestas->error400();
         } else {
             //todo ok
             $token = $datos['token'];
@@ -43,15 +43,15 @@ class Login
                             'token' => 'disabled'
                         );
                     } else {
-                        return $this->respuestas->error_500('Internal Error, updates fail');
+                        return $this->respuestas->error500('Internal Error, updates fail');
                     }
 
                     return $result;
                 } else {
-                    return $this->respuestas->error_200('Token expired');
+                    return $this->respuestas->error200('Token expired');
                 }
             } else {
-                return $this->respuestas->error_200('Token ivalid');
+                return $this->respuestas->error200('Token ivalid');
             }
         }
     }
@@ -66,7 +66,7 @@ class Login
 
         if (!isset($datos['user']) || !isset($datos['password'])) {
             //error
-            return $this->respuestas->error_400();
+            return $this->respuestas->error400();
         } else {
             //todo ok
             $usuario = $datos['user'];
@@ -87,18 +87,18 @@ class Login
                                 'token' => $verificar
                             );
                         } else {
-                            return $this->respuestas->error_500('Internal Server Error');
+                            return $this->respuestas->error500('Internal Server Error');
                         }
 
                         return $result;
                     } else {
-                        return $this->respuestas->error_200('user inactive');
+                        return $this->respuestas->error200('user inactive');
                     }
                 } else {
-                    return $this->respuestas->error_200('Incorrect password');
+                    return $this->respuestas->error200('Incorrect password');
                 }
             } else {
-                return $this->respuestas->error_200("The user $usuario not found");
+                return $this->respuestas->error200("The user $usuario not found");
             }
         }
     }
