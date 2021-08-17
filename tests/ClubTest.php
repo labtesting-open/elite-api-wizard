@@ -15,7 +15,9 @@ class ClubTest extends TestCase
     protected function setUp(): void
     {
         $this->user = 'elitesports17';
+        $this->password = 'abc1234';
         $this->client = new Client();
+        $this->urlServer = 'http://4a82261d3a15.ngrok.io';
     }
 
 
@@ -23,14 +25,16 @@ class ClubTest extends TestCase
     {
 
         try {
+
+            $body = '{"user":"' . $this->user . '","password":"'. $this->password .'"}';
+            $url = $this->urlServer. '/labtest/elite-api-wizard/v1/login.php';
+
             $requestToken = $this->client->request(
                 'POST',
-                'http://localhost/labtest/elite-api-wizard/v1/login.php',
+                $url,
                 [
-                'body' => '{
-                    "user":"elitesports17",
-                    "password":"abc1234"
-                }']
+                'body' => $body
+                ]
             );
         
             $response = json_decode($requestToken->getBody()->getContents());
@@ -38,10 +42,11 @@ class ClubTest extends TestCase
             $token = $response->result->token;
 
             $body = '{"token":"' . $token . '","club_id":"1"}';
+            $url = $this->urlServer. '/labtest/elite-api-wizard/v1/club.php';
             
             $requestBasic = $this->client->request(
                 'POST',
-                'http://localhost/labtest/elite-api-wizard/v1/club.php',
+                $url,
                 [
                 'body' => $body
                 ]
