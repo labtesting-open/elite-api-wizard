@@ -25,9 +25,8 @@ class ClubTest extends TestCase
     {
 
         try {
-
-            $body = '{"user":"' . $this->user . '","password":"'. $this->password .'"}';
-            $url = $this->urlServer. '/labtest/elite-api-wizard/v1/login.php';
+            $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
+            $url = $this->urlServer . '/labtest/elite-api-wizard/v1/login.php';
 
             $requestToken = $this->client->request(
                 'POST',
@@ -42,7 +41,7 @@ class ClubTest extends TestCase
             $token = $response->result->token;
 
             $body = '{"token":"' . $token . '","club_id":"1"}';
-            $url = $this->urlServer. '/labtest/elite-api-wizard/v1/club.php';
+            $url = $this->urlServer . '/labtest/elite-api-wizard/v1/club.php';
             
             $requestBasic = $this->client->request(
                 'POST',
