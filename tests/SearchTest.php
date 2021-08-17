@@ -23,17 +23,33 @@ class SearchTest extends TestCase
     {
 
         try {
+            $requestToken = $this->client->request(
+                'POST',
+                'http://localhost/labtest/elite-api-wizard/v1/login.php',
+                [
+                'body' => '{
+                    "user":"elitesports17",
+                    "password":"abc1234"
+                }']
+            );
+        
+            $response = json_decode($requestToken->getBody()->getContents());
+
+            $token = $response->result->token;
+
+            $body = '{"token":"' . $token . '",
+                "find":"baye",
+                "language_id":"GB", 
+                "fast":"1",
+                "limit":"10"
+            }';
+
             $requestBasic = $this->client->request(
                 'POST',
                 'http://localhost/labtest/elite-api-wizard/v1/search.php',
                 [
-                'body' => '{
-                    "token":"85c6dc7d5922cb381f8eb8a82671d6e9",
-                    "find":"baye",
-                    "language_id":"GB", 
-                    "fast":"1",
-                    "limit":"10"                       
-                }']
+                'body' => $body
+                ]
             );
         
             $response = json_decode($requestBasic->getBody()->getContents());

@@ -23,13 +23,28 @@ class LogoutTest extends TestCase
     {
 
         try {
+            $requestToken = $this->client->request(
+                'POST',
+                'http://localhost/labtest/elite-api-wizard/v1/login.php',
+                [
+                'body' => '{
+                    "user":"elitesports17",
+                    "password":"abc1234"
+                }']
+            );
+        
+            $response = json_decode($requestToken->getBody()->getContents());
+
+            $token = $response->result->token;
+
+            $body = '{"token":"' . $token . '"}';
+
             $requestBasic = $this->client->request(
                 'POST',
                 'http://localhost/labtest/elite-api-wizard/v1/logout.php',
                 [
-                'body' => '{
-                    "token":"4cc62325fa16c70320e4247c22f08459"
-                }']
+                'body' => $body
+                ]
             );
         
             $response = json_decode($requestBasic->getBody()->getContents());

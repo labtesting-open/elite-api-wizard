@@ -23,20 +23,36 @@ class InfoTeamsTest extends TestCase
     {
 
         try {
-            $requestBasic = $this->client->request(
+            $requestToken = $this->client->request(
                 'POST',
-                'http://localhost/labtest/elite-api-wizard/v1/teams.php',
+                'http://localhost/labtest/elite-api-wizard/v1/login.php',
                 [
                 'body' => '{
-                    "token":"85c6dc7d5922cb381f8eb8a82671d6e9",
-                    "page":"1",
-                    "continent_code":"SA",
-                    "country_code":"AR",
-                    "category_id":"1",
-                    "division_id":"1",
-                    "order":"club_name",
-                    "ordersense":"DESC"
+                    "user":"elitesports17",
+                    "password":"abc1234"
                 }']
+            );
+        
+            $response = json_decode($requestToken->getBody()->getContents());
+
+            $token = $response->result->token;
+
+            $body = '{"token":"' . $token . '",
+                "page":"1",
+                "continent_code":"SA",
+                "country_code":"AR",
+                "category_id":"1",
+                "division_id":"1",
+                "order":"club_name",
+                "ordersense":"DESC" 
+            }';
+
+            $requestBasic = $this->client->request(
+                'POST',
+                'http://localhost/labtest/elite-api-wizard/v1/info.teams.php',
+                [
+                    'body' => $body
+                ]
             );
         
             $response = json_decode($requestBasic->getBody()->getContents());
