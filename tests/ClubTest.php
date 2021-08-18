@@ -9,15 +9,27 @@ use GuzzleHttp\Client;
 
 class ClubTest extends TestCase
 {
-    public $user = null;
+    public $user;
+    public $password;
+    public $client;
+    public $server;
+    public $apiFolder;
+    public $parentFolder;
+    public $version;
     
 
     protected function setUp(): void
     {
-        $this->user = 'elitesports17';
-        $this->password = 'abc1234';
+        $settings = new \Elitesports\Setting('remote');
+
+        $this->server   = $settings->getServer();
+        $this->user     = $settings->getUser();
+        $this->password = $settings->getPassword();
+        $this->apiFolder = $settings->getApiFolder();
+        $this->parentFolder = $settings->getParentFolder();
+        $this->version = $settings->getVersion();
+
         $this->client = new Client();
-        $this->urlServer = 'http://4a82261d3a15.ngrok.io';
     }
 
 
@@ -26,7 +38,8 @@ class ClubTest extends TestCase
 
         try {
             $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
-            $url = $this->urlServer . '/labtest/elite-api-wizard/v1/login.php';
+
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
 
             $requestToken = $this->client->request(
                 'POST',
@@ -37,12 +50,13 @@ class ClubTest extends TestCase
             );
         
             $response = json_decode($requestToken->getBody()->getContents());
-
-            $token = $response->result->token;
-
-            $body = '{"token":"' . $token . '","club_id":"1"}';
-            $url = $this->urlServer . '/labtest/elite-api-wizard/v1/club.php';
             
+            $token = $response->result->token;
+            
+            $body = '{"token":"' . $token . '","club_id":"1"}';
+            
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/club.php';
+
             $requestBasic = $this->client->request(
                 'POST',
                 $url,
