@@ -55,7 +55,7 @@ class LogoutTest extends TestCase
             
             $body = '{"token":"' . $token . '"}';
             
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/logout.php';            
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/logout.php';
 
             $requestBasic = $this->client->request(
                 'POST',

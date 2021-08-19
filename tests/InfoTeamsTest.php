@@ -63,7 +63,8 @@ class InfoTeamsTest extends TestCase
                 "ordersense":"DESC"
             }';
             
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/info.teams.php';           
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version;
+            $url .= '/info.teams.php';
 
             $requestBasic = $this->client->request(
                 'POST',

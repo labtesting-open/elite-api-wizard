@@ -51,7 +51,7 @@ class PlayerInfoTest extends TestCase
         
             $response = json_decode($requestToken->getBody()->getContents());
             
-            $token = $response->result->token; 
+            $token = $response->result->token;
 
             $body = '{"token":"' . $token . '",
                 "id":"47",

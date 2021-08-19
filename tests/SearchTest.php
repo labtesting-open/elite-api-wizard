@@ -60,7 +60,7 @@ class SearchTest extends TestCase
                 "limit":"10"
             }';
             
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/search.php'; 
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/search.php';
             
             $requestBasic = $this->client->request(
                 'POST',

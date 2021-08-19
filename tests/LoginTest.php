@@ -48,7 +48,7 @@ class LoginTest extends TestCase
                 ]
             );
         
-            $response = json_decode($requestToken->getBody()->getContents());  
+            $response = json_decode($requestToken->getBody()->getContents());
         
             //var_dump($response->status);
 

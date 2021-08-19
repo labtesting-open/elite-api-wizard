@@ -59,7 +59,7 @@ class PlayersTest extends TestCase
                 "language_id":"GB"     
             }';
             
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/players.php';            
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/players.php';
 
             $requestBasic = $this->client->request(
                 'POST',
