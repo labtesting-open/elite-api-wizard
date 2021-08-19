@@ -26,7 +26,7 @@
     },
     "scripts": {
         "phpunit": "phpunit --stop-on-error --stop-on-failure --testdox",
-        "phpunit-xml": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --stop-on-error --stop-on-failure --coverage-clover phpunit.coverage.xml",
+        "phpunit-xml": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-clover phpunit.coverage.xml",
         "phpcs-check":  "phpcs --colors -s",
         "phpcs-fix":  "phpcbf --colors -s",
         "phpcs-auto-check": "@phpcs-check --standard=.phpcs.xml",
