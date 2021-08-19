@@ -16,8 +16,6 @@ class Club
         $this->club = new \Elitelib\Club();
         $this->token = new \Elitelib\Token();
         $this->respuestas  = new Respuestas();
-        $this->pathFlag   = 'imgs/svg/';
-        $this->folderClub = 'imgs/clubs_logo/';
     }
 
     public function getInfo($json)
@@ -48,21 +46,7 @@ class Club
             }
         }
     }
-
-
-    private function checkTarget($target)
-    {
-            
-        $result = false;
-
-        if ($target == 'continents' || $target == 'countries' || $target == 'divisions') {
-            $result = true;
-        }
-
-        return $result;
-    }
-
-
+    
     public function getInfoWithFilters($json)
     {
            

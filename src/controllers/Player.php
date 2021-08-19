@@ -14,6 +14,7 @@ class Player
     private $player;
     private $club;
     private $team;
+    private $respuestas;
 
     public function __construct()
     {
@@ -31,7 +32,7 @@ class Player
         $datos = json_decode($json, true);
 
         if (!isset($datos['token'])) {
-            return $this->respuestas->error_401();
+            return $this->respuestas->error401();
         } else {
             $testToken = $this->token->checkToken($datos['token']);
             
@@ -93,7 +94,7 @@ class Player
         $datos = json_decode($json, true);
 
         if (!isset($datos['token'])) {
-            return $this->respuestas->error_401();
+            return $this->respuestas->error401();
         } else {
             $testToken = $this->token->checkToken($datos['token']);
             
@@ -259,6 +260,8 @@ class Player
                         $divisionId = $datos['division_id'];
                     }
                     
+                    $result = new stdClass();
+                    
                     if ($datos['target'] == 'continents') {
                         $result = $this->club->getAvailableContinents(
                             $continentCode,
@@ -296,8 +299,6 @@ class Player
                     }
                     
                     if ($datos['target'] == 'all') {
-                        $result = new stdClass();
-                   
                         $result->continents = $this->club->getAvailableContinents(
                             $continentCode,
                             $countryCode,

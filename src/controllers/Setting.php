@@ -33,7 +33,7 @@ class Setting
 
     public function setRemoteMode()
     {
-        $this->server = 'http://0786fa7ffe68.ngrok.io';
+        $this->server = 'http://e79101d38d16.ngrok.io';
         $this->user = 'elitesports17';
         $this->password = 'abc1234';
         $this->folder = '/elite-api-wizard';
@@ -51,34 +51,12 @@ class Setting
         $this->version = $version;
     }
 
+    /*
+    server
+    */
     public function getServer()
     {
         return $this->server;
-    }
-
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    public function getApiFolder()
-    {
-        return $this->folder;
-    }
-
-    public function getParentFolder()
-    {
-        return $this->parentFolder;
-    }
-
-    public function getVersion()
-    {
-        return $this->version;
     }
 
     public function setServer($server)
@@ -86,9 +64,27 @@ class Setting
         $this->server = $server;
     }
 
+    /*
+    user
+    */
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    /*
+    password
+    */
+
+    public function getPassword()
+    {
+        return $this->password;
     }
 
     public function setPassword($password)
@@ -96,18 +92,45 @@ class Setting
         $this->password = $password;
     }
 
-    public function setApiFolder($apiFolder)
+    /*
+    folder (apiFolder)
+    */
+
+    public function getApiFolder()
     {
-        $this->apiFolder = $apiFolder;
+        return $this->folder;
     }
 
-    public function setApiSubFolder($parentFolder)
+    public function setApiFolder($apiFolder)
     {
-        $this->parentFolder = $parentFolder;
+        $this->folder = $apiFolder;
+    }
+
+    /*
+    version
+    */
+
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     public function setVersion($version)
     {
         $this->version = $version;
+    }
+
+    /*
+    parenFolder
+    */
+
+    public function getParentFolder()
+    {
+        return $this->parentFolder;
+    }
+
+    public function setParentFolder($parentFolder)
+    {
+        $this->parentFolder = $parentFolder;
     }
 }

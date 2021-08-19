@@ -19,9 +19,6 @@ class Team
         $this->token = new \Elitelib\Token();
         $this->respuestas  = new Respuestas();
         $this->club = new \Elitelib\Club();
-        $this->pathFlag   = 'imgs/svg/';
-        $this->folderClub = 'imgs/clubs_logo/';
-        $this->folderTeam = 'imgs/teams_profile/';
     }
 
 
@@ -172,6 +169,8 @@ class Team
                     if (isset($datos['division_id']) &&  !empty($datos['division_id'])) {
                         $divisionId = $datos['division_id'];
                     }
+
+                    $result = new stdClass();
                     
                     if ($datos['target'] == 'continents') {
                         $result = $this->club->getAvailableContinents(
@@ -210,8 +209,6 @@ class Team
                     }
                     
                     if ($datos['target'] == 'all') {
-                        $result = new stdClass();
-
                         $result->continents = $this->club->getAvailableContinents(
                             $continentCode,
                             $countryCode,

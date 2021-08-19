@@ -55,7 +55,7 @@ class UserTest extends TestCase
             
             $body = '{"token":"' . $token . '"}';
             
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/club.php';
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/user.php';
             
             $requestBasic = $this->client->request(
                 'POST',
