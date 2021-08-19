@@ -9,12 +9,26 @@ use GuzzleHttp\Client;
 
 class PlayersTest extends TestCase
 {
-    public $user = null;
+    public $user;
+    public $password;
+    public $client;
+    public $server;
+    public $apiFolder;
+    public $parentFolder;
+    public $version;
     
 
     protected function setUp(): void
     {
-        $this->user = 'elitesports17';
+        $settings = new \Elitesports\Setting('remote');
+
+        $this->server   = $settings->getServer();
+        $this->user     = $settings->getUser();
+        $this->password = $settings->getPassword();
+        $this->apiFolder = $settings->getApiFolder();
+        $this->parentFolder = $settings->getParentFolder();
+        $this->version = $settings->getVersion();
+
         $this->client = new Client();
     }
 
@@ -23,29 +37,33 @@ class PlayersTest extends TestCase
     {
 
         try {
+            $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
+
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
+
             $requestToken = $this->client->request(
                 'POST',
-                'http://localhost/labtest/elite-api-wizard/v1/login.php',
+                $url,
                 [
-                'body' => '{
-                    "user":"elitesports17",
-                    "password":"abc1234"
-                }']
+                'body' => $body
+                ]
             );
         
             $response = json_decode($requestToken->getBody()->getContents());
-
+            
             $token = $response->result->token;
-
+            
             $body = '{"token":"' . $token . '",
                 "club_id":"3",
                 "team_id":"5", 
                 "language_id":"GB"     
             }';
+            
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/players.php';            
 
             $requestBasic = $this->client->request(
                 'POST',
-                'http://localhost/labtest/elite-api-wizard/v1/players.php',
+                $url,
                 [
                 'body' => $body
                 ]

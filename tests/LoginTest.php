@@ -9,13 +9,25 @@ use GuzzleHttp\Client;
 
 class LoginTest extends TestCase
 {
-    public $user = null;
-    //public $auth_model;
+    public $user;
+    public $password;
+    public $client;
+    public $server;
+    public $apiFolder;
+    public $parentFolder;
+    public $version;
 
     protected function setUp(): void
     {
-        //$this->auth_model = new Elitelib\Auth();
-        $this->user = 'elitesports17';
+        $settings = new \Elitesports\Setting('remote');
+
+        $this->server   = $settings->getServer();
+        $this->user     = $settings->getUser();
+        $this->password = $settings->getPassword();
+        $this->apiFolder = $settings->getApiFolder();
+        $this->parentFolder = $settings->getParentFolder();
+        $this->version = $settings->getVersion();
+
         $this->client = new Client();
     }
 
@@ -24,17 +36,19 @@ class LoginTest extends TestCase
     {
 
         try {
-            $requestBasic = $this->client->request(
+            $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
+
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
+
+            $requestToken = $this->client->request(
                 'POST',
-                'http://localhost/labtest/elite-api-wizard/v1/login.php',
+                $url,
                 [
-                'body' => '{
-                    "user":"elitesports17",
-                    "password":"abc1234"
-                }']
+                'body' => $body
+                ]
             );
         
-            $response = json_decode($requestBasic->getBody()->getContents());
+            $response = json_decode($requestToken->getBody()->getContents());  
         
             //var_dump($response->status);
 
