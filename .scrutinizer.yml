@@ -6,7 +6,7 @@ build:
     coverage:
       tests:
         override:
-          - command: ./vendor/bin/phpunit --coverage-clover phpunit.coverage.xml --verbose --filter coredump
+          - command:
             coverage:
               file: phpunit.coverage.xml
               format: clover
