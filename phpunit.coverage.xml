@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1629462086">
-  <project timestamp="1629462086">
+<coverage generated="1629465995">
+  <project timestamp="1629465995">
     <file name="C:\xampp\htdocs\labtest\elite-api-wizard\src\controllers\Club.php">
       <class name="Elitesports\Club" namespace="global">
         <metrics complexity="21" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="49" coveredstatements="0" elements="52" coveredelements="0"/>
