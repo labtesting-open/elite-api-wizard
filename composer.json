@@ -25,7 +25,8 @@
         "squizlabs/php_codesniffer": "^3.6"
     },
     "scripts": {
-        "phpunit": "phpunit --stop-on-error --stop-on-failure --testdox",        
+        "phpunit": "phpunit --stop-on-error --stop-on-failure --testdox",
+        "phpunit-xml": "./vendor/bin/phpunit --coverage-clover phpunit.coverage.xml",
         "phpcs-check":  "phpcs --colors -s",
         "phpcs-fix":  "phpcbf --colors -s",
         "phpcs-auto-check": "@phpcs-check --standard=.phpcs.xml",
