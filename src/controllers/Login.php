@@ -4,8 +4,8 @@ namespace Elitesports;
 
 use Elitesports\Respuestas;
 
-
-class Login {
+class Login
+{
 
     private $auth;
     private $respuestas;
@@ -14,112 +14,92 @@ class Login {
     public function __construct()
     {
         $this->auth = new \Elitelib\Auth();
-        $this->respuestas = new Respuestas(); 
+        $this->respuestas = new Respuestas();
     }
 
 
-    public function logOut($json){        
+    public function logOut($json)
+    {
         
-        $datos = json_decode($json, true);       
+        $datos = json_decode($json, true);
 
-        if( !isset($datos['token']) ){
+        if (!isset($datos['token'])) {
             //error
-            return $this->respuestas->error_400();
-        }else{
+            return $this->respuestas->error400();
+        } else {
             //todo ok
-            $token = $datos['token'];                     
+            $token = $datos['token'];
             
 
             $datos = $this->auth->getUserToken($token);
 
-            if($datos){
-
-                if($datos[0]['mode'] == 1){                    
-
+            if ($datos) {
+                if ($datos[0]['mode'] == 1) {
                     $actualizar = $this->auth->disableToken($datos[0]['id']);
 
-                    if($actualizar){
+                    if ($actualizar) {
                         $result = $this->respuestas->response;
-                        $result["result"] = array(
-                            "token" =>'disabled'
+                        $result['result'] = array(
+                            'token' => 'disabled'
                         );
-
-                    }else{
-                        return $this->respuestas->error_500("Internal Error, updates fail");
+                    } else {
+                        return $this->respuestas->error500('Internal Error, updates fail');
                     }
 
                     return $result;
-                   
-
-                }else{
-                    return $this->respuestas->error_200("Token expired");
+                } else {
+                    return $this->respuestas->error200('Token expired');
                 }
-
-
-            }else{
-                return $this->respuestas->error_200("Token ivalid");
+            } else {
+                return $this->respuestas->error200('Token ivalid');
             }
-
         }
-
     }
 
 
-    public function login($json){
+    public function login($json)
+    {
         
         
 
-        $datos = json_decode($json, true);       
+        $datos = json_decode($json, true);
 
-        if( !isset($datos['user']) || !isset($datos['password']) ){
+        if (!isset($datos['user']) || !isset($datos['password'])) {
             //error
-            return $this->respuestas->error_400();
-        }else{
+            return $this->respuestas->error400();
+        } else {
             //todo ok
             $usuario = $datos['user'];
-            $password = $datos['password'];            
+            $password = $datos['password'];
            
-            $password = $this->auth->encriptar($password); 
+            $password = $this->auth->encriptar($password);
 
             $datos = $this->auth->getUserDataByUserName($usuario);
 
-            if($datos){
-                if($password == $datos[0]['password']){
-
-                    if($datos[0]['active'] == 1){
-
+            if ($datos) {
+                if ($password == $datos[0]['password']) {
+                    if ($datos[0]['active'] == 1) {
                         $verificar = $this->auth->insertarToken($datos[0]['id']);
 
-                        if($verificar){
+                        if ($verificar) {
                             $result = $this->respuestas->response;
-                            $result["result"] = array(
-                                "token" =>$verificar
+                            $result['result'] = array(
+                                'token' => $verificar
                             );
-
-                        }else{
-                            return $this->respuestas->error_500("Internal Server Error");
+                        } else {
+                            return $this->respuestas->error500('Internal Server Error');
                         }
 
                         return $result;
-
-                    }else{
-                        return $this->respuestas->error_200("user inactive");
+                    } else {
+                        return $this->respuestas->error200('user inactive');
                     }
-
-                }else{
-                    return $this->respuestas->error_200("Incorrect password");
+                } else {
+                    return $this->respuestas->error200('Incorrect password');
                 }
-
-
-            }else{
-                return $this->respuestas->error_200("The user $usuario not found");
+            } else {
+                return $this->respuestas->error200("The user $usuario not found");
             }
-
         }
-
     }
-
-
-
-
 }

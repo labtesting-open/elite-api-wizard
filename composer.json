@@ -20,5 +20,18 @@
         "elitelib/persistence": "dev-main",
         "guzzlehttp/guzzle": "^7.0",
         "phpunit/phpunit": "9.5.0"
-    }     
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.6"
+    },
+    "scripts": {
+        "phpunit": "phpunit --testdox",
+        "phpunit-xml": "phpunit --coverage-clover phpunit.coverage.xml",
+        "phpcs-check":  "phpcs --colors -s",
+        "phpcs-fix":  "phpcbf --colors -s",
+        "phpcs-auto-check": "@phpcs-check --standard=.phpcs.xml",
+        "phpcs-auto-fix": "@phpcs-fix --standard=.phpcs.xml",
+        "phpcs-auto-check-project": "phpcs --report=summary -p",
+        "phpcs-auto-fix-project": "phpcbf --report=summary -p"
+    }
 }

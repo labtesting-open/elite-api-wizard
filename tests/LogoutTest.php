@@ -2,48 +2,76 @@
 
 declare(strict_types=1);
 
-require_once __DIR__."/../vendor/autoload.php";
+namespace Elitesports\Test;
 
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client;
 
-
 class LogoutTest extends TestCase
 {
-    public $user = null;
+    public $user;
+    public $password;
+    public $client;
+    public $server;
+    public $apiFolder;
+    public $parentFolder;
+    public $version;
     
 
     protected function setUp(): void
-    {       
-        $this->user = 'elitesports17';
+    {
+        $settings = new \Elitesports\Setting('remote');
+
+        $this->server   = $settings->getServer();
+        $this->user     = $settings->getUser();
+        $this->password = $settings->getPassword();
+        $this->apiFolder = $settings->getApiFolder();
+        $this->parentFolder = $settings->getParentFolder();
+        $this->version = $settings->getVersion();
+
         $this->client = new Client();
     }
 
 
-    public function testLogOutResultStatus(){
+    public function testLogOutResultStatus()
+    {
 
-        try{
+        try {
+            $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
 
-            $requestBasic = $this->client->request('POST', 'http://localhost/labtest/elite-api-wizard/v1/logout.php',[
-                'body'=>'{
-                    "token":"4cc62325fa16c70320e4247c22f08459"
-                }']
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
+
+            $requestToken = $this->client->request(
+                'POST',
+                $url,
+                [
+                'body' => $body
+                ]
+            );
+        
+            $response = json_decode($requestToken->getBody()->getContents());
+            
+            $token = $response->result->token;
+            
+            $body = '{"token":"' . $token . '"}';
+            
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/logout.php';
+
+            $requestBasic = $this->client->request(
+                'POST',
+                $url,
+                [
+                'body' => $body
+                ]
             );
         
             $response = json_decode($requestBasic->getBody()->getContents());
         
-            //var_dump($response->status);  
+            //var_dump($response->status);
 
             $this->assertContains($response->status, array('ok','error'));
-        
-        
-        }catch (\Throwable $th){
+        } catch (\Throwable $th) {
             var_dump($th->getMessage());
         }
-        
     }
-
-   
-
-
 }
