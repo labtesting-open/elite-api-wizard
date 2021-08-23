@@ -22,10 +22,9 @@ class Club
     {
            
         $datos = json_decode($json, true);
-
-        if (!isset($datos['token'])) {
-            return $this->respuestas->error401();
-        } else {
+        $responseHttp = $this->respuestas->error401();
+        
+        if (isset($datos['token'])) {
             $testToken = $this->token->checkToken($datos['token']);
 
             if ($testToken) {
@@ -37,14 +36,15 @@ class Club
                     $resultado->result = new stdClass();
                     $resultado->result = $info;
                         
-                    return $resultado;
+                    $responseHttp = $resultado;
                 } else {
-                    return $this->respuestas->error200('Data incorrect or incomplete');
+                    $responseHttp = $this->respuestas->error200('Data incorrect or incomplete');
                 }
             } else {
-                return $this->respuestas->error401('Token invalid or expired');
+                $responseHttp = $this->respuestas->error401('Token invalid or expired');
             }
         }
+        return $responseHttp;
     }
     
     public function getInfoWithFilters($json)
