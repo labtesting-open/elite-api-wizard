@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1629470513">
-  <project timestamp="1629470513">
+<coverage generated="1629706861">
+  <project timestamp="1629706861">
     <file name="C:\xampp\htdocs\labtest\elite-api-wizard\src\controllers\Club.php">
       <class name="Elitesports\Club" namespace="global">
         <metrics complexity="21" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="49" coveredstatements="0" elements="52" coveredelements="0"/>
@@ -382,13 +382,13 @@
     </file>
     <file name="C:\xampp\htdocs\labtest\elite-api-wizard\src\controllers\Setting.php">
       <class name="Elitesports\Setting" namespace="global">
-        <metrics complexity="18" methods="16" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="43" coveredstatements="0" elements="59" coveredelements="0"/>
+        <metrics complexity="18" methods="16" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="43" coveredstatements="16" elements="59" coveredelements="23"/>
       </class>
-      <line num="15" type="method" name="__construct" visibility="public" complexity="3" crap="12" count="0"/>
-      <line num="17" type="stmt" count="0"/>
-      <line num="18" type="stmt" count="0"/>
+      <line num="15" type="method" name="__construct" visibility="public" complexity="3" crap="3.14" count="15"/>
+      <line num="17" type="stmt" count="15"/>
+      <line num="18" type="stmt" count="15"/>
       <line num="20" type="stmt" count="0"/>
-      <line num="22" type="stmt" count="0"/>
+      <line num="22" type="stmt" count="15"/>
       <line num="24" type="method" name="setLocalMode" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="26" type="stmt" count="0"/>
       <line num="27" type="stmt" count="0"/>
@@ -397,14 +397,14 @@
       <line num="30" type="stmt" count="0"/>
       <line num="31" type="stmt" count="0"/>
       <line num="32" type="stmt" count="0"/>
-      <line num="34" type="method" name="setRemoteMode" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="36" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="39" type="stmt" count="0"/>
-      <line num="40" type="stmt" count="0"/>
-      <line num="41" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
+      <line num="34" type="method" name="setRemoteMode" visibility="public" complexity="1" crap="1" count="15"/>
+      <line num="36" type="stmt" count="15"/>
+      <line num="37" type="stmt" count="15"/>
+      <line num="38" type="stmt" count="15"/>
+      <line num="39" type="stmt" count="15"/>
+      <line num="40" type="stmt" count="15"/>
+      <line num="41" type="stmt" count="15"/>
+      <line num="42" type="stmt" count="15"/>
       <line num="44" type="method" name="setParams" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="46" type="stmt" count="0"/>
       <line num="47" type="stmt" count="0"/>
@@ -413,37 +413,37 @@
       <line num="50" type="stmt" count="0"/>
       <line num="51" type="stmt" count="0"/>
       <line num="52" type="stmt" count="0"/>
-      <line num="57" type="method" name="getServer" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="59" type="stmt" count="0"/>
+      <line num="57" type="method" name="getServer" visibility="public" complexity="1" crap="1" count="15"/>
+      <line num="59" type="stmt" count="15"/>
       <line num="62" type="method" name="setServer" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="64" type="stmt" count="0"/>
       <line num="65" type="stmt" count="0"/>
-      <line num="71" type="method" name="getUser" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="73" type="stmt" count="0"/>
+      <line num="71" type="method" name="getUser" visibility="public" complexity="1" crap="1" count="15"/>
+      <line num="73" type="stmt" count="15"/>
       <line num="76" type="method" name="setUser" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="78" type="stmt" count="0"/>
       <line num="79" type="stmt" count="0"/>
-      <line num="85" type="method" name="getPassword" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="87" type="stmt" count="0"/>
+      <line num="85" type="method" name="getPassword" visibility="public" complexity="1" crap="1" count="15"/>
+      <line num="87" type="stmt" count="15"/>
       <line num="90" type="method" name="setPassword" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="92" type="stmt" count="0"/>
       <line num="93" type="stmt" count="0"/>
-      <line num="99" type="method" name="getApiFolder" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="101" type="stmt" count="0"/>
+      <line num="99" type="method" name="getApiFolder" visibility="public" complexity="1" crap="1" count="15"/>
+      <line num="101" type="stmt" count="15"/>
       <line num="104" type="method" name="setApiFolder" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="106" type="stmt" count="0"/>
       <line num="107" type="stmt" count="0"/>
-      <line num="113" type="method" name="getVersion" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="115" type="stmt" count="0"/>
+      <line num="113" type="method" name="getVersion" visibility="public" complexity="1" crap="1" count="15"/>
+      <line num="115" type="stmt" count="15"/>
       <line num="118" type="method" name="setVersion" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="120" type="stmt" count="0"/>
       <line num="121" type="stmt" count="0"/>
-      <line num="127" type="method" name="getParentFolder" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="129" type="stmt" count="0"/>
+      <line num="127" type="method" name="getParentFolder" visibility="public" complexity="1" crap="1" count="15"/>
+      <line num="129" type="stmt" count="15"/>
       <line num="132" type="method" name="setParentFolder" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="134" type="stmt" count="0"/>
       <line num="135" type="stmt" count="0"/>
-      <metrics loc="136" ncloc="118" classes="1" methods="16" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="43" coveredstatements="0" elements="59" coveredelements="0"/>
+      <metrics loc="136" ncloc="118" classes="1" methods="16" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="43" coveredstatements="16" elements="59" coveredelements="23"/>
     </file>
     <file name="C:\xampp\htdocs\labtest\elite-api-wizard\src\controllers\Team.php">
       <class name="Elitesports\Team" namespace="global">
@@ -645,6 +645,6 @@
       <line num="37" type="stmt" count="0"/>
       <metrics loc="39" ncloc="39" classes="1" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="0" elements="14" coveredelements="0"/>
     </file>
-    <metrics files="11" loc="1307" ncloc="1285" classes="11" methods="50" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="528" coveredstatements="0" elements="578" coveredelements="0"/>
+    <metrics files="11" loc="1307" ncloc="1285" classes="11" methods="50" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="528" coveredstatements="16" elements="578" coveredelements="23"/>
   </project>
 </coverage>
