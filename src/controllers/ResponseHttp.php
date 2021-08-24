@@ -4,8 +4,6 @@ namespace Elitesports;
 
 class ResponseHttp
 {
-
-   const tokenInvalidOrExpired = 'Token invalid or expired';
-   const dataIncorrectOrIncomplete = 'Data incorrect or incomplete';
-
+    public const TOKENINVALIDOREXPIRED = 'Token invalid or expired';
+    public const DATAINCORRECTORINCOMPLETE = 'Data incorrect or incomplete';
 }

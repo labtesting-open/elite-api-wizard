@@ -38,10 +38,10 @@ class Club
                         
                     $responseHttp = $resultado;
                 } else {
-                    $responseHttp = $this->respuestas->error200(ResponseHttp::dataIncorrectOrIncomplete);
+                    $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
                 }
             } else {
-                $responseHttp = $this->respuestas->error401(ResponseHttp::tokenInvalidOrExpired);
+                $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
             }
         }
         return $responseHttp;
@@ -98,7 +98,7 @@ class Club
                         
                 $responseHttp =  $resultado;
             } else {
-                $responseHttp = $this->respuestas->error401(ResponseHttp::tokenInvalidOrExpired);
+                $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
             }
         }
         return $responseHttp;
