@@ -22,15 +22,10 @@ class Login
     {
         
         $datos = json_decode($json, true);
+        $responseHttp = $this->respuestas->error400();
 
-        if (!isset($datos['token'])) {
-            //error
-            return $this->respuestas->error400();
-        } else {
-            //todo ok
+        if (isset($datos['token'])) {
             $token = $datos['token'];
-            
-
             $datos = $this->auth->getUserToken($token);
 
             if ($datos) {
@@ -38,37 +33,27 @@ class Login
                     $actualizar = $this->auth->disableToken($datos[0]['id']);
 
                     if ($actualizar) {
-                        $result = $this->respuestas->response;
-                        $result['result'] = array(
-                            'token' => 'disabled'
-                        );
+                        $responseHttp = $this->respuestas->success200('token', 'disabled');
                     } else {
-                        return $this->respuestas->error500('Internal Error, updates fail');
+                        $responseHttp =  $this->respuestas->error500(ResponseHttp::INTERNALERRORUPDATESFAIL);
                     }
-
-                    return $result;
                 } else {
-                    return $this->respuestas->error200('Token expired');
+                    $responseHttp =  $this->respuestas->error200(ResponseHttp::TOKENEXPIRED);
                 }
             } else {
-                return $this->respuestas->error200('Token ivalid');
+                $responseHttp = $this->respuestas->error200(ResponseHttp::TOKENINVALID);
             }
         }
+        return $responseHttp;
     }
 
 
     public function login($json)
     {
-        
-        
-
         $datos = json_decode($json, true);
+        $responseHttp = $this->respuestas->error400();
 
-        if (!isset($datos['user']) || !isset($datos['password'])) {
-            //error
-            return $this->respuestas->error400();
-        } else {
-            //todo ok
+        if (isset($datos['user']) && isset($datos['password'])) {
             $usuario = $datos['user'];
             $password = $datos['password'];
            
@@ -82,24 +67,20 @@ class Login
                         $verificar = $this->auth->insertarToken($datos[0]['id']);
 
                         if ($verificar) {
-                            $result = $this->respuestas->response;
-                            $result['result'] = array(
-                                'token' => $verificar
-                            );
+                            $responseHttp = $this->respuestas->success200('token', $verificar);
                         } else {
-                            return $this->respuestas->error500('Internal Server Error');
+                            $responseHttp = $this->respuestas->error500(ResponseHttp::INTERNALSERVERERROR);
                         }
-
-                        return $result;
                     } else {
-                        return $this->respuestas->error200('user inactive');
+                        $responseHttp = $this->respuestas->error200(ResponseHttp::USERINACTIVE);
                     }
                 } else {
-                    return $this->respuestas->error200('Incorrect password');
+                    $responseHttp = $this->respuestas->error200(ResponseHttp::INCORRECTPASSWORD);
                 }
             } else {
-                return $this->respuestas->error200("The user $usuario not found");
+                $responseHttp = $this->respuestas->error200("The user $usuario not found");
             }
         }
+        return $responseHttp;
     }
 }
