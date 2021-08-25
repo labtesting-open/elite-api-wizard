@@ -10,7 +10,7 @@ class Token
     private $respuestas;
 
     public function __construct()
-    {        
+    {
         $this->respuestas  = new Respuestas();
         $this->token = new \Elitelib\Token();
     }
@@ -31,6 +31,4 @@ class Token
         }
         return $responseHttp;
     }
-
-
 }

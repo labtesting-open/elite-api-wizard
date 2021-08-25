@@ -12,7 +12,7 @@ class Club
 
     public function __construct()
     {
-        $this->club = new \Elitelib\Club();        
+        $this->club = new \Elitelib\Club();
         $this->respuestas  = new Respuestas();
         $this->token = new Token();
     }

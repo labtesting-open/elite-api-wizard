@@ -18,16 +18,16 @@ class Team
         $this->token = new Token();
         $this->respuestas  = new Respuestas();
         $this->club = new \Elitelib\Club();
-    }    
+    }
 
 
 
     public function getClubTeams($json)
     {
 
-        $result = $this->token->checkAndReturnResponse($json);
+        $responseHttp = $this->token->checkAndReturnResponse($json);
 
-        if ($result == null) {
+        if ($responseHttp == null) {
             $datos = json_decode($json, true);
 
             if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
@@ -40,13 +40,13 @@ class Team
                 $resultado->result = new stdClass();
                 $resultado->result = $info;
 
-                $result = $resultado;
+                $responseHttp = $resultado;
             } else {
-                $result = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+                $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
             }
         }
 
-        return $result;
+        return $responseHttp;
     }
 
 
@@ -122,9 +122,9 @@ class Team
 
     public function getAvailableFilters($json)
     {
-        $resultHttp = $this->token->checkAndReturnResponse($json);
+        $responseHttp = $this->token->checkAndReturnResponse($json);
 
-        if ($resultHttp == null) {
+        if ($responseHttp == null) {
             $datos = json_decode($json, true);
 
             if (isset($datos['target']) && $this->checkTarget($datos['target'])) {
@@ -219,13 +219,13 @@ class Team
 
                 $resultado->result = $result;
 
-                $resultHttp = $resultado;
+                $responseHttp = $resultado;
             } else {
-                $resultHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+                $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
             }
         }
 
-        return $resultHttp;
+        return $responseHttp;
     }
 
 
