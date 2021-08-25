@@ -2,7 +2,6 @@
 
 namespace Elitesports;
 
-use Elitesports\Respuestas;
 use stdClass;
 
 class Team
@@ -16,7 +15,7 @@ class Team
     public function __construct()
     {
         $this->team = new \Elitelib\Team();
-        $this->token = new \Elitelib\Token();
+        $this->token = new Token();
         $this->respuestas  = new Respuestas();
         $this->club = new \Elitelib\Club();
     }
@@ -26,54 +25,114 @@ class Team
     public function getClubTeams($json)
     {
 
+        $responseHttp = $this->token->checkAndReturnResponse($json);
 
-        $datos = json_decode($json, true);
+        if ($responseHttp == null) {
+            $datos = json_decode($json, true);
 
-        if (!isset($datos['token'])) {
-            return $this->respuestas->error401();
-        } else {
-            $testToken = $this->token->checkToken($datos['token']);
+            if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
+                $countryCode   = (isset($datos['country_code'])) ? $datos['country_code'] : null;
 
-            if ($testToken) {
-                if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
-                    $countryCode   = (isset($datos['country_code'])) ? $datos['country_code'] : null;
+                $info = $this->team->getTeams($datos['club_id'], $countryCode);
 
-                    $info = $this->team->getTeams($datos['club_id'], $countryCode);
+                $resultado = new stdClass();
+                $resultado->status = 'ok';
+                $resultado->result = new stdClass();
+                $resultado->result = $info;
 
-                    $resultado = new stdClass();
-                    $resultado->status = 'ok';
-                    $resultado->result = new stdClass();
-                    $resultado->result = $info;
-
-                    return $resultado;
-                } else {
-                    return $this->respuestas->error200('Data incorrect or incomplete');
-                }
+                $responseHttp = $resultado;
             } else {
-                return $this->respuestas->error401('Token invalid or expired');
+                $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
             }
         }
+
+        return $responseHttp;
     }
-
-
-
-
-
 
 
     public function getInfoWithFilters($json)
     {
 
-        $datos = json_decode($json, true);
+        $responseHttp = $this->token->checkAndReturnResponse($json);
 
-        if (!isset($datos['token'])) {
-            return $this->respuestas->error401();
-        } else {
-            $testToken = $this->token->checkToken($datos['token']);
+        if ($responseHttp == null) {
+            $datos = json_decode($json, true);
+            
+            $continentCode = null;
+            if (isset($datos['continent_code']) &&  !empty($datos['continent_code'])) {
+                $continentCode = $datos['continent_code'];
+            }
+            $countryCode = null;
+            if (isset($datos['country_code']) &&  !empty($datos['country_code'])) {
+                $countryCode = $datos['country_code'];
+            }
+            $categoryId = null;
+            if (isset($datos['category_id']) &&  !empty($datos['category_id'])) {
+                $categoryId = $datos['category_id'];
+            }
+            $divisionId = null;
+            if (isset($datos['division_id']) &&  !empty($datos['division_id'])) {
+                $divisionId = $datos['division_id'];
+            }
+            $page = 1;
+            if (isset($datos['page']) &&  is_numeric($datos['page'])) {
+                $page = $datos['page'];
+            }
+            $cant = 100;
+            if (isset($datos['cant']) &&  is_numeric($datos['cant'])) {
+                $cant = $datos['cant'];
+            }
+            $order = null;
+            if (isset($datos['order']) &&  !empty($datos['order'])) {
+                $order = $datos['order'];
+            }
+            $orderSense = null;
+            if (isset($datos['order_sense']) &&  !empty($datos['order_sense'])) {
+                $orderSense = $datos['order_sense'];
+            }
+            $translateCode = 'GB';
+            if (isset($datos['language_id']) &&  !empty($datos['language_id'])) {
+                $translateCode = $datos['language_id'];
+            }
+            
+            $info = $this->team->getTeamsByFilters(
+                $continentCode,
+                $countryCode,
+                $categoryId,
+                $divisionId,
+                $page,
+                $cant,
+                $order,
+                $orderSense,
+                $translateCode
+            );
 
-            if ($testToken) {
+            $resultado = new stdClass();
+            $resultado->status = 'ok';
+            $resultado->result = new stdClass();
+            $resultado->result = $info;
+
+            $responseHttp = $resultado;
+        }
+
+        return $responseHttp;
+    }
+
+
+
+    public function getAvailableFilters($json)
+    {
+        $responseHttp = $this->token->checkAndReturnResponse($json);
+
+        if ($responseHttp == null) {
+            $datos = json_decode($json, true);
+
+            if (isset($datos['target']) && $this->checkTarget($datos['target'])) {
+                $resultado = new stdClass();
+                $resultado->status = 'ok';
+                $resultado->result = new stdClass();
+
                 $continentCode = null;
-
                 if (isset($datos['continent_code']) &&  !empty($datos['continent_code'])) {
                     $continentCode = $datos['continent_code'];
                 }
@@ -89,166 +148,84 @@ class Team
                 if (isset($datos['division_id']) &&  !empty($datos['division_id'])) {
                     $divisionId = $datos['division_id'];
                 }
-                $page = 1;
-                if (isset($datos['page']) &&  is_numeric($datos['page'])) {
-                    $page = $datos['page'];
-                }
-                $cant = 100;
-                if (isset($datos['cant']) &&  is_numeric($datos['cant'])) {
-                    $cant = $datos['cant'];
-                }
-                $order = null;
-                if (isset($datos['order']) &&  !empty($datos['order'])) {
-                    $order = $datos['order'];
-                }
-                $orderSense = null;
-                if (isset($datos['order_sense']) &&  !empty($datos['order_sense'])) {
-                    $orderSense = $datos['order_sense'];
-                }
-                $translateCode = 'GB';
-                if (isset($datos['language_id']) &&  !empty($datos['language_id'])) {
-                    $translateCode = $datos['language_id'];
+
+                $result = new stdClass();
+                
+                if ($datos['target'] == 'continents') {
+                    $result = $this->club->getAvailableContinents(
+                        $continentCode,
+                        $countryCode,
+                        $categoryId,
+                        $divisionId
+                    );
                 }
                 
-                $info = $this->team->getTeamsByFilters(
-                    $continentCode,
-                    $countryCode,
-                    $categoryId,
-                    $divisionId,
-                    $page,
-                    $cant,
-                    $order,
-                    $orderSense,
-                    $translateCode
-                );
-
-                $resultado = new stdClass();
-                $resultado->status = 'ok';
-                $resultado->result = new stdClass();
-                $resultado->result = $info;
-
-                return $resultado;
-            } else {
-                return $this->respuestas->error401('Token invalid or expired');
-            }
-        }
-    }
-
-
-
-    public function getAvailableFilters($json)
-    {
-
-
-        $datos = json_decode($json, true);
-
-        if (!isset($datos['token'])) {
-            return $this->respuestas->error401();
-        } else {
-            $testToken = $this->token->checkToken($datos['token']);
-
-            if ($testToken) {
-                if (isset($datos['target']) && $this->checkTarget($datos['target'])) {
-                    $resultado = new stdClass();
-                    $resultado->status = 'ok';
-                    $resultado->result = new stdClass();
-
-                    $continentCode = null;
-                    if (isset($datos['continent_code']) &&  !empty($datos['continent_code'])) {
-                        $continentCode = $datos['continent_code'];
-                    }
-                    $countryCode = null;
-                    if (isset($datos['country_code']) &&  !empty($datos['country_code'])) {
-                        $countryCode = $datos['country_code'];
-                    }
-                    $categoryId = null;
-                    if (isset($datos['category_id']) &&  !empty($datos['category_id'])) {
-                        $categoryId = $datos['category_id'];
-                    }
-                    $divisionId = null;
-                    if (isset($datos['division_id']) &&  !empty($datos['division_id'])) {
-                        $divisionId = $datos['division_id'];
-                    }
-
-                    $result = new stdClass();
-                    
-                    if ($datos['target'] == 'continents') {
-                        $result = $this->club->getAvailableContinents(
-                            $continentCode,
-                            $countryCode,
-                            $categoryId,
-                            $divisionId
-                        );
-                    }
-                    
-                    if ($datos['target'] == 'countries') {
-                        $result = $this->club->getAvailableCountries(
-                            $continentCode,
-                            $countryCode,
-                            $categoryId,
-                            $divisionId
-                        );
-                    }
-                    
-                    if ($datos['target'] == 'categories') {
-                        $result = $this->team->getAvailableCategories(
-                            $continentCode,
-                            $countryCode,
-                            $categoryId,
-                            $divisionId
-                        );
-                    }
-                    
-                    if ($datos['target'] == 'divisions') {
-                        $result = $this->club->getAvailableDivisions(
-                            $continentCode,
-                            $countryCode,
-                            $categoryId,
-                            $divisionId
-                        );
-                    }
-                    
-                    if ($datos['target'] == 'all') {
-                        $result->continents = $this->club->getAvailableContinents(
-                            $continentCode,
-                            $countryCode,
-                            $categoryId,
-                            $divisionId
-                        );
-
-                        $result->countries  = $this->club->getAvailableCountries(
-                            $continentCode,
-                            $countryCode,
-                            $categoryId,
-                            $divisionId
-                        );
-
-                        $result->categories = $this->team->getAvailableCategories(
-                            $continentCode,
-                            $countryCode,
-                            $categoryId,
-                            $divisionId
-                        );
-
-                        $result->divisions  = $this->club->getAvailableDivisions(
-                            $continentCode,
-                            $countryCode,
-                            $categoryId,
-                            $divisionId
-                        );
-                    }
-
-
-                    $resultado->result = $result;
-
-                    return $resultado;
-                } else {
-                    return $this->respuestas->error200('Data incorrect or incomplete');
+                if ($datos['target'] == 'countries') {
+                    $result = $this->club->getAvailableCountries(
+                        $continentCode,
+                        $countryCode,
+                        $categoryId,
+                        $divisionId
+                    );
                 }
+                
+                if ($datos['target'] == 'categories') {
+                    $result = $this->team->getAvailableCategories(
+                        $continentCode,
+                        $countryCode,
+                        $categoryId,
+                        $divisionId
+                    );
+                }
+                
+                if ($datos['target'] == 'divisions') {
+                    $result = $this->club->getAvailableDivisions(
+                        $continentCode,
+                        $countryCode,
+                        $categoryId,
+                        $divisionId
+                    );
+                }
+                
+                if ($datos['target'] == 'all') {
+                    $result->continents = $this->club->getAvailableContinents(
+                        $continentCode,
+                        $countryCode,
+                        $categoryId,
+                        $divisionId
+                    );
+
+                    $result->countries  = $this->club->getAvailableCountries(
+                        $continentCode,
+                        $countryCode,
+                        $categoryId,
+                        $divisionId
+                    );
+
+                    $result->categories = $this->team->getAvailableCategories(
+                        $continentCode,
+                        $countryCode,
+                        $categoryId,
+                        $divisionId
+                    );
+
+                    $result->divisions  = $this->club->getAvailableDivisions(
+                        $continentCode,
+                        $countryCode,
+                        $categoryId,
+                        $divisionId
+                    );
+                }
+
+                $resultado->result = $result;
+
+                $responseHttp = $resultado;
             } else {
-                return $this->respuestas->error401('Token invalid or expired');
+                $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
             }
         }
+
+        return $responseHttp;
     }
 
 

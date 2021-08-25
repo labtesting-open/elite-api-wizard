@@ -28,10 +28,9 @@ class Search
     {
           
         $datos = json_decode($json, true);
+        $responseHttp = $this->respuestas->error401();
 
-        if (!isset($datos['token'])) {
-            return $this->respuestas->error401();
-        } else {
+        if (isset($datos['token'])) {
             $arrayToken = $this->token->checkToken($datos['token']);
 
             if ($arrayToken) {
@@ -63,13 +62,14 @@ class Search
                     $resultado->result->players = $resultPlayers;
                     $resultado->result->clubs = $resultClubs;
                         
-                    return $resultado;
+                    $responseHttp = $resultado;
                 } else {
-                    return $this->respuestas->error200('Data incorrect or incomplete');
+                    $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
                 }
             } else {
-                return $this->respuestas->error401('Token invalid or expired');
+                $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
             }
         }
+        return $responseHttp;
     }
 }
