@@ -17,11 +17,18 @@ class Club
         $this->token = new Token();
     }
 
+
+    public function checkTokenAndReturnResponse($json)
+    {
+        return $this->token->checkAndReturnResponse($json);
+    }
+
+
     public function getInfo($json)
     {
-        $result = $this->token->checkAndReturnResponse($json);
+        $result = $this->checkTokenAndReturnResponse($json);
 
-        if ($result == null) {
+        if (is_null($result)) {
             $datos = json_decode($json, true);
             if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
                 $info = $this->club->getBasicInfo($datos['club_id']);
@@ -43,9 +50,9 @@ class Club
     public function getInfoWithFilters($json)
     {
 
-        $responseHttp = $this->token->checkAndReturnResponse($json);
+        $responseHttp = $this->checkTokenAndReturnResponse($json);
 
-        if ($responseHttp == null) {
+        if (is_null($responseHttp)) {
             $datos = json_decode($json, true);
 
             $continentCode = null;
