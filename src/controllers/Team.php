@@ -2,7 +2,6 @@
 
 namespace Elitesports;
 
-use Elitesports\Respuestas;
 use stdClass;
 
 class Team
@@ -16,34 +15,17 @@ class Team
     public function __construct()
     {
         $this->team = new \Elitelib\Team();
-        $this->token = new \Elitelib\Token();
+        $this->token = new Token();
         $this->respuestas  = new Respuestas();
         $this->club = new \Elitelib\Club();
-    }
-
-    private function checkTokenAndResponse($json)
-    {
-        $datos = json_decode($json, true);
-        $responseHttp = $this->respuestas->error401();
-        
-        if (isset($datos['token'])) {
-            $testToken = $this->token->checkToken($datos['token']);
-
-            if ($testToken) {
-                $responseHttp = null;
-            } else {
-                $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
-            }
-        }
-        return $responseHttp;
-    }
+    }    
 
 
 
     public function getClubTeams($json)
     {
 
-        $responseHttp = $this->checkTokenAndResponse($json);
+        $responseHttp = $this->token->checkAndReturnResponse($json);
 
         if ($responseHttp == null) {
             $datos = json_decode($json, true);
@@ -71,7 +53,7 @@ class Team
     public function getInfoWithFilters($json)
     {
 
-        $responseHttp = $this->checkTokenAndResponse($json);
+        $responseHttp = $this->token->checkAndReturnResponse($json);
 
         if ($responseHttp == null) {
             $datos = json_decode($json, true);
@@ -140,7 +122,7 @@ class Team
 
     public function getAvailableFilters($json)
     {
-        $responseHttp = $this->checkTokenAndResponse($json);
+        $responseHttp = $this->token->checkAndReturnResponse($json);
 
         if ($responseHttp == null) {
             $datos = json_decode($json, true);

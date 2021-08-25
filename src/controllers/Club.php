@@ -2,7 +2,6 @@
 
 namespace Elitesports;
 
-use Elitesports\Respuestas;
 use stdClass;
 
 class Club
@@ -13,31 +12,14 @@ class Club
 
     public function __construct()
     {
-        $this->club = new \Elitelib\Club();
-        $this->token = new \Elitelib\Token();
+        $this->club = new \Elitelib\Club();        
         $this->respuestas  = new Respuestas();
-    }
-
-    private function checkTokenAndResponse($json)
-    {
-        $datos = json_decode($json, true);
-        $responseHttp = $this->respuestas->error401();
-        
-        if (isset($datos['token'])) {
-            $testToken = $this->token->checkToken($datos['token']);
-
-            if ($testToken) {
-                $responseHttp = null;
-            } else {
-                $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
-            }
-        }
-        return $responseHttp;
+        $this->token = new Token();
     }
 
     public function getInfo($json)
     {
-        $responseHttp = $this->checkTokenAndResponse($json);
+        $responseHttp = $this->token->checkAndReturnResponse($json);
 
         if ($responseHttp == null) {
             $datos = json_decode($json, true);
@@ -61,7 +43,7 @@ class Club
     public function getInfoWithFilters($json)
     {
 
-        $responseHttp = $this->checkTokenAndResponse($json);
+        $responseHttp = $this->token->checkAndReturnResponse($json);
 
         if ($responseHttp == null) {
             $datos = json_decode($json, true);
