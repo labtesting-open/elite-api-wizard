@@ -24,10 +24,9 @@ class UserClub
     {
             
         $datos = json_decode($json, true);
+        $responseHttp = $this->respuestas->error401();
 
-        if (!isset($datos['token'])) {
-            return $this->respuestas->error401();
-        } else {
+        if (isset($datos['token'])) {
             $testToken = $this->token->checkToken($datos['token']);
 
             if ($testToken) {
@@ -38,10 +37,11 @@ class UserClub
                     $resultado->result = new stdClass();
                     $resultado->result = $clubId;
                         
-                    return $resultado;
+                    $responseHttp = $resultado;
             } else {
-                return $this->respuestas->error401('Token invalid or expired');
+                $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
             }
         }
+        return $responseHttp;
     }
 }

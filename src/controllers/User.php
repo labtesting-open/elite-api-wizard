@@ -23,11 +23,11 @@ class User
     public function getUserPlan($json)
     {
             
-            $datos = json_decode($json, true);
+        $datos = json_decode($json, true);
 
-        if (!isset($datos['token'])) {
-            return $this->respuestas->error401();
-        } else {
+        $responseHttp = $this->respuestas->error401();
+        
+        if (isset($datos['token'])) {
             $arrayToken = $this->token->checkToken($datos['token']);
 
             if ($arrayToken) {
@@ -52,10 +52,11 @@ class User
                    $resultado->result->plan->services = new stdClass();
                    $resultado->result->plan->services = $planServices;
                        
-                   return $resultado;
+                   $responseHttp = $resultado;
             } else {
-                return $this->respuestas->error401('Token invalid or expired');
+                $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
             }
         }
+        return $responseHttp;
     }
 }

@@ -76,4 +76,16 @@ class Respuestas
 
         return $this->response;
     }
+
+    public function success200($key = null, $valor = null)
+    {
+        
+        $this->response['status'] = 'ok';
+        
+        $this->response['result'] = array(
+            "$key" => "$valor"
+        );
+
+        return $this->response;
+    }
 }
