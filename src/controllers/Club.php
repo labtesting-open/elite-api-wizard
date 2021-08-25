@@ -19,9 +19,9 @@ class Club
 
     public function getInfo($json)
     {
-        $responseHttp = $this->token->checkAndReturnResponse($json);
+        $result = $this->token->checkAndReturnResponse($json);
 
-        if ($responseHttp == null) {
+        if ($result == null) {
             $datos = json_decode($json, true);
             if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
                 $info = $this->club->getBasicInfo($datos['club_id']);
@@ -31,13 +31,13 @@ class Club
                 $resultado->result = new stdClass();
                 $resultado->result = $info;
                     
-                $responseHttp = $resultado;
+                $result = $resultado;
             } else {
-                $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+                $result = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
             }
         }
 
-        return $responseHttp;
+        return $result;
     }
     
     public function getInfoWithFilters($json)
