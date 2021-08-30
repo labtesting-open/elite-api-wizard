@@ -23,7 +23,7 @@ class Setting
 
     public function setLocalMode()
     {
-        $this->server = 'http://localhost';
+        $this->server = 'http://127.0.0.1';
         $this->user = 'elitesports17';
         $this->password = 'abc1234';
         $this->folder = '/elite-api-wizard';
