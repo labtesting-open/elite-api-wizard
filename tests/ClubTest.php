@@ -20,7 +20,7 @@ class ClubTest extends TestCase
 
     protected function setUp(): void
     {
-        $settings = new \Elitesports\Setting('remote');
+        $settings = new \Elitesports\Setting();
 
         $this->server   = $settings->getServer();
         $this->user     = $settings->getUser();
@@ -41,7 +41,7 @@ class ClubTest extends TestCase
 
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
 
-            $requestToken = $this->client->request(
+            $requestAuth = $this->client->request(
                 'POST',
                 $url,
                 [
@@ -49,26 +49,28 @@ class ClubTest extends TestCase
                 ]
             );
         
-            $response = json_decode($requestToken->getBody()->getContents());
+            $responseAuth = json_decode($requestAuth->getBody()->getContents());
             
-            $token = $response->result->token;
+            $token = $responseAuth->result->token;
             
-            $body = '{"token":"' . $token . '","club_id":"1"}';
+            $body = '{"club_id":"1"}';            
             
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/club.php';
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/club.php';  
 
-            $requestBasic = $this->client->request(
-                'POST',
-                $url,
+            $requestCustom = $this->client->request('GET', $url,             
+            [
+                'headers' => 
                 [
-                'body' => $body
-                ]
-            );
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                    'token' => $token
+                ],
+                'body' => $body                
+            ]);
 
         
-            $response = json_decode($requestBasic->getBody()->getContents());
-        
-            //var_dump($response->status);
+            $response = json_decode($requestCustom->getBody()->getContents());        
+           
+            //var_dump($response);            
 
             $this->assertEquals('ok', $response->status);
         } catch (\Throwable $th) {

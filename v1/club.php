@@ -3,8 +3,9 @@
 include __DIR__."/../vendor/autoload.php";
 
 
-$_club = new \Elitesports\Club();
-$_respuestas = new \Elitesports\Respuestas();
+$clubController = new \Elitesports\Club();
+$responsesController = new \Elitesports\Respuestas();
+$tokenController = new \Elitesports\Token();
 
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
@@ -15,31 +16,35 @@ header('content-type: application/json');
 
 
 if ($_SERVER['REQUEST_METHOD'] == "GET"){
+    $headers = apache_request_headers();
+    $token = isset($headers['token'])? $headers['token']: null;    
+    $httpResponse = $tokenController->checkAndReturnResponse($token);
 
-    $datosArray = $_respuestas->error405();
-    echo json_encode($datosArray); 
-   
+    if ( is_null($httpResponse)) {
+        $bodyContents = file_get_contents("php://input");
+        $httpResponse = $clubController->getInfo($bodyContents);
+    }
+
+    echo json_encode($httpResponse); 
 
 }else if($_SERVER['REQUEST_METHOD'] == "POST"){
 
-    $postBody = file_get_contents("php://input");
-    $datosArray = $_club->getInfo($postBody);   
-    echo json_encode($datosArray);
-
+    $datosArray = $responsesController->error405();
+    echo json_encode($datosArray); 
 
 }else if($_SERVER['REQUEST_METHOD'] == "PUT"){
 
-    $datosArray = $_respuestas->error405();
+    $datosArray = $responsesController->error405();
     echo json_encode($datosArray); 
 
 }else if($_SERVER['REQUEST_METHOD'] == "DELETE"){
 
-    $datosArray = $_respuestas->error405();
+    $datosArray = $responsesController->error405();
     echo json_encode($datosArray); 
 
 }else{
    
-    $datosArray = $_respuestas->error405();
+    $datosArray = $responsesController->error405();
     echo json_encode($datosArray); 
 
 }
