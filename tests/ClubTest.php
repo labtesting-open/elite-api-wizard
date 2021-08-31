@@ -20,7 +20,7 @@ class ClubTest extends TestCase
 
     protected function setUp(): void
     {
-        $settings = new \Elitesports\Setting();
+        $settings = new \Elitesports\Setting('remote');
 
         $this->server   = $settings->getServer();
         $this->user     = $settings->getUser();
@@ -53,25 +53,27 @@ class ClubTest extends TestCase
             
             $token = $responseAuth->result->token;
             
-            $body = '{"club_id":"1"}';            
+            $body = '{"club_id":"1"}';
             
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/club.php';  
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/club.php';
 
-            $requestCustom = $this->client->request('GET', $url,             
-            [
-                'headers' => 
+            $requestCustom = $this->client->request(
+                'GET',
+                $url,
+                [
+                'headers' =>
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                    'token' => $token
+                    'Token' => $token
                 ],
-                'body' => $body                
-            ]);
+                'body' => $body
+                ]
+            );
 
-        
-            $response = json_decode($requestCustom->getBody()->getContents());        
-           
-            //var_dump($response);            
-
+            $response = json_decode($requestCustom->getBody()->getContents());
+            
+            //var_dump($response);
+            
             $this->assertEquals('ok', $response->status);
         } catch (\Throwable $th) {
             var_dump($th->getMessage());

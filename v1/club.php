@@ -15,9 +15,9 @@ header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 header('content-type: application/json');
 
 
-if ($_SERVER['REQUEST_METHOD'] == "GET"){
-    $headers = apache_request_headers();
-    $token = isset($headers['token'])? $headers['token']: null;    
+if ($_SERVER['REQUEST_METHOD'] == "GET") {
+    $headers = apache_request_headers();    
+    $token = isset($headers['Token'])? $headers['Token']: null;    
     $httpResponse = $tokenController->checkAndReturnResponse($token);
 
     if ( is_null($httpResponse)) {
@@ -25,9 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET"){
         $httpResponse = $clubController->getInfo($bodyContents);
     }
 
-    echo json_encode($httpResponse); 
+    echo json_encode($httpResponse);
 
-}else if($_SERVER['REQUEST_METHOD'] == "POST"){
+} else if($_SERVER['REQUEST_METHOD'] == "POST") {
 
     $datosArray = $responsesController->error405();
     echo json_encode($datosArray); 

@@ -89,8 +89,8 @@ class Respuestas
         return $this->response;
     }
 
-    public function standarResponse($code = 200, $result = null )
-    {  
+    public function standarResponse($code = 200, $result = null)
+    {
         $this->response['status'] = $code;
         
         $this->response['result'] = $result;

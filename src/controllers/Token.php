@@ -33,7 +33,7 @@ class Token
     }
 
     public function checkAndReturnResponse($key)
-    {   
+    {
         $responseHttp = $this->respuestas->error401(ResponseHttp::NOTAUTHORISED);
         
         if (isset($key)) {
