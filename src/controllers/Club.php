@@ -31,7 +31,6 @@ class Club
         $datos = json_decode($json, true);
 
         if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
-            
             $info = $this->club->getBasicInfo($datos['club_id']);
          
             $infoClub = new stdClass();

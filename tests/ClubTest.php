@@ -75,7 +75,6 @@ class ClubTest extends TestCase
             //var_dump($response);
             
             $this->assertEquals('ok', $response->status);
-            
         } catch (\Throwable $th) {
             var_dump($th->getMessage());
         }

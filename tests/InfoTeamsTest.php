@@ -37,44 +37,48 @@ class InfoTeamsTest extends TestCase
     {
 
         try {
-            $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
-
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
-
-            $requestToken = $this->client->request(
-                'POST',
-                $url,
-                [
-                'body' => $body
-                ]
-            );
-        
-            $response = json_decode($requestToken->getBody()->getContents());
+                $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
+    
+                $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
+    
+                $requestAuth = $this->client->request(
+                    'POST',
+                    $url,
+                    [
+                    'body' => $body
+                    ]
+                );
             
-            $token = $response->result->token;
-            
-            $body = '{"token":"' . $token . '",
-                "page":"1",
-                "continent_code":"SA",
-                "country_code":"AR",
-                "category_id":"1",
-                "division_id":"1",
-                "order":"club_name",
-                "ordersense":"DESC"
-            }';
-            
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version;
-            $url .= '/info.teams.php';
-
-            $requestBasic = $this->client->request(
-                'POST',
-                $url,
-                [
-                'body' => $body
-                ]
-            );
-        
-            $response = json_decode($requestBasic->getBody()->getContents());
+                $responseAuth = json_decode($requestAuth->getBody()->getContents());
+                
+                $token = $responseAuth->result->token;
+                
+                $body = '{
+                    "page":"1",
+                    "continent_code":"SA",
+                    "country_code":"AR",
+                    "category_id":"1",
+                    "division_id":"1",
+                    "order":"club_name",
+                    "ordersense":"DESC"
+                }';
+                
+                $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/info.teams.php';
+    
+                $requestCustom = $this->client->request(
+                    'GET',
+                    $url,
+                    [
+                    'headers' =>
+                    [
+                        'Content-Type' => 'application/x-www-form-urlencoded',
+                        'Token' => $token
+                    ],
+                    'body' => $body
+                    ]
+                );
+    
+                $response = json_decode($requestCustom->getBody()->getContents());
         
             //var_dump($response->status);
 

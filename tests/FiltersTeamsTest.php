@@ -41,7 +41,7 @@ class FiltersTeamsTest extends TestCase
 
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
 
-            $requestToken = $this->client->request(
+            $requestAuth = $this->client->request(
                 'POST',
                 $url,
                 [
@@ -49,23 +49,28 @@ class FiltersTeamsTest extends TestCase
                 ]
             );
         
-            $response = json_decode($requestToken->getBody()->getContents());
+            $responseAuth = json_decode($requestAuth->getBody()->getContents());
             
-            $token = $response->result->token;
-
-            $body = '{"token":"' . $token . '","target":"all"}';
+            $token = $responseAuth->result->token;
+            
+            $body = '{"target":"all"}';
             
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/filters.teams.php';
 
-            $requestBasic = $this->client->request(
-                'POST',
+            $requestCustom = $this->client->request(
+                'GET',
                 $url,
                 [
+                'headers' =>
+                [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                    'Token' => $token
+                ],
                 'body' => $body
                 ]
             );
-        
-            $response = json_decode($requestBasic->getBody()->getContents());
+
+            $response = json_decode($requestCustom->getBody()->getContents());
         
             //var_dump($response->status);
 

@@ -73,9 +73,9 @@ class TeamsTest extends TestCase
             $response = json_decode($requestCustom->getBody()->getContents());
             
             //var_dump($response->status);
+            
 
-            $this->assertEquals('ok', strval($response->status));
-
+            $this->assertEquals('ok', $response->status);
         } catch (\Throwable $th) {
             var_dump($th->getMessage());
         }
