@@ -24,28 +24,21 @@ class Team
 
     public function getClubTeams($json)
     {
+        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+       
+        $datos = json_decode($json, true);
 
-        $responseHttp = $this->token->checkAndReturnResponse($json);
+        if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
 
-        if ($responseHttp == null) {
-            $datos = json_decode($json, true);
+            $countryCode   = (isset($datos['country_code'])) ? $datos['country_code'] : null;
 
-            if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
-                $countryCode   = (isset($datos['country_code'])) ? $datos['country_code'] : null;
+            $info = $this->team->getTeams($datos['club_id'], $countryCode);
 
-                $info = $this->team->getTeams($datos['club_id'], $countryCode);
-
-                $resultado = new stdClass();
-                $resultado->status = 'ok';
-                $resultado->result = new stdClass();
-                $resultado->result = $info;
-
-                $responseHttp = $resultado;
-            } else {
-                $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
-            }
+            $infoTeams = new stdClass();
+            $infoTeams = $info;
+            $responseHttp = $this->respuestas->standarResponse('ok', $infoTeams);            
         }
-
+        
         return $responseHttp;
     }
 

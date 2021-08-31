@@ -29,22 +29,22 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 } else if($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    $datosArray = $responsesController->error405();
-    echo json_encode($datosArray); 
+    $httpResponse = $responsesController->error405();
+    echo json_encode($httpResponse); 
 
 }else if($_SERVER['REQUEST_METHOD'] == "PUT"){
 
-    $datosArray = $responsesController->error405();
-    echo json_encode($datosArray); 
+    $httpResponse = $responsesController->error405();
+    echo json_encode($httpResponse); 
 
 }else if($_SERVER['REQUEST_METHOD'] == "DELETE"){
 
-    $datosArray = $responsesController->error405();
-    echo json_encode($datosArray); 
+    $httpResponse = $responsesController->error405();
+    echo json_encode($httpResponse); 
 
 }else{
    
-    $datosArray = $responsesController->error405();
-    echo json_encode($datosArray); 
+    $httpResponse = $responsesController->error405();
+    echo json_encode($httpResponse); 
 
 }
