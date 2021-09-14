@@ -19,11 +19,12 @@ header('content-type: application/json');
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
     $headers = apache_request_headers();    
     $token = isset($headers['Token'])? $headers['Token']: null;    
-    $httpResponse = $teamController->getInfoWithFilters($token);
+    $httpResponse = $tokenController->checkAndReturnResponse($token);
 
     if ( is_null($httpResponse)) {
         $bodyContents = file_get_contents("php://input");
-        $httpResponse = $clubController->getInfo($bodyContents);
+        $httpResponse = $teamController->getInfoWithFilters($bodyContents);
+       
     }
 
     echo json_encode($httpResponse);
