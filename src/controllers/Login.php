@@ -18,14 +18,12 @@ class Login
     }
 
 
-    public function logOut($json)
+    public function logOut($token)
     {
-        
-        $datos = json_decode($json, true);
         $responseHttp = $this->respuestas->error400();
 
-        if (isset($datos['token'])) {
-            $token = $datos['token'];
+        if (isset($token)) {
+           
             $datos = $this->auth->getUserToken($token);
 
             if ($datos) {

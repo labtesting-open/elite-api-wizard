@@ -2,6 +2,11 @@
 
 include __DIR__."/../vendor/autoload.php";
 
+
+$loginController = new \Elitesports\Login();
+$responsesController = new \Elitesports\Respuestas();
+$tokenController = new \Elitesports\Token();
+
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
@@ -9,32 +14,37 @@ header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 
 header('content-type: application/json');
 
-$_login = new \Elitesports\Login();
-$_respuestas = new \Elitesports\Respuestas();
 
-if($_SERVER['REQUEST_METHOD'] == "POST"){
+if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
+    $httpResponse = $responsesController->error405();
+    echo json_encode($httpResponse); 
 
-    //recibir datos
-    $postBody = file_get_contents("php://input");
-    
-    //enviar datos al manejador
-    $datosArray = $_login->logOut($postBody);
+} else if($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    //retornar respuesta
-    header('content-type: application/json');
+    $headers = apache_request_headers();    
+    $token = isset($headers['Token'])? $headers['Token']: null;    
+    $httpResponse = $tokenController->checkAndReturnResponse($token);
 
-    if(isset($datosArray["result"]["error_id"])){
-        $responseCode = $datosArray["result"]["error_id"];
-        http_response_code($responseCode);
-    }else{
-        http_response_code(200);
+    if ( is_null($httpResponse)) {        
+        $httpResponse = $loginController->logOut($token);        
     }
 
-    echo json_encode($datosArray);
+    echo json_encode($httpResponse);
+
+}else if($_SERVER['REQUEST_METHOD'] == "PUT"){
+
+    $httpResponse = $responsesController->error405();
+    echo json_encode($httpResponse); 
+
+}else if($_SERVER['REQUEST_METHOD'] == "DELETE"){
+
+    $httpResponse = $responsesController->error405();
+    echo json_encode($httpResponse); 
 
 }else{
-    header('content-type: application/json');
-    $datosArray = $_respuestas->error405();
-    echo json_encode($datosArray); 
+   
+    $httpResponse = $responsesController->error405();
+    echo json_encode($httpResponse); 
+
 }
