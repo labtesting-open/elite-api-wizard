@@ -1,5 +1,7 @@
 <?php
 
+use Elitesports\Utils;
+
 include __DIR__."/../vendor/autoload.php";
 
 
@@ -16,8 +18,9 @@ header('content-type: application/json');
 
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
-    $headers = apache_request_headers();    
-    $token = isset($headers['Token'])? $headers['Token']: null;    
+    
+    $headers = apache_request_headers();
+    $token = Utils::getkey($headers,'token');
     $httpResponse = $tokenController->checkAndReturnResponse($token);
 
     if ( is_null($httpResponse)) {

@@ -36,4 +36,24 @@ class Utils
         }
         return true;
     }
+
+    public static function getkey($keyList, $target, $type=null){
+        
+        $matchResult = null;
+
+        if(isset($target) && isset($keyList)){
+            foreach($keyList as $key =>$value){
+                if(strtolower($key) == $target){
+                    $matchResult = $value;
+                }
+            }
+        }
+
+        if(isset($type) && $type == 'Bearer'){
+            $matchResult = substr($matchResult,strlen($type));
+        }
+
+        return trim($matchResult);
+    }    
+
 }

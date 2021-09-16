@@ -1,5 +1,7 @@
 <?php
 
+use Elitesports\Utils;
+
 include __DIR__."/../vendor/autoload.php";
 
 
@@ -7,8 +9,9 @@ $userController = new \Elitesports\User();
 $responsesController = new \Elitesports\Respuestas();
 $tokenController = new \Elitesports\Token();
 
+
 header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
+header("Access-Control-Allow-Headers: Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 
@@ -16,8 +19,10 @@ header('content-type: application/json');
 
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
+
     $headers = apache_request_headers();    
-    $token = isset($headers['Token'])? $headers['Token']: null;    
+    $token = Utils::getkey($headers,'authorization', 'Bearer');
+    
     $httpResponse = $tokenController->checkAndReturnResponse($token);
 
     if ( is_null($httpResponse)) {        
@@ -27,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     echo json_encode($httpResponse);
 
 } else if($_SERVER['REQUEST_METHOD'] == "POST") {
-
+    
     $httpResponse = $responsesController->error405();
     echo json_encode($httpResponse); 
 
@@ -42,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     echo json_encode($httpResponse); 
 
 }else{
-   
+    
     $httpResponse = $responsesController->error405();
     echo json_encode($httpResponse); 
 

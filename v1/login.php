@@ -14,16 +14,10 @@ $_respuestas = new \Elitesports\Respuestas();
 
 
 if($_SERVER['REQUEST_METHOD'] == "POST"){
-
-
-    //recibir datos
-    $postBody = file_get_contents("php://input");
     
-    //enviar datos al manejador
-    $datosArray = $_login->login($postBody);
+    $postBody = file_get_contents("php://input");
 
-    //retornar respuesta
-   
+    $datosArray = $_login->login($postBody); 
 
     if(isset($datosArray["result"]["error_id"])){
         $responseCode = $datosArray["result"]["error_id"];
