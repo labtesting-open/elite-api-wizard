@@ -15,30 +15,25 @@ header('content-type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == "GET"){
 
-    $datosArray = $_respuestas->error405();
-    echo json_encode($datosArray); 
+    $datosArray = $_respuestas->error405();    
    
 
 }else if($_SERVER['REQUEST_METHOD'] == "POST"){
 
     $postBody = file_get_contents("php://input");
-    $datosArray = $_user_club->getOwnClub($postBody);   
-    echo json_encode($datosArray);
-
+    $datosArray = $_user_club->getOwnClub($postBody);
 
 }else if($_SERVER['REQUEST_METHOD'] == "PUT"){
 
     $datosArray = $_respuestas->error405();
-    echo json_encode($datosArray); 
 
 }else if($_SERVER['REQUEST_METHOD'] == "DELETE"){
 
     $datosArray = $_respuestas->error405();
-    echo json_encode($datosArray); 
 
 }else{
    
     $datosArray = $_respuestas->error405();
-    echo json_encode($datosArray); 
-
 }
+
+echo json_encode($datosArray);

@@ -56,33 +56,36 @@ class Login
         $responseHttp = $this->respuestas->error400();
 
         if (isset($datos['user']) && isset($datos['password'])) {
+
             $usuario = $datos['user'];
-            $password = $this->cryptography->decode($datos['password']);
+            $password = $datos['password'];
+
+            //$passwordDecoded = $this->cryptography->decodeBase64($password);
            
-            //$password = $this->auth->encriptar($password);
+            $password = $this->auth->encriptar($password);
 
-            // $datos = $this->auth->getUserDataByUserName($usuario);
+            $datos = $this->auth->getUserDataByUserName($usuario);
 
-            // if ($datos) {
-            //     if ($password == $datos[0]['password']) {
-            //         if ($datos[0]['active'] == 1) {
-            //             $verificar = $this->auth->insertarToken($datos[0]['id']);
+            if ($datos) {
+                if ($password == $datos[0]['password']) {
+                    if ($datos[0]['active'] == 1) {
+                        $verificar = $this->auth->insertarToken($datos[0]['id']);
 
-            //             if ($verificar) {
-            //                 $responseHttp = $this->respuestas->success200('token', $verificar);
-            //             } else {
-            //                 $responseHttp = $this->respuestas->error500(ResponseHttp::INTERNALSERVERERROR);
-            //             }
-            //         } else {
-            //             $responseHttp = $this->respuestas->error200(ResponseHttp::USERINACTIVE);
-            //         }
-            //     } else {
-            //         $responseHttp = $this->respuestas->error200(ResponseHttp::INCORRECTPASSWORD);
-            //     }
-            // } else {
-            //     $responseHttp = $this->respuestas->error200("The user $usuario not found");
-            // }
+                        if ($verificar) {
+                            $responseHttp = $this->respuestas->success200('token', $verificar);
+                        } else {
+                            $responseHttp = $this->respuestas->error500(ResponseHttp::INTERNALSERVERERROR);
+                        }
+                    } else {
+                        $responseHttp = $this->respuestas->error200(ResponseHttp::USERINACTIVE);
+                    }
+                } else {
+                    $responseHttp = $this->respuestas->error200(ResponseHttp::INCORRECTPASSWORD);
+                }
+            } else {
+                $responseHttp = $this->respuestas->error200("The user $usuario not found");
+            }
         }
-        return $password;
+        return $responseHttp;
     }
 }
