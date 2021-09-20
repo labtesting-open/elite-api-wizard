@@ -26,31 +26,22 @@ class Season
 
     public function getAvailableSeasons($json)
     {
+        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+       
+        $params = json_decode($json, true);
 
+        $keys = array('club_id', 'team_id');
+
+        if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
            
-        $datos = json_decode($json, true);
-        $responseHttp = $this->respuestas->error401();
+            $seasons = $this->season->getSeasonsByClubTeam($params['club_id'], $params['team_id']);
 
-        if (isset($datos['token'])) {
-            $arrayToken = $this->token->checkToken($datos['token']);
-
-            if ($arrayToken) {
-                if (Utils::checkIssetEmptyNumeric($datos['club_id'], $datos['team_id'])) {
-                    $seasons = $this->season->getSeasonsByClubTeam($datos['club_id'], $datos['team_id']);
-                       
-                    $resultado = new stdClass();
-                    $resultado->status = 'ok';
-                    $resultado->result = new stdClass();
-                    $resultado->result = $seasons;
-                        
-                    $responseHttp = $resultado;
-                } else {
-                    $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
-                }
-            } else {
-                $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
-            }
+            $infoSeasons = new stdClass();
+            $infoSeasons = $seasons;
+            $responseHttp = $this->respuestas->standarResponse('ok', $infoSeasons);
         }
+        
         return $responseHttp;
+       
     }
 }

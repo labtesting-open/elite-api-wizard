@@ -37,6 +37,51 @@ class Utils
         return true;
     }
 
+
+    private static function notEmptyAndNumeric($listKeys, $key){
+
+        $result = false;
+
+        foreach ($listKeys as $param => $value) {
+            if($param == $key){
+                if (!empty($value) && is_numeric($value)){
+                    $result = true;
+                    break;
+                } 
+            } 
+        }
+
+        return $result;
+
+    }
+
+    public static function checkParamsIssetAndNumeric($paramList, $keyList)
+    {
+        $utils = new Utils();
+
+        $checkResult = true;       
+
+        if( count($paramList) > 0 && count($keyList) > 0){
+
+            foreach ($keyList as $key) {   
+
+                $chekValue = $utils->notEmptyAndNumeric($paramList, $key);
+
+                if(!$chekValue){
+                    $checkResult = false;
+                    break;
+                }
+            }
+
+        }else{
+            $checkResult = false;
+        }        
+
+        return $checkResult;
+        
+    }
+
+
     public static function getkey($keyList, $target, $type=null){
         
         $matchResult = null;
