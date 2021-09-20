@@ -36,7 +36,7 @@ class Token
     {
         $responseHttp = $this->respuestas->error401(ResponseHttp::NOTAUTHORISED);
         
-        if (isset($key)) {
+        if (isset($key) && !empty($key)) {
             $testToken = $this->token->checkToken($key);
 
             if ($testToken) {

@@ -54,6 +54,22 @@ class Utils
         }
 
         return trim($matchResult);
-    }    
+    }  
+    
+    
+    public static function getAllParams($requestList, $outputMode=null){
+
+        $paramList = array();
+
+        foreach($requestList as $key => $value){
+           $paramList[$key] = $value;
+        }
+
+        if(isset($outputMode) && $outputMode == OutputsTypes::JSON){
+            $paramList = json_encode($paramList, true);
+        }
+        return $paramList;
+
+    }
 
 }

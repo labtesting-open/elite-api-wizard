@@ -3,13 +3,12 @@
 use Elitesports\Utils;
 
 include __DIR__."/../vendor/autoload.php";
-
+include('extras/headers.php');
 
 $userController = new \Elitesports\User();
 $responsesController = new \Elitesports\Respuestas();
 $tokenController = new \Elitesports\Token();
 
-include('extras/headers.php');
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
