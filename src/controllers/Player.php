@@ -132,50 +132,48 @@ class Player
        
         $datos = json_decode($json, true);
         
-        if (!isset($datos['token'])) {
-            return $this->respuestas->error401();
-        } else {
-            $testToken = $this->token->checkToken($datos['token']);
-            
-            if ($testToken) {
-                if (Utils::checkIssetEmptyNumeric($datos['season_id'], $datos['club_id'], $datos['team_id'])) {
-                    $languageId = (!isset($datos['language_id'])) ? 'GB' : $datos['language_id'];
-                    $resultado = new stdClass();
-                    $resultado->status = 'ok';
-                    $resultado->result = new stdClass();
-                    $categories = array();
+        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+       
+        $params = json_decode($json, true);
+
+        $keys = array('club_id', 'team_id', 'season_id');            
+           
+        if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
+
+            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;                    
+
+            $categories = array();
                     
-                    $categoriesList = $this->player->getCategoriesByLanguage($languageId);
-                    $find = (!isset($datos['find'])) ? null : $datos['find'];
+            $categoriesList = $this->player->getCategoriesByLanguage($countryCode);
+
+            $find = (!isset($params['find'])) ? null : $params['find'];
                     
-                    for ($positionId = 1; $positionId <= 4; $positionId++) {
-                        $playersList = $this->player->getTeamPlayersInfoAndStaticsByPosition(
-                            $datos['club_id'],
-                            $datos['team_id'],
-                            $datos['season_id'],
-                            $languageId,
-                            $positionId,
-                            'players.name',
-                            $find
-                        );
-                        
-                        $itemPlayersCategory = new stdClass();
-                        $itemPlayersCategory->name = $categoriesList[$positionId - 1]['name'];
-                        $itemPlayersCategory->players = $playersList;
-                        
-                        array_push($categories, $itemPlayersCategory);
-                    }
-                    
-                    $resultado->result->categories = $categories;
-                    
-                    return $resultado;
-                } else {
-                    return $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
-                }
-            } else {
-                return $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
+            for ($positionId = 1; $positionId <= 4; $positionId++) {
+                $playersList = $this->player->getTeamPlayersInfoAndStaticsByPosition(
+                    $params['club_id'],
+                    $params['team_id'],
+                    $params['season_id'],
+                    $countryCode,
+                    $positionId,
+                    'players.name',
+                    $find
+                );
+                
+                $itemPlayersCategory = new stdClass();
+                $itemPlayersCategory->name = $categoriesList[$positionId - 1]['name'];
+                $itemPlayersCategory->players = $playersList;
+                
+                array_push($categories, $itemPlayersCategory);
             }
+
+            $playersResult = new stdClass();
+            $playersResult->categories = $categories;
+            
+            $responseHttp = $this->respuestas->standarResponse('ok', $playersResult);
         }
+
+        return $responseHttp;
+        
     }
 
 
