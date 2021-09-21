@@ -64,7 +64,7 @@ class Player
                             null
                         );
                 }
-                
+
                 $itemPlayersCategory = new stdClass();
                 $itemPlayersCategory->name = $categoriesList[$positionId - 1]['name'];
                 $itemPlayersCategory->players = $playersList;
@@ -79,59 +79,49 @@ class Player
         }
 
         return $responseHttp;
-        
+
     }
 
 
     public function getTeamSeasonPlayerStatics($json)
     {
-        
-        $datos = json_decode($json, true);
-        $responseHttp = $this->respuestas->error401();
+        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
-        if (isset($datos['token'])) {
-            $testToken = $this->token->checkToken($datos['token']);
+        $params = json_decode($json, true);
+
+        $keys = array('id');            
+           
+        if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
+
+            $actions = array();
+            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
+            $positionId = $this->player->getPosition_id($params['id']);
+            $actionList = $this->player->getActionIdList($positionId);
+            $actionNameList = $this->player->getActionNameList($actionList, $countryCode);
+            $i = 0;
             
-            if ($testToken) {
-                if (Utils::checkIssetEmptyNumeric($datos['id'])) {
-                    $languageId = (!isset($datos['language_id'])) ? 'GB' : $datos['language_id'];
-                    $resultado = new stdClass();
-                    $resultado->status = 'ok';
-                    $resultado->result = new stdClass();
-                    $actions = array();
-                    $positionId = $this->player->getPosition_id($datos['id']);
-                    $actionList = $this->player->getActionIdList($positionId);
-                    $actionNameList = $this->player->getActionNameList($actionList, $languageId);
-                    $i = 0;
-                    
-                    foreach ($actionList as $actionId) {
-                        $actionsObtained = $this->player->getPlayerActionsByAction_id($datos['id'], $actionId);
-                        $itemPlayersAction = new stdClass();
-                        $itemPlayersAction->name  = $actionNameList[$i]['name'];
-                        $itemPlayersAction->items = $actionsObtained;
-                        $i++;
-                        array_push($actions, $itemPlayersAction);
-                    }
-                    
-                    $resultado->result->actions = $actions;
-                    
-                    $responseHttp = $resultado;
-                } else {
-                    $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
-                }
-            } else {
-                $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
+            foreach ($actionList as $actionId) {
+                $actionsObtained = $this->player->getPlayerActionsByAction_id($params['id'], $actionId);
+                $itemPlayersAction = new stdClass();
+                $itemPlayersAction->name  = $actionNameList[$i]['name'];
+                $itemPlayersAction->items = $actionsObtained;
+                $i++;
+                array_push($actions, $itemPlayersAction);
             }
+
+            $playersResult = new stdClass();
+            $playersResult->actions = $actions;
+            
+            $responseHttp = $this->respuestas->standarResponse('ok', $playersResult);
         }
+
         return $responseHttp;
     }
 
 
     public function getTeamSeasonPlayersSearch($json)
     {
-       
-        $datos = json_decode($json, true);
-        
+
         $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
        
         $params = json_decode($json, true);
