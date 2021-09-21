@@ -27,49 +27,37 @@ class Search
     public function find($json)
     {
           
-        $datos = json_decode($json, true);
-        $responseHttp = $this->respuestas->error401();
+        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+       
+        $params = json_decode($json, true);
 
-        if (isset($datos['token'])) {
-            $arrayToken = $this->token->checkToken($datos['token']);
+        if ( isset($params['find'])) {
 
-            if ($arrayToken) {
-                if (isset($datos['find'])) {
-                    $find = $datos['find'];
+            $find = $params['find'];
+            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
+            $page = (isset($datos['page'])) ? $datos['page'] : 1;
+            $modeFast = (isset($datos['fast'])) ? $datos['fast'] : 0;
+            $limit = (isset($datos['limit'])) ? $datos['limit'] : 10;
 
-                    $languageId = (!isset($datos['language_id'])) ? 'GB' : $datos['language_id'];
+            $resultPlayers = array();
+            $resultClubs   = array();
 
-                    $page = (isset($datos['page'])) ? $datos['page'] : 1;
-
-                    $modeFast = (isset($datos['fast'])) ? $datos['fast'] : 0;
-
-                    $limit = (isset($datos['limit'])) ? $datos['limit'] : 10;
-
-                    $resultPlayers = array();
-                    $resultClubs   = array();
-
-                    if (!$modeFast) {
-                        $resultPlayers = $this->player->findPlayers($find, $languageId, $page);
-                        $resultClubs   = $this->club->findClubs($find, $languageId, $page);
-                    } elseif (isset($find) && !empty($find)) {
-                        $resultPlayers = $this->player->findPlayersFast($find, $languageId, $limit);
-                        $resultClubs   = $this->club->findClubsFast($find, $languageId, $page);
-                    }
-                       
-                    $resultado = new stdClass();
-                    $resultado->status = 'ok';
-                    $resultado->result = new stdClass();
-                    $resultado->result->players = $resultPlayers;
-                    $resultado->result->clubs = $resultClubs;
-                        
-                    $responseHttp = $resultado;
-                } else {
-                    $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
-                }
-            } else {
-                $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
+            if (!$modeFast) {
+                $resultPlayers = $this->player->findPlayers($find, $countryCode, $page);
+                $resultClubs   = $this->club->findClubs($find, $countryCode, $page);
+            } elseif (isset($find) && !empty($find)) {
+                $resultPlayers = $this->player->findPlayersFast($find, $countryCode, $limit);
+                $resultClubs   = $this->club->findClubsFast($find, $countryCode, $page);
             }
+
+            $searchResult = new stdClass();
+            $searchResult->players = $resultPlayers;
+            $searchResult->clubs = $resultClubs;
+            
+            $responseHttp = $this->respuestas->standarResponse('ok', $searchResult);
         }
+
         return $responseHttp;
+        
     }
 }
