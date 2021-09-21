@@ -42,47 +42,47 @@ class Team
     }
 
 
-    public function getInfoWithFilters($json)
+    public function getInfoWithFilters($token, $json)
     {
         $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
-        
-        $datos = json_decode($json, true);
-            
+
+        $params = json_decode($json, true); 
+
         $continentCode = null;
-        if (isset($datos['continent_code']) &&  !empty($datos['continent_code'])) {
-            $continentCode = $datos['continent_code'];
+        if (isset($params['continent_code']) &&  !empty($params['continent_code'])) {
+            $continentCode = $params['continent_code'];
         }
         $countryCode = null;
-        if (isset($datos['country_code']) &&  !empty($datos['country_code'])) {
-            $countryCode = $datos['country_code'];
+        if (isset($params['country_code']) &&  !empty($params['country_code'])) {
+            $countryCode = $params['country_code'];
         }
         $categoryId = null;
-        if (isset($datos['category_id']) &&  !empty($datos['category_id'])) {
-            $categoryId = $datos['category_id'];
+        if (isset($params['category_id']) &&  !empty($params['category_id'])) {
+            $categoryId = $params['category_id'];
         }
         $divisionId = null;
-        if (isset($datos['division_id']) &&  !empty($datos['division_id'])) {
-            $divisionId = $datos['division_id'];
+        if (isset($params['division_id']) &&  !empty($params['division_id'])) {
+            $divisionId = $params['division_id'];
         }
         $page = 1;
-        if (isset($datos['page']) &&  is_numeric($datos['page'])) {
-            $page = $datos['page'];
+        if (isset($params['page']) &&  is_numeric($params['page'])) {
+            $page = $params['page'];
         }
         $cant = 100;
-        if (isset($datos['cant']) &&  is_numeric($datos['cant'])) {
-            $cant = $datos['cant'];
+        if (isset($params['cant']) &&  is_numeric($params['cant'])) {
+            $cant = $params['cant'];
         }
         $order = null;
-        if (isset($datos['order']) &&  !empty($datos['order'])) {
-            $order = $datos['order'];
+        if (isset($params['order']) &&  !empty($params['order'])) {
+            $order = $params['order'];
         }
         $orderSense = null;
-        if (isset($datos['order_sense']) &&  !empty($datos['order_sense'])) {
-            $orderSense = $datos['order_sense'];
+        if (isset($params['order_sense']) &&  !empty($params['order_sense'])) {
+            $orderSense = $params['order_sense'];
         }
         $translateCode = 'GB';
-        if (isset($datos['language_id']) &&  !empty($datos['language_id'])) {
-            $translateCode = $datos['language_id'];
+        if (isset($params['language_id']) &&  !empty($params['language_id'])) {
+            $translateCode = $params['language_id'];
         }
         
         $info = $this->team->getTeamsByFilters(
