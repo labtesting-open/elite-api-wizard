@@ -130,7 +130,7 @@ class Player
            
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
 
-            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;                    
+            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
 
             $categories = array();
                     
@@ -169,37 +169,34 @@ class Player
 
     public function getPerfil($json)
     {
-        $datos = json_decode($json, true);
-        
-        if (!isset($datos['token'])) {
-            return $this->respuestas->error401();
-        } else {
-            $testToken = $this->token->checkToken($datos['token']);
+
+        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+
+        $params = json_decode($json, true);
+
+        $keys = array('id');            
+           
+        if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
+       
+            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
             
-            if ($testToken) {
-                if (Utils::checkIssetEmptyNumeric($datos['id'])) {
-                    $languageId = (!isset($datos['language_id'])) ? 'GB' : $datos['language_id'];
-                    $resultado = new stdClass();
-                    $resultado->status = 'ok';
-                    $resultado->result = new stdClass();
-                    $resultado->result->perfil = new stdClass();
-                    $resultado->result->history_injuries = new stdClass();
-                    $playerPerfil = $this->player->getPlayerPerfil($datos['id'], $languageId);
-                    $playerSecondaryPositions = $this->player->getSecondaryPositions($datos['id'], $languageId);
-                    $playerHistoryInjuries = $this->player->getInjuriesHistory($datos['id'], $languageId);
-                    $resultado->result->perfil = $playerPerfil[0];
-                    $resultado->result->map_secondary_position = $playerSecondaryPositions;
-                    $resultado->result->history_injuries = $playerHistoryInjuries;
-                    
-                    return $resultado;
-                } else {
-                    return $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
-                }
-            } else {
-                return $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
-            }
+            $playerPerfil = $this->player->getPlayerPerfil($params['id'], $countryCode);
+            $playerSecondaryPositions = $this->player->getSecondaryPositions($params['id'], $countryCode);
+            $playerHistoryInjuries = $this->player->getInjuriesHistory($params['id'], $countryCode);
+
+            $playerInfo = new stdClass();
+            $playerInfo->perfil = $playerPerfil[0];
+            $playerInfo->map_secondary_position = $playerSecondaryPositions;
+            $playerInfo->history_injuries = $playerHistoryInjuries;
+            
+            $responseHttp = $this->respuestas->standarResponse('ok', $playerInfo);
+
         }
+
+        return $responseHttp;
+
     }
+    
 
     private function checkTarget($target)
     {
