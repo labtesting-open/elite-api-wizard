@@ -1,8 +1,8 @@
-# Info Teams
+# Filters Teams
 
-Get clubs with filters.
+Get filters available of teams.
 
-**URL** : `/api/info.teams/`
+**URL** : `/api/filters.teams/`
 
 **Method** : `GET`
 
@@ -16,7 +16,7 @@ Authorization Bearer Token
 
 **Parameters required** :
 
-**Parameters optional** : `continent_code`, `country_code`, `category_id`,`division_id`, `order`,`ordersense`,`page`
+**Parameters optional** : `target`,`continent_code`, `country_code`, `category_id`,`division_id`
 
 ## Success Response
 
@@ -29,31 +29,31 @@ Authorization Bearer Token
     "status": "ok",
     "result": [
         {
-            "team_id": "2",
-            "club_id": "2",
-            "team_name": "First Team",
-            "club_name": "River Plate",
-            "logo": "imgs/clubs_logo/2.svg",
-            "category_name": "Profesional",
-            "division_name": "Primera División",
-            "country_name": "Argentina",
-            "country_flag": "imgs/svg/AR.svg",
-            "squad": "0"
-        },
-        {
-            "team_id": "1",
+            "team_id": "29",
             "club_id": "1",
             "team_name": "First Team",
             "club_name": "Boca Juniors",
             "logo": "imgs/clubs_logo/1.svg",
-            "category_name": "Profesional",
-            "division_name": "Primera División",
+            "category_name": "Profesional F",
+            "division_name": "Primera División F",
             "country_name": "Argentina",
             "country_flag": "imgs/svg/AR.svg",
-            "squad": "24"
+            "squad": "10"
+        },
+        {
+            "team_id": "28",
+            "club_id": "24",
+            "team_name": "First Team",
+            "club_name": "Nasarawa United",
+            "logo": "imgs/clubs_logo/24.png",
+            "category_name": "Profesional",
+            "division_name": "NPFL",
+            "country_name": "Nigeria",
+            "country_flag": "imgs/svg/NG.svg",
+            "squad": "0"
         }
     ]
-}     
+}
 ```
 
 ## Error Response
@@ -90,3 +90,4 @@ Authorization Bearer Token
     }
 }
 ```
+
