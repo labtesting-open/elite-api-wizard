@@ -53,23 +53,27 @@ class PlayerStaticsTest extends TestCase
             
             $token = $response->result->token;
             
-            $body = '{"token":"' . $token . '",
-                "id":5,
-                "language_id":"GB"     
-            }';
+            $body = '';
             
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/player.statics.php';
-            
 
-            $requestBasic = $this->client->request(
-                'POST',
+            $parameters = '?id=5&country_code=GB';
+            $url.=$parameters;
+
+            $requestCustom = $this->client->request(
+                'GET',
                 $url,
                 [
+                'headers' =>
+                [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                    'Authorization' => 'Bearer '.$token
+                ],
                 'body' => $body
                 ]
             );
         
-            $response = json_decode($requestBasic->getBody()->getContents());
+            $response = json_decode($requestCustom->getBody()->getContents());
         
             //var_dump($response->status);
 

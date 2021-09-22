@@ -53,17 +53,14 @@ class InfoTeamsTest extends TestCase
                 
                 $token = $responseAuth->result->token;
                 
-                $body = '{
-                    "page":"1",
-                    "continent_code":"SA",
-                    "country_code":"AR",
-                    "category_id":"1",
-                    "division_id":"1",
-                    "order":"club_name",
-                    "ordersense":"DESC"
-                }';
+                $body = '';
                 
                 $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/info.teams.php';
+    
+                $parameters = '?continent_code=sa&country_code=ar&category_id=1';
+                $parameters.= '&division_id=1&order=club_name&ordersense=desc';
+
+                $url.=$parameters;
     
                 $requestCustom = $this->client->request(
                     'GET',
@@ -72,7 +69,7 @@ class InfoTeamsTest extends TestCase
                     'headers' =>
                     [
                         'Content-Type' => 'application/x-www-form-urlencoded',
-                        'Token' => $token
+                        'Authorization' => 'Bearer '.$token
                     ],
                     'body' => $body
                     ]

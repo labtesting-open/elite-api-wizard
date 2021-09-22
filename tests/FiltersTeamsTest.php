@@ -57,6 +57,10 @@ class FiltersTeamsTest extends TestCase
             
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/filters.teams.php';
 
+            $parameters = '?target=all';
+
+            $url.=$parameters;
+    
             $requestCustom = $this->client->request(
                 'GET',
                 $url,
@@ -64,7 +68,7 @@ class FiltersTeamsTest extends TestCase
                 'headers' =>
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Token' => $token
+                    'Authorization' => 'Bearer '.$token
                 ],
                 'body' => $body
                 ]

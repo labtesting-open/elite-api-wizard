@@ -53,19 +53,24 @@ class UserClubTest extends TestCase
             
             $token = $response->result->token;
             
-            $body = '{"token":"' . $token . '"}';
+            $body = '';
             
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/user.club.php';
-            
-            $requestBasic = $this->client->request(
-                'POST',
+
+            $requestCustom = $this->client->request(
+                'GET',
                 $url,
                 [
+                'headers' =>
+                [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                    'Authorization' => 'Bearer '.$token
+                ],
                 'body' => $body
                 ]
             );
         
-            $response = json_decode($requestBasic->getBody()->getContents());
+            $response = json_decode($requestCustom->getBody()->getContents());
         
             //var_dump($response->status);
 

@@ -53,23 +53,27 @@ class PlayerInfoTest extends TestCase
             
             $token = $response->result->token;
 
-            $body = '{"token":"' . $token . '",
-                "id":"47",
-                "language_id":"ES"
-            }';
+            $body = '';
             
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/player.info.php';
-            
 
-            $requestBasic = $this->client->request(
-                'POST',
+            $parameters = '?id=47&country_code=GB';
+            $url.=$parameters;
+
+            $requestCustom = $this->client->request(
+                'GET',
                 $url,
                 [
+                'headers' =>
+                [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                    'Authorization' => 'Bearer '.$token
+                ],
                 'body' => $body
                 ]
             );
         
-            $response = json_decode($requestBasic->getBody()->getContents());
+            $response = json_decode($requestCustom->getBody()->getContents());
         
             //var_dump($response->status);
 

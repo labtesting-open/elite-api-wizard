@@ -53,9 +53,12 @@ class ClubTest extends TestCase
             
             $token = $responseAuth->result->token;
             
-            $body = '{"club_id":"1"}';
+            $body = '';
             
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/club.php';
+
+            $parameters = '?club_id=1&country_code=GB';
+            $url.=$parameters;
 
             $requestCustom = $this->client->request(
                 'GET',
@@ -64,7 +67,7 @@ class ClubTest extends TestCase
                 'headers' =>
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Token' => $token
+                    'Authorization' => 'Bearer '.$token
                 ],
                 'body' => $body
                 ]

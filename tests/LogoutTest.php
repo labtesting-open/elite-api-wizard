@@ -64,7 +64,7 @@ class LogoutTest extends TestCase
                 'headers' =>
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Token' => $token
+                    'Authorization' => 'Bearer '.$token
                 ],
                 'body' => $body
                 ]

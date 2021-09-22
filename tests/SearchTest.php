@@ -53,24 +53,27 @@ class SearchTest extends TestCase
             
             $token = $response->result->token;
             
-            $body = '{"token":"' . $token . '",
-                "find":"baye",
-                "language_id":"GB", 
-                "fast":"1",
-                "limit":"10"
-            }';
+            $body = '';
             
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/search.php';
             
-            $requestBasic = $this->client->request(
-                'POST',
+            $parameters = '?find=baye&fast=1&limit=10&country_code=GB';
+            $url.=$parameters;
+
+            $requestCustom = $this->client->request(
+                'GET',
                 $url,
                 [
+                'headers' =>
+                [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                    'Authorization' => 'Bearer '.$token
+                ],
                 'body' => $body
                 ]
             );
         
-            $response = json_decode($requestBasic->getBody()->getContents());
+            $response = json_decode($requestCustom->getBody()->getContents());
         
             //var_dump($response->status);
 

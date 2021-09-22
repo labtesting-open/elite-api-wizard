@@ -53,25 +53,27 @@ class PlayersSearchTest extends TestCase
             
             $token = $response->result->token;
             
-            $body = '{"token":"' . $token . '",
-                "season_id":"1",
-                "club_id":"1",
-                "team_id":"1",
-                "language_id":"GB",
-                "find":"teve"     
-            }';
+            $body = '';
             
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/players.search.php';
             
-            $requestBasic = $this->client->request(
-                'POST',
+            $parameters = '?club_id=1&team_id=1&season_id=1&country_code=GB&find=teve';
+            $url.=$parameters;
+
+            $requestCustom = $this->client->request(
+                'GET',
                 $url,
                 [
+                'headers' =>
+                [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                    'Authorization' => 'Bearer '.$token
+                ],
                 'body' => $body
                 ]
             );
         
-            $response = json_decode($requestBasic->getBody()->getContents());
+            $response = json_decode($requestCustom->getBody()->getContents());
         
             //var_dump($response->status);
 
