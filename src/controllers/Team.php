@@ -113,9 +113,6 @@ class Team
         $datos = json_decode($json, true);
 
         if (isset($datos['target']) && $this->checkTarget($datos['target'])) {
-            $resultado = new stdClass();
-            $resultado->status = 'ok';
-            $resultado->result = new stdClass();
 
             $continentCode = null;
             if (isset($datos['continent_code']) &&  !empty($datos['continent_code'])) {
@@ -202,9 +199,7 @@ class Team
                 );
             }
 
-            $resultado->result = $result;
-
-            $responseHttp = $resultado;
+            $responseHttp = $this->respuestas->standarResponse('ok', $result);
         }
 
         return $responseHttp;

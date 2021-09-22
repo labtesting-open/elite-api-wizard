@@ -14,9 +14,9 @@ Get filters available of teams.
 Authorization Bearer Token
 ```
 
-**Parameters required** :
+**Parameters required** :`target`
 
-**Parameters optional** : `target`,`continent_code`, `country_code`, `category_id`,`division_id`
+**Parameters optional** : `continent_code`, `country_code`, `category_id`,`division_id`
 
 ## Success Response
 
@@ -91,3 +91,18 @@ Authorization Bearer Token
 }
 ```
 
+**Condition** : if any of these parameters are not found.
+
+**Code** : `400 BAD REQUEST`
+
+**Content** :
+
+```json
+{
+    "status": "error",
+    "result": {
+        "error_id": "400",
+        "error_msg": "Bad Request"
+    }
+}
+```
