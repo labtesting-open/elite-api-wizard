@@ -26,7 +26,7 @@ class Club
 
     public function getInfo($json)
     {
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
         $datos = json_decode($json, true);
 
@@ -35,7 +35,7 @@ class Club
          
             $infoClub = new stdClass();
             $infoClub = $info;
-            $responseHttp = $this->respuestas->standarResponse('ok', $infoClub);
+            $responseHttp = $this->respuestas->standarSuccess($infoClub);
         }
 
         return $responseHttp;

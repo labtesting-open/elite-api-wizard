@@ -23,7 +23,7 @@ class UserClub
     public function getOwnClub($token)
     {
 
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
         
         if (isset($token)) {
             $arrayToken = $this->token->checkToken($token);
@@ -32,7 +32,7 @@ class UserClub
                 
                 $clubId = $this->userClub->getUserClub($arrayToken[0]['user_id']);
                 
-                $responseHttp = $this->respuestas->standarResponse('ok', $clubId);
+                $responseHttp = $this->respuestas->standarSuccess($clubId);
 
             } else {
                 $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);

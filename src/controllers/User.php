@@ -22,7 +22,7 @@ class User
 
     public function getUserPlan($token)
     {
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
         
         if (isset($token)) {
             $arrayToken = $this->token->checkToken($token);
@@ -47,7 +47,7 @@ class User
                    $result->plan->services = new stdClass();
                    $result->plan->services = $planServices;                       
                    
-                   $responseHttp = $this->respuestas->standarResponse('ok', $result);
+                   $responseHttp = $this->respuestas->standarSuccess($result);
             } else {
                 $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
             }

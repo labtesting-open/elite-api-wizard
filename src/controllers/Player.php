@@ -29,7 +29,7 @@ class Player
     public function getTeamSeasonPlayers($json)
     {
 
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
        
         $params = json_decode($json, true);
 
@@ -75,7 +75,7 @@ class Player
             $playersResult = new stdClass();
             $playersResult->categories = $categories;
             
-            $responseHttp = $this->respuestas->standarResponse('ok', $playersResult);
+            $responseHttp = $this->respuestas->standarSuccess($playersResult);
         }
 
         return $responseHttp;
@@ -85,7 +85,7 @@ class Player
 
     public function getTeamSeasonPlayerStatics($json)
     {
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
         $params = json_decode($json, true);
 
@@ -112,7 +112,7 @@ class Player
             $playersResult = new stdClass();
             $playersResult->actions = $actions;
             
-            $responseHttp = $this->respuestas->standarResponse('ok', $playersResult);
+            $responseHttp = $this->respuestas->standarSuccess($playersResult);
         }
 
         return $responseHttp;
@@ -122,7 +122,7 @@ class Player
     public function getTeamSeasonPlayersSearch($json)
     {
 
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
        
         $params = json_decode($json, true);
 
@@ -159,7 +159,7 @@ class Player
             $playersResult = new stdClass();
             $playersResult->categories = $categories;
             
-            $responseHttp = $this->respuestas->standarResponse('ok', $playersResult);
+            $responseHttp = $this->respuestas->standarSuccess($playersResult);
         }
 
         return $responseHttp;
@@ -170,7 +170,7 @@ class Player
     public function getPerfil($json)
     {
 
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
         $params = json_decode($json, true);
 
@@ -189,7 +189,7 @@ class Player
             $playerInfo->map_secondary_position = $playerSecondaryPositions;
             $playerInfo->history_injuries = $playerHistoryInjuries;
             
-            $responseHttp = $this->respuestas->standarResponse('ok', $playerInfo);
+            $responseHttp = $this->respuestas->standarSuccess($playerInfo);
 
         }
 
@@ -207,7 +207,7 @@ class Player
     
     public function getAvailableFilters($json)
     {
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
         $params = json_decode($json, true);
             
@@ -301,7 +301,7 @@ class Player
                 );
             }
             
-             $responseHttp = $this->respuestas->standarResponse('ok', $result);
+             $responseHttp = $this->respuestas->standarSuccess($result);
 
         }
         return $responseHttp;

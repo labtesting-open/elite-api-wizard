@@ -21,6 +21,8 @@ class Respuestas
             'error_msg' => 'Method Not Allowed'
         );
 
+        //http_response_code(405);
+
         return $this->response;
     }
 
@@ -34,19 +36,23 @@ class Respuestas
             'error_msg' => $valor
         );
 
+        //http_response_code(200);
+
         return $this->response;
     }
 
 
-    public function error400()
+    public function error400($msg='Bad Request')
     {
         
         $this->response['status'] = 'error';
         
         $this->response['result'] = array(
             'error_id' => '400',
-            'error_msg' => 'Bad Request'
+            'error_msg' => $msg
         );
+
+        //http_response_code(400);
 
         return $this->response;
     }
@@ -61,18 +67,21 @@ class Respuestas
             'error_msg' => $valor
         );
 
+        //http_response_code(500);
+
         return $this->response;
     }
 
-    public function error401($valor = 'Unauthorized')
+    public function error401($msg = 'Unauthorized')
     {
-        
         $this->response['status'] = 'error';
         
         $this->response['result'] = array(
             'error_id' => '401',
-            'error_msg' => $valor
+            'error_msg' => $msg
         );
+
+        //http_response_code(401);
 
         return $this->response;
     }
@@ -86,14 +95,32 @@ class Respuestas
             "$key" => "$valor"
         );
 
+        //http_response_code(200);
+
         return $this->response;
     }
 
-    public function standarResponse($code = 200, $result = null)
+    public function standarSuccess($result = null, $code = 'ok')
     {
         $this->response['status'] = $code;
         
         $this->response['result'] = $result;
+
+        //http_response_code(200);
+
+        return $this->response;
+    }
+
+    public function customResponse($status='ok', $code = 200, $msg = null)
+    {   
+        $this->response['status'] = 'error';
+        
+        $this->response['result'] = array(
+            'error_id' => $code,
+            'error_msg' => $msg
+        );
+
+        //http_response_code(intval($code));
 
         return $this->response;
     }

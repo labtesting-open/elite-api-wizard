@@ -24,7 +24,7 @@ class Team
 
     public function getClubTeams($json)
     {
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
        
         $datos = json_decode($json, true);
 
@@ -35,7 +35,7 @@ class Team
 
             $infoTeams = new stdClass();
             $infoTeams = $info;
-            $responseHttp = $this->respuestas->standarResponse('ok', $infoTeams);
+            $responseHttp = $this->respuestas->standarSuccess($infoTeams);
         }
         
         return $responseHttp;
@@ -44,7 +44,7 @@ class Team
 
     public function getInfoWithFilters($token, $json)
     {
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
         $params = json_decode($json, true); 
 
@@ -99,7 +99,7 @@ class Team
 
         $infoTeams = new stdClass();
         $infoTeams = $info;
-        $responseHttp = $this->respuestas->standarResponse('ok', $infoTeams);
+        $responseHttp = $this->respuestas->standarSuccess($infoTeams);
 
         return $responseHttp;
     }
@@ -108,7 +108,7 @@ class Team
 
     public function getAvailableFilters($json)
     {
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
         
         $datos = json_decode($json, true);
 
@@ -199,7 +199,7 @@ class Team
                 );
             }
 
-            $responseHttp = $this->respuestas->standarResponse('ok', $result);
+            $responseHttp = $this->respuestas->standarSuccess($result);
         }
 
         return $responseHttp;

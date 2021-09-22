@@ -27,7 +27,7 @@ class Search
     public function find($json)
     {
           
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
        
         $params = json_decode($json, true);
 
@@ -54,7 +54,7 @@ class Search
             $searchResult->players = $resultPlayers;
             $searchResult->clubs = $resultClubs;
             
-            $responseHttp = $this->respuestas->standarResponse('ok', $searchResult);
+            $responseHttp = $this->respuestas->standarSuccess($searchResult);
         }
 
         return $responseHttp;

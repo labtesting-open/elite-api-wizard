@@ -26,7 +26,7 @@ class Season
 
     public function getAvailableSeasons($json)
     {
-        $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
        
         $params = json_decode($json, true);
 
@@ -38,7 +38,7 @@ class Season
 
             $infoSeasons = new stdClass();
             $infoSeasons = $seasons;
-            $responseHttp = $this->respuestas->standarResponse('ok', $infoSeasons);
+            $responseHttp = $this->respuestas->standarSuccess($infoSeasons);
         }
         
         return $responseHttp;
