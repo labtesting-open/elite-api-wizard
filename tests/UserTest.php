@@ -64,7 +64,7 @@ class UserTest extends TestCase
                 'headers' =>
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Authorization' => 'Bearer '.$token
+                    'Authorization' => 'Bearer ' . $token
                 ],
                 'body' => $body
                 ]

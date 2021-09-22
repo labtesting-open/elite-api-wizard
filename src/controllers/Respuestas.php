@@ -42,7 +42,7 @@ class Respuestas
     }
 
 
-    public function error400($msg='Bad Request')
+    public function error400($msg = 'Bad Request')
     {
         
         $this->response['status'] = 'error';
@@ -111,8 +111,8 @@ class Respuestas
         return $this->response;
     }
 
-    public function customResponse($status='ok', $code = 200, $msg = null)
-    {   
+    public function customResponse($status = 'ok', $code = 200, $msg = null)
+    {
         $this->response['status'] = 'error';
         
         $this->response['result'] = array(

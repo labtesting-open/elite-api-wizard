@@ -58,7 +58,7 @@ class PlayersSearchTest extends TestCase
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/players.search.php';
             
             $parameters = '?club_id=1&team_id=1&season_id=1&country_code=GB&find=teve';
-            $url.=$parameters;
+            $url .= $parameters;
 
             $requestCustom = $this->client->request(
                 'GET',
@@ -67,7 +67,7 @@ class PlayersSearchTest extends TestCase
                 'headers' =>
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Authorization' => 'Bearer '.$token
+                    'Authorization' => 'Bearer ' . $token
                 ],
                 'body' => $body
                 ]

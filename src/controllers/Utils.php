@@ -38,83 +38,79 @@ class Utils
     }
 
 
-    private static function notEmptyAndNumeric($listKeys, $key){
+    private static function notEmptyAndNumeric($listKeys, $key)
+    {
 
         $result = false;
 
         foreach ($listKeys as $param => $value) {
-            if($param == $key){
-                if (!empty($value) && is_numeric($value)){
+            if ($param == $key) {
+                if (!empty($value) && is_numeric($value)) {
                     $result = true;
                     break;
-                } 
-            } 
+                }
+            }
         }
 
         return $result;
-
     }
 
     public static function checkParamsIssetAndNumeric($paramList, $keyList)
     {
         $utils = new Utils();
 
-        $checkResult = true;       
+        $checkResult = true;
 
-        if( count($paramList) > 0 && count($keyList) > 0){
-
-            foreach ($keyList as $key) {   
-
+        if (count($paramList) > 0 && count($keyList) > 0) {
+            foreach ($keyList as $key) {
                 $chekValue = $utils->notEmptyAndNumeric($paramList, $key);
 
-                if(!$chekValue){
+                if (!$chekValue) {
                     $checkResult = false;
                     break;
                 }
             }
-
-        }else{
+        } else {
             $checkResult = false;
-        }        
+        }
 
         return $checkResult;
-        
     }
 
 
-    public static function getkey($keyList, $target, $type=null){
+    public static function getkey($keyList, $target, $type = null)
+    {
         
         $matchResult = null;
 
-        if(isset($target) && isset($keyList)){
-            foreach($keyList as $key =>$value){
-                if(strtolower($key) == $target){
+        if (isset($target) && isset($keyList)) {
+            foreach ($keyList as $key => $value) {
+                if (strtolower($key) == $target) {
                     $matchResult = $value;
                 }
             }
         }
 
-        if(isset($type) && $type == 'Bearer'){
-            $matchResult = substr($matchResult,strlen($type));
+        if (isset($type) && $type == 'Bearer') {
+            $matchResult = substr($matchResult, strlen($type));
         }
 
         return trim($matchResult);
-    }  
+    }
     
     
-    public static function getAllParams($requestList, $outputMode=null){
+    public static function getAllParams($requestList, $outputMode = null)
+    {
 
         $paramList = array();
 
-        foreach($requestList as $key => $value){
-           $paramList[$key] = $value;
+        foreach ($requestList as $key => $value) {
+            $paramList[$key] = $value;
         }
 
-        if(isset($outputMode) && $outputMode == OutputsTypes::JSON){
+        if (isset($outputMode) && $outputMode == OutputsTypes::JSON) {
             $paramList = json_encode($paramList, true);
         }
         return $paramList;
-
     }
-
 }

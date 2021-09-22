@@ -58,7 +58,7 @@ class SearchTest extends TestCase
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/search.php';
             
             $parameters = '?find=baye&fast=1&limit=10&country_code=GB';
-            $url.=$parameters;
+            $url .= $parameters;
 
             $requestCustom = $this->client->request(
                 'GET',
@@ -67,7 +67,7 @@ class SearchTest extends TestCase
                 'headers' =>
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Authorization' => 'Bearer '.$token
+                    'Authorization' => 'Bearer ' . $token
                 ],
                 'body' => $body
                 ]

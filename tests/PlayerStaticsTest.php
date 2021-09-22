@@ -58,7 +58,7 @@ class PlayerStaticsTest extends TestCase
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/player.statics.php';
 
             $parameters = '?id=5&country_code=GB';
-            $url.=$parameters;
+            $url .= $parameters;
 
             $requestCustom = $this->client->request(
                 'GET',
@@ -67,7 +67,7 @@ class PlayerStaticsTest extends TestCase
                 'headers' =>
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Authorization' => 'Bearer '.$token
+                    'Authorization' => 'Bearer ' . $token
                 ],
                 'body' => $body
                 ]

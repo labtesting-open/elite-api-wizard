@@ -33,7 +33,6 @@ class Season
         $keys = array('club_id', 'team_id');
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
-           
             $seasons = $this->season->getSeasonsByClubTeam($params['club_id'], $params['team_id']);
 
             $infoSeasons = new stdClass();
@@ -42,6 +41,5 @@ class Season
         }
         
         return $responseHttp;
-       
     }
 }

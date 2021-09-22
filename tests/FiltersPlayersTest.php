@@ -59,7 +59,7 @@ class FiltersPlayersTest extends TestCase
 
             $parameters = '?target=all';
 
-            $url.=$parameters;
+            $url .= $parameters;
     
             $requestCustom = $this->client->request(
                 'GET',
@@ -68,7 +68,7 @@ class FiltersPlayersTest extends TestCase
                 'headers' =>
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Authorization' => 'Bearer '.$token
+                    'Authorization' => 'Bearer ' . $token
                 ],
                 'body' => $body
                 ]

@@ -29,17 +29,14 @@ class UserClub
             $arrayToken = $this->token->checkToken($token);
 
             if ($arrayToken) {
-                
                 $clubId = $this->userClub->getUserClub($arrayToken[0]['user_id']);
                 
                 $responseHttp = $this->respuestas->standarSuccess($clubId);
-
             } else {
                 $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
             }
         }
         
         return $responseHttp;
-
     }
 }

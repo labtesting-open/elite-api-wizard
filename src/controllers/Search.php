@@ -31,8 +31,7 @@ class Search
        
         $params = json_decode($json, true);
 
-        if ( isset($params['find'])) {
-
+        if (isset($params['find'])) {
             $find = $params['find'];
             $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
             $page = (isset($datos['page'])) ? $datos['page'] : 1;
@@ -58,6 +57,5 @@ class Search
         }
 
         return $responseHttp;
-        
     }
 }

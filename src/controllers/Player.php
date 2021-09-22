@@ -36,7 +36,6 @@ class Player
         $keys = array('club_id', 'team_id');
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
-           
             $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
 
             $categories = array();
@@ -79,7 +78,6 @@ class Player
         }
 
         return $responseHttp;
-
     }
 
 
@@ -89,10 +87,9 @@ class Player
 
         $params = json_decode($json, true);
 
-        $keys = array('id');            
+        $keys = array('id');
            
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
-
             $actions = array();
             $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
             $positionId = $this->player->getPosition_id($params['id']);
@@ -126,10 +123,9 @@ class Player
        
         $params = json_decode($json, true);
 
-        $keys = array('club_id', 'team_id', 'season_id');            
+        $keys = array('club_id', 'team_id', 'season_id');
            
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
-
             $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
 
             $categories = array();
@@ -163,7 +159,6 @@ class Player
         }
 
         return $responseHttp;
-        
     }
 
 
@@ -174,10 +169,9 @@ class Player
 
         $params = json_decode($json, true);
 
-        $keys = array('id');            
+        $keys = array('id');
            
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
-       
             $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
             
             $playerPerfil = $this->player->getPlayerPerfil($params['id'], $countryCode);
@@ -186,15 +180,13 @@ class Player
 
             $playerInfo = new stdClass();
             $playerInfo->perfil = $playerPerfil[0];
-            $playerInfo->map_secondary_position = $playerSecondaryPositions;
-            $playerInfo->history_injuries = $playerHistoryInjuries;
+            $playerInfo->mapSecondaryPosition = $playerSecondaryPositions;
+            $playerInfo->historyInjuries = $playerHistoryInjuries;
             
             $responseHttp = $this->respuestas->standarSuccess($playerInfo);
-
         }
 
         return $responseHttp;
-
     }
     
 
@@ -212,7 +204,6 @@ class Player
         $params = json_decode($json, true);
             
         if (isset($params['target']) && $this->checkTarget($params['target'])) {
-
             $continentCode = null;
             if (isset($params['continent_code']) &&  !empty($params['continent_code'])) {
                 $continentCode = $params['continent_code'];
@@ -302,9 +293,7 @@ class Player
             }
             
              $responseHttp = $this->respuestas->standarSuccess($result);
-
         }
         return $responseHttp;
     }
-
 }

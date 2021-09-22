@@ -46,7 +46,7 @@ class Team
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
-        $params = json_decode($json, true); 
+        $params = json_decode($json, true);
 
         $continentCode = null;
         if (isset($params['continent_code']) &&  !empty($params['continent_code'])) {
@@ -113,7 +113,6 @@ class Team
         $datos = json_decode($json, true);
 
         if (isset($datos['target']) && $this->checkTarget($datos['target'])) {
-
             $continentCode = null;
             if (isset($datos['continent_code']) &&  !empty($datos['continent_code'])) {
                 $continentCode = $datos['continent_code'];

@@ -58,9 +58,9 @@ class InfoTeamsTest extends TestCase
                 $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/info.teams.php';
     
                 $parameters = '?continent_code=sa&country_code=ar&category_id=1';
-                $parameters.= '&division_id=1&order=club_name&ordersense=desc';
+                $parameters .= '&division_id=1&order=club_name&ordersense=desc';
 
-                $url.=$parameters;
+                $url .= $parameters;
     
                 $requestCustom = $this->client->request(
                     'GET',
@@ -69,7 +69,7 @@ class InfoTeamsTest extends TestCase
                     'headers' =>
                     [
                         'Content-Type' => 'application/x-www-form-urlencoded',
-                        'Authorization' => 'Bearer '.$token
+                        'Authorization' => 'Bearer ' . $token
                     ],
                     'body' => $body
                     ]

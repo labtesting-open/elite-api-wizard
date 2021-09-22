@@ -11,14 +11,14 @@ class Login
     private $respuestas;
     private $cryptography;
     private $publicKey = 'elitewizard';
-    private $privateKey ='talkthetalkorwalkthewalk';
+    private $privateKey = 'talkthetalkorwalkthewalk';
 
 
     public function __construct()
     {
         $this->auth = new \Elitelib\Auth();
         $this->respuestas = new Respuestas();
-        $this->cryptography = new \Elitesports\RSA($this->publicKey, $this->privateKey);         
+        $this->cryptography = new \Elitesports\RSA($this->publicKey, $this->privateKey);
     }
 
 
@@ -27,7 +27,6 @@ class Login
         $responseHttp = $this->respuestas->error400();
 
         if (isset($token)) {
-           
             $datos = $this->auth->getUserToken($token);
 
             if ($datos) {
@@ -56,7 +55,6 @@ class Login
         $responseHttp = $this->respuestas->error400();
 
         if (isset($datos['user']) && isset($datos['password'])) {
-
             $usuario = $datos['user'];
             $password = $datos['password'];
 
