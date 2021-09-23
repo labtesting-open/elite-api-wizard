@@ -41,7 +41,7 @@ class Team
 
 
     public function getInfoWithFilters($json)
-    { 
+    {
         $paramsReceived = json_decode($json, true);
 
         $paramsAcepted = array(
@@ -71,7 +71,6 @@ class Team
         );
 
         return $this->respuestas->standarSuccess($infoTeams);
-
     }
 
 

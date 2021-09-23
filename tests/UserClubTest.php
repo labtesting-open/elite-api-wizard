@@ -64,7 +64,7 @@ class UserClubTest extends TestCase
                 ]
             );
         
-            $response = json_decode($requestCustom->getBody()->getContents());            
+            $response = json_decode($requestCustom->getBody()->getContents());
 
             $this->assertEquals('ok', $response->status);
         } catch (\Throwable $th) {

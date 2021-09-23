@@ -47,7 +47,7 @@ class SearchTest extends TestCase
         
             $response = json_decode($requestAuth->getBody()->getContents());
             
-            $token = $response->result->token; 
+            $token = $response->result->token;
             
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/search.php';
             
@@ -67,7 +67,7 @@ class SearchTest extends TestCase
                 ]
             );
         
-            $response = json_decode($requestCustom->getBody()->getContents());            
+            $response = json_decode($requestCustom->getBody()->getContents());
 
             $this->assertEquals('ok', $response->status);
         } catch (\Throwable $th) {

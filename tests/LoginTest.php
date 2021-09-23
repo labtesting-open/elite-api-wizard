@@ -21,7 +21,7 @@ class LoginTest extends TestCase
     {
         $settings = new \Elitesports\Setting('remote');
 
-        $this->server   = $settings->getServer();       
+        $this->server   = $settings->getServer();
         $this->apiFolder = $settings->getApiFolder();
         $this->parentFolder = $settings->getParentFolder();
         $this->version = $settings->getVersion();
@@ -47,7 +47,6 @@ class LoginTest extends TestCase
             $response = json_decode($requestAuth->getBody()->getContents());
 
             $this->assertEquals('ok', $response->status);
-
         } catch (\Throwable $th) {
             var_dump($th->getMessage());
         }

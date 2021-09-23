@@ -22,7 +22,7 @@ class PlayersSearchTest extends TestCase
     {
         $settings = new \Elitesports\Setting('remote');
 
-        $this->server   = $settings->getServer();       
+        $this->server   = $settings->getServer();
         $this->apiFolder = $settings->getApiFolder();
         $this->parentFolder = $settings->getParentFolder();
         $this->version = $settings->getVersion();
@@ -67,7 +67,7 @@ class PlayersSearchTest extends TestCase
                 ]
             );
         
-            $response = json_decode($requestCustom->getBody()->getContents()); 
+            $response = json_decode($requestCustom->getBody()->getContents());
 
             $this->assertEquals('ok', $response->status);
         } catch (\Throwable $th) {

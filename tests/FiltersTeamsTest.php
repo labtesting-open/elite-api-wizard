@@ -22,7 +22,7 @@ class FiltersTeamsTest extends TestCase
     {
         $settings = new \Elitesports\Setting('remote');
 
-        $this->server   = $settings->getServer();        
+        $this->server   = $settings->getServer();
         $this->apiFolder = $settings->getApiFolder();
         $this->parentFolder = $settings->getParentFolder();
         $this->version = $settings->getVersion();
@@ -35,7 +35,6 @@ class FiltersTeamsTest extends TestCase
     {
 
         try {
-
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
 
             $requestAuth = $this->client->request(
@@ -48,7 +47,7 @@ class FiltersTeamsTest extends TestCase
         
             $responseAuth = json_decode($requestAuth->getBody()->getContents());
             
-            $token = $responseAuth->result->token;            
+            $token = $responseAuth->result->token;
             
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/filters.teams.php';
 
@@ -69,7 +68,7 @@ class FiltersTeamsTest extends TestCase
                 ]
             );
 
-            $response = json_decode($requestCustom->getBody()->getContents());            
+            $response = json_decode($requestCustom->getBody()->getContents());
 
             $this->assertEquals('ok', $response->status);
         } catch (\Throwable $th) {
