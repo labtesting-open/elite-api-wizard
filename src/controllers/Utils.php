@@ -44,11 +44,9 @@ class Utils
         $result = false;
 
         foreach ($listKeys as $param => $value) {
-            if ($param == $key) {
-                if (!empty($value) && is_numeric($value)) {
-                    $result = true;
-                    break;
-                }
+            if ($param == $key && !empty($value) && is_numeric($value)) {
+                $result = true;
+                break;
             }
         }
 
@@ -112,5 +110,25 @@ class Utils
             $paramList = json_encode($paramList, true);
         }
         return $paramList;
+    }
+    
+
+    public static function normalizerParams($received, $acepted)
+    {
+        $normalized = array();
+
+        if (count($received) > 0) {
+            foreach ($acepted as $key => $value) {
+                if (array_key_exists($key, $received)) {
+                    $normalized[$key] = $received[$key];
+                } else {
+                    $normalized[$key] = $value;
+                }
+            }
+        } else {
+            $normalized = $acepted;
+        }
+
+        return $normalized;
     }
 }

@@ -9,16 +9,12 @@ class Login
 
     private $auth;
     private $respuestas;
-    private $cryptography;
-    private $publicKey = 'elitewizard';
-    private $privateKey = 'talkthetalkorwalkthewalk';
 
 
     public function __construct()
     {
         $this->auth = new \Elitelib\Auth();
         $this->respuestas = new Respuestas();
-        $this->cryptography = new \Elitesports\RSA($this->publicKey, $this->privateKey);
     }
 
 
@@ -57,8 +53,6 @@ class Login
         if (isset($datos['user']) && isset($datos['password'])) {
             $usuario = $datos['user'];
             $password = $datos['password'];
-
-            //$passwordDecoded = $this->cryptography->decodeBase64($password);
            
             $password = $this->auth->encriptar($password);
 

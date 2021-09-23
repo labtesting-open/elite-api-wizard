@@ -21,8 +21,6 @@ class Respuestas
             'error_msg' => 'Method Not Allowed'
         );
 
-        //http_response_code(405);
-
         return $this->response;
     }
 
@@ -35,8 +33,6 @@ class Respuestas
             'error_id' => '200',
             'error_msg' => $valor
         );
-
-        //http_response_code(200);
 
         return $this->response;
     }
@@ -52,8 +48,6 @@ class Respuestas
             'error_msg' => $msg
         );
 
-        //http_response_code(400);
-
         return $this->response;
     }
 
@@ -67,8 +61,6 @@ class Respuestas
             'error_msg' => $valor
         );
 
-        //http_response_code(500);
-
         return $this->response;
     }
 
@@ -80,8 +72,6 @@ class Respuestas
             'error_id' => '401',
             'error_msg' => $msg
         );
-
-        //http_response_code(401);
 
         return $this->response;
     }
@@ -95,18 +85,14 @@ class Respuestas
             "$key" => "$valor"
         );
 
-        //http_response_code(200);
-
         return $this->response;
     }
 
     public function standarSuccess($result = null, $code = 'ok')
     {
         $this->response['status'] = $code;
-        
-        $this->response['result'] = $result;
 
-        //http_response_code(200);
+        $this->response['result'] = $result;
 
         return $this->response;
     }
@@ -119,8 +105,6 @@ class Respuestas
             'error_id' => $code,
             'error_msg' => $msg
         );
-
-        //http_response_code(intval($code));
 
         return $this->response;
     }

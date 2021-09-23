@@ -8,9 +8,6 @@ use Elitesports\Utils;
 
 class Season
 {
-
-  
-        
         private $season;
         private $token;
         private $respuestas;
@@ -35,9 +32,7 @@ class Season
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
             $seasons = $this->season->getSeasonsByClubTeam($params['club_id'], $params['team_id']);
 
-            $infoSeasons = new stdClass();
-            $infoSeasons = $seasons;
-            $responseHttp = $this->respuestas->standarSuccess($infoSeasons);
+            $responseHttp = $this->respuestas->standarSuccess($seasons);
         }
         
         return $responseHttp;

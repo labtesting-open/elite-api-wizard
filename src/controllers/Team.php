@@ -31,10 +31,8 @@ class Team
         if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
             $countryCode   = (isset($datos['country_code'])) ? $datos['country_code'] : null;
 
-            $info = $this->team->getTeams($datos['club_id'], $countryCode);
+            $infoTeams = $this->team->getTeams($datos['club_id'], $countryCode);
 
-            $infoTeams = new stdClass();
-            $infoTeams = $info;
             $responseHttp = $this->respuestas->standarSuccess($infoTeams);
         }
         
@@ -42,63 +40,38 @@ class Team
     }
 
 
-    public function getInfoWithFilters($token, $json)
+    public function getInfoWithFilters($json)
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
-        $params = json_decode($json, true);
+        $paramsReceived = json_decode($json, true);
 
-        $continentCode = null;
-        if (isset($params['continent_code']) &&  !empty($params['continent_code'])) {
-            $continentCode = $params['continent_code'];
-        }
-        $countryCode = null;
-        if (isset($params['country_code']) &&  !empty($params['country_code'])) {
-            $countryCode = $params['country_code'];
-        }
-        $categoryId = null;
-        if (isset($params['category_id']) &&  !empty($params['category_id'])) {
-            $categoryId = $params['category_id'];
-        }
-        $divisionId = null;
-        if (isset($params['division_id']) &&  !empty($params['division_id'])) {
-            $divisionId = $params['division_id'];
-        }
-        $page = 1;
-        if (isset($params['page']) &&  is_numeric($params['page'])) {
-            $page = $params['page'];
-        }
-        $cant = 100;
-        if (isset($params['cant']) &&  is_numeric($params['cant'])) {
-            $cant = $params['cant'];
-        }
-        $order = null;
-        if (isset($params['order']) &&  !empty($params['order'])) {
-            $order = $params['order'];
-        }
-        $orderSense = null;
-        if (isset($params['order_sense']) &&  !empty($params['order_sense'])) {
-            $orderSense = $params['order_sense'];
-        }
-        $translateCode = 'GB';
-        if (isset($params['language_id']) &&  !empty($params['language_id'])) {
-            $translateCode = $params['language_id'];
-        }
-        
-        $info = $this->team->getTeamsByFilters(
-            $continentCode,
-            $countryCode,
-            $categoryId,
-            $divisionId,
-            $page,
-            $cant,
-            $order,
-            $orderSense,
-            $translateCode
+        $paramsAcepted = array(
+            'continent_code' => null,
+            'country_code' => null,
+            'category_id' => null,
+            'division_id' => null,
+            'page' => 1,
+            'limit' => 100,
+            'order' => null,
+            'order_sense' => null,
+            'translate_code' => 'GB'
         );
 
-        $infoTeams = new stdClass();
-        $infoTeams = $info;
+        $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
+        
+        $infoTeams = $this->team->getTeamsByFilters(
+            $paramsNormaliced['continent_code'],
+            $paramsNormaliced['country_code'],
+            $paramsNormaliced['category_id'],
+            $paramsNormaliced['division_id'],
+            $paramsNormaliced['page'],
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['order'],
+            $paramsNormaliced['order_sense'],
+            $paramsNormaliced['translate_code']
+        );
+
         $responseHttp = $this->respuestas->standarSuccess($infoTeams);
 
         return $responseHttp;
@@ -110,91 +83,83 @@ class Team
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
         
-        $datos = json_decode($json, true);
+        $paramsReceived = json_decode($json, true);
 
-        if (isset($datos['target']) && $this->checkTarget($datos['target'])) {
-            $continentCode = null;
-            if (isset($datos['continent_code']) &&  !empty($datos['continent_code'])) {
-                $continentCode = $datos['continent_code'];
-            }
-            $countryCode = null;
-            if (isset($datos['country_code']) &&  !empty($datos['country_code'])) {
-                $countryCode = $datos['country_code'];
-            }
-            $categoryId = null;
-            if (isset($datos['category_id']) &&  !empty($datos['category_id'])) {
-                $categoryId = $datos['category_id'];
-            }
-            $divisionId = null;
-            if (isset($datos['division_id']) &&  !empty($datos['division_id'])) {
-                $divisionId = $datos['division_id'];
-            }
+        if (isset($paramsReceived['target']) && $this->checkTarget($paramsReceived['target'])) {
+            $paramsAcepted = array(
+                'continent_code' => null,
+                'country_code' => null,
+                'category_id' => null,
+                'division_id' => null
+            );
+
+            $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
 
             $result = new stdClass();
             
-            if ($datos['target'] == 'continents') {
+            if ($paramsReceived['target'] == 'continents') {
                 $result = $this->club->getAvailableContinents(
-                    $continentCode,
-                    $countryCode,
-                    $categoryId,
-                    $divisionId
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
                 );
             }
             
-            if ($datos['target'] == 'countries') {
+            if ($paramsReceived['target'] == 'countries') {
                 $result = $this->club->getAvailableCountries(
-                    $continentCode,
-                    $countryCode,
-                    $categoryId,
-                    $divisionId
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
                 );
             }
             
-            if ($datos['target'] == 'categories') {
+            if ($paramsReceived['target'] == 'categories') {
                 $result = $this->team->getAvailableCategories(
-                    $continentCode,
-                    $countryCode,
-                    $categoryId,
-                    $divisionId
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
                 );
             }
             
-            if ($datos['target'] == 'divisions') {
+            if ($paramsReceived['target'] == 'divisions') {
                 $result = $this->club->getAvailableDivisions(
-                    $continentCode,
-                    $countryCode,
-                    $categoryId,
-                    $divisionId
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
                 );
             }
             
-            if ($datos['target'] == 'all') {
+            if ($paramsReceived['target'] == 'all') {
                 $result->continents = $this->club->getAvailableContinents(
-                    $continentCode,
-                    $countryCode,
-                    $categoryId,
-                    $divisionId
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
                 );
 
                 $result->countries  = $this->club->getAvailableCountries(
-                    $continentCode,
-                    $countryCode,
-                    $categoryId,
-                    $divisionId
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
                 );
 
                 $result->categories = $this->team->getAvailableCategories(
-                    $continentCode,
-                    $countryCode,
-                    $categoryId,
-                    $divisionId
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
                 );
 
                 $result->divisions  = $this->club->getAvailableDivisions(
-                    $continentCode,
-                    $countryCode,
-                    $categoryId,
-                    $divisionId
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
                 );
             }
 
