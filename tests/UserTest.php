@@ -22,13 +22,11 @@ class UserTest extends TestCase
     {
         $settings = new \Elitesports\Setting('remote');
 
-        $this->server   = $settings->getServer();
-        $this->user     = $settings->getUser();
-        $this->password = $settings->getPassword();
+        $this->server   = $settings->getServer();        
         $this->apiFolder = $settings->getApiFolder();
         $this->parentFolder = $settings->getParentFolder();
         $this->version = $settings->getVersion();
-
+        $this->bodyWithCredentials = $settings->getBodyWithCredentials();
         $this->client = new Client();
     }
 
@@ -37,42 +35,36 @@ class UserTest extends TestCase
     {
 
         try {
-            $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
-
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
 
             $requestAuth = $this->client->request(
                 'POST',
                 $url,
                 [
-                'body' => $body
+                'body' => $this->bodyWithCredentials
                 ]
             );
         
             $responseAuth = json_decode($requestAuth->getBody()->getContents());
             
-            $token = $responseAuth->result->token;
-            
-            $body = '';
+            $token = $responseAuth->result->token;            
             
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/user.php';
+
+            $headers = [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'Authorization' => 'Bearer ' . $token
+            ];
 
             $requestCustom = $this->client->request(
                 'GET',
                 $url,
                 [
-                'headers' =>
-                [
-                    'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Authorization' => 'Bearer ' . $token
-                ],
-                'body' => $body
+                'headers' => $headers
                 ]
             );
 
             $response = json_decode($requestCustom->getBody()->getContents());
-        
-            //var_dump($response->status);
 
             $this->assertEquals('ok', $response->status);
         } catch (\Throwable $th) {

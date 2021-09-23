@@ -21,13 +21,11 @@ class LoginTest extends TestCase
     {
         $settings = new \Elitesports\Setting('remote');
 
-        $this->server   = $settings->getServer();
-        $this->user     = $settings->getUser();
-        $this->password = $settings->getPassword();
+        $this->server   = $settings->getServer();       
         $this->apiFolder = $settings->getApiFolder();
         $this->parentFolder = $settings->getParentFolder();
         $this->version = $settings->getVersion();
-
+        $this->bodyWithCredentials = $settings->getBodyWithCredentials();
         $this->client = new Client();
     }
 
@@ -36,23 +34,20 @@ class LoginTest extends TestCase
     {
 
         try {
-            $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
-
             $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
 
-            $requestToken = $this->client->request(
+            $requestAuth = $this->client->request(
                 'POST',
                 $url,
                 [
-                'body' => $body
+                'body' => $this->bodyWithCredentials
                 ]
             );
         
-            $response = json_decode($requestToken->getBody()->getContents());
-        
-            //var_dump($response->status);
+            $response = json_decode($requestAuth->getBody()->getContents());
 
             $this->assertEquals('ok', $response->status);
+
         } catch (\Throwable $th) {
             var_dump($th->getMessage());
         }

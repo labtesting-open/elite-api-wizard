@@ -22,13 +22,11 @@ class InfoTeamsTest extends TestCase
     {
         $settings = new \Elitesports\Setting('remote');
 
-        $this->server   = $settings->getServer();
-        $this->user     = $settings->getUser();
-        $this->password = $settings->getPassword();
+        $this->server   = $settings->getServer();       
         $this->apiFolder = $settings->getApiFolder();
         $this->parentFolder = $settings->getParentFolder();
         $this->version = $settings->getVersion();
-
+        $this->bodyWithCredentials = $settings->getBodyWithCredentials();
         $this->client = new Client();
     }
 
@@ -37,47 +35,41 @@ class InfoTeamsTest extends TestCase
     {
 
         try {
-                $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
-    
-                $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
-    
-                $requestAuth = $this->client->request(
-                    'POST',
-                    $url,
-                    [
-                    'body' => $body
-                    ]
-                );
-            
-                $responseAuth = json_decode($requestAuth->getBody()->getContents());
-                
-                $token = $responseAuth->result->token;
-                
-                $body = '';
-                
-                $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/info.teams.php';
-    
-                $parameters = '?continent_code=sa&country_code=ar&category_id=1';
-                $parameters .= '&division_id=1&order=club_name&ordersense=desc';
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
 
-                $url .= $parameters;
-    
-                $requestCustom = $this->client->request(
-                    'GET',
-                    $url,
-                    [
-                    'headers' =>
-                    [
-                        'Content-Type' => 'application/x-www-form-urlencoded',
-                        'Authorization' => 'Bearer ' . $token
-                    ],
-                    'body' => $body
-                    ]
-                );
-    
-                $response = json_decode($requestCustom->getBody()->getContents());
-        
-            //var_dump($response->status);
+            $requestAuth = $this->client->request(
+                'POST',
+                $url,
+                [
+                'body' => $this->bodyWithCredentials
+                ]
+            );
+            
+            $responseAuth = json_decode($requestAuth->getBody()->getContents());
+            
+            $token = $responseAuth->result->token;   
+            
+            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/info.teams.php';
+
+            $parameters = '?continent_code=sa&country_code=ar&category_id=1';
+            $parameters .= '&division_id=1&order=club_name&ordersense=desc';
+
+            $url .= $parameters;
+
+            $headers = [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'Authorization' => 'Bearer ' . $token
+            ];
+
+            $requestCustom = $this->client->request(
+                'GET',
+                $url,
+                [
+                'headers' => $headers
+                ]
+            );
+
+            $response = json_decode($requestCustom->getBody()->getContents());           
 
             $this->assertEquals('ok', $response->status);
         } catch (\Throwable $th) {

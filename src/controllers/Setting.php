@@ -141,11 +141,9 @@ class Setting
 
     public function getHeaderWithAuthorization($token)
     {
-        $headers = [
+        return $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
             'Authorization' => 'Bearer ' . $token
         ];
-        
-        return $headers;
     }
 }

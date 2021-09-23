@@ -41,9 +41,7 @@ class Team
 
 
     public function getInfoWithFilters($json)
-    {
-        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
-
+    { 
         $paramsReceived = json_decode($json, true);
 
         $paramsAcepted = array(
@@ -72,9 +70,8 @@ class Team
             $paramsNormaliced['translate_code']
         );
 
-        $responseHttp = $this->respuestas->standarSuccess($infoTeams);
+        return $this->respuestas->standarSuccess($infoTeams);
 
-        return $responseHttp;
     }
 
 

@@ -97,7 +97,7 @@ class Respuestas
         return $this->response;
     }
 
-    public function customResponse($status = 'ok', $code = 200, $msg = null)
+    public function customResponse($code = 200, $msg = null)
     {
         $this->response['status'] = 'error';
         
