@@ -9,23 +9,17 @@ use GuzzleHttp\Client;
 
 class PlayersSearchTest extends TestCase
 {
-    public $user;
-    public $password;
     public $client;
-    public $server;
-    public $apiFolder;
-    public $parentFolder;
-    public $version;
+    public $apiUrl;
+    public $bodyWithCredentials;
+    public $settings;
     
 
     protected function setUp(): void
     {
         $settings = new \Elitesports\Setting('remote');
 
-        $this->server   = $settings->getServer();
-        $this->apiFolder = $settings->getApiFolder();
-        $this->parentFolder = $settings->getParentFolder();
-        $this->version = $settings->getVersion();
+        $this->apiUrl = $settings->getApiUrl();
         $this->bodyWithCredentials = $settings->getBodyWithCredentials();
         $this->client = new Client();
     }
@@ -35,7 +29,7 @@ class PlayersSearchTest extends TestCase
     {
 
         try {
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
+            $url = $this->apiUrl . '/login.php';
 
             $requestAuth = $this->client->request(
                 'POST',
@@ -49,9 +43,10 @@ class PlayersSearchTest extends TestCase
             
             $token = $response->result->token;
             
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/players.search.php';
+            $url = $this->apiUrl . '/players.search.php';
             
             $parameters = '?club_id=1&team_id=1&season_id=1&country_code=GB&find=teve';
+
             $url .= $parameters;
 
             $headers = [

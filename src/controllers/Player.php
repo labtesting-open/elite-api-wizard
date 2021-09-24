@@ -36,7 +36,7 @@ class Player
         $keys = array('club_id', 'team_id');
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
-            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
+            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : 'GB';
 
             $categories = array();
 
@@ -126,7 +126,7 @@ class Player
         $keys = array('club_id', 'team_id', 'season_id');
            
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
-            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
+            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : 'GB';
 
             $categories = array();
                     

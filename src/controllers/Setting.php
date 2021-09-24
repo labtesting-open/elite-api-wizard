@@ -33,7 +33,7 @@ class Setting
 
     public function setRemoteMode()
     {
-        $this->server = 'http://f493-83-39-205-111.ngrok.io';
+        $this->server = 'http://b16b-83-39-205-111.ngrok.io';
         $this->user = 'elitesports17';
         $this->password = 'abc1234';
         $this->folder = '/elite-api-wizard';
@@ -141,9 +141,14 @@ class Setting
 
     public function getHeaderWithAuthorization($token)
     {
-        return $headers = [
-            'Content-Type' => 'application/x-www-form-urlencoded',
-            'Authorization' => 'Bearer ' . $token
-        ];
+        return "[
+            Content-Type => application/x-www-form-urlencoded,
+            Authorization => Bearer $token
+        ]";
+    }
+
+    public function getApiUrl()
+    {
+        return $this->server . $this->parentFolder . $this->folder . $this->version;
     }
 }

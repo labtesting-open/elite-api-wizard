@@ -2,7 +2,7 @@
 
 get all players from a team on a season
 
-**URL** : `/api/seasons/`
+**URL** : `/api/players/`
 
 **Method** : `GET`
 

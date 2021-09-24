@@ -9,23 +9,16 @@ use GuzzleHttp\Client;
 
 class InfoTeamsTest extends TestCase
 {
-    public $user;
-    public $password;
     public $client;
-    public $server;
-    public $apiFolder;
-    public $parentFolder;
-    public $version;
-    
+    public $apiUrl;
+    public $bodyWithCredentials;
+    public $settings;
 
     protected function setUp(): void
     {
         $settings = new \Elitesports\Setting('remote');
 
-        $this->server   = $settings->getServer();
-        $this->apiFolder = $settings->getApiFolder();
-        $this->parentFolder = $settings->getParentFolder();
-        $this->version = $settings->getVersion();
+        $this->apiUrl = $settings->getApiUrl();
         $this->bodyWithCredentials = $settings->getBodyWithCredentials();
         $this->client = new Client();
     }
@@ -35,11 +28,11 @@ class InfoTeamsTest extends TestCase
     {
 
         try {
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
+            $urlAuth = $this->apiUrl . '/login.php';
 
             $requestAuth = $this->client->request(
                 'POST',
-                $url,
+                $urlAuth,
                 [
                 'body' => $this->bodyWithCredentials
                 ]
@@ -49,10 +42,14 @@ class InfoTeamsTest extends TestCase
             
             $token = $responseAuth->result->token;
             
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/info.teams.php';
+            $url = $this->apiUrl . '/info.teams.php';
 
-            $parameters = '?continent_code=sa&country_code=ar&category_id=1';
-            $parameters .= '&division_id=1&order=club_name&ordersense=desc';
+            $parameters = '?continent_code=sa
+            &country_code=ar
+            &category_id=1
+            &division_id=1
+            &order=club_name
+            &ordersense=desc';
 
             $url .= $parameters;
 
@@ -60,7 +57,7 @@ class InfoTeamsTest extends TestCase
                 'Content-Type' => 'application/x-www-form-urlencoded',
                 'Authorization' => 'Bearer ' . $token
             ];
-
+            
             $requestCustom = $this->client->request(
                 'GET',
                 $url,

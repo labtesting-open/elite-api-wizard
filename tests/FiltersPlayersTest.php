@@ -9,25 +9,17 @@ use GuzzleHttp\Client;
 
 class FiltersPlayersTest extends TestCase
 {
-    public $user;
-    public $password;
     public $client;
-    public $server;
-    public $apiFolder;
-    public $parentFolder;
-    public $version;
-    
+    public $apiUrl;
+    public $bodyWithCredentials;
+    public $settings;
 
     protected function setUp(): void
     {
         $settings = new \Elitesports\Setting('remote');
 
-        $this->server   = $settings->getServer();
-        $this->apiFolder = $settings->getApiFolder();
-        $this->parentFolder = $settings->getParentFolder();
-        $this->version = $settings->getVersion();
+        $this->apiUrl = $settings->getApiUrl();
         $this->bodyWithCredentials = $settings->getBodyWithCredentials();
-     
         $this->client = new Client();
     }
 
@@ -36,7 +28,7 @@ class FiltersPlayersTest extends TestCase
     {
 
         try {
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
+            $url = $this->apiUrl . '/login.php';
 
             $requestAuth = $this->client->request(
                 'POST',
@@ -50,7 +42,7 @@ class FiltersPlayersTest extends TestCase
 
             $token = $response->result->token;
             
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/filters.players.php';
+            $url = $this->apiUrl . '/filters.players.php';
 
             $parameters = '?target=all';
             $url .= $parameters;
