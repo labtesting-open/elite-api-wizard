@@ -12,22 +12,19 @@ class LogoutTest extends TestCase
     public $requester;
 
     protected function setUp(): void
-    {     
-       $this->requester = new Requester();
+    {
+        $this->requester = new Requester();
     }
 
 
     public function testLogOutResultStatus()
-    {       
-        try {            
-
+    {
+        try {
             $response = $this->requester->testRequest('POST', 'logout', null);
 
             $this->assertEquals('ok', $response->status);
-
         } catch (\Throwable $th) {
             var_dump($th->getMessage());
         }
-
     }
 }

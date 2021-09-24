@@ -4,7 +4,7 @@ namespace Elitesports;
 
 use GuzzleHttp\Client;
 
-class Requester 
+class Requester
 {
     public $client;
     public $apiUrl;
@@ -35,21 +35,19 @@ class Requester
     
         $responseAuth = json_decode($requestAuth->getBody()->getContents());
         
-        return $responseAuth;      
-
-    }   
+        return $responseAuth;
+    }
 
 
     public function testRequest($method, $endPoint, $parameters)
     {
 
         try {
-           
             $auth = $this->getAuth();
 
             $token = $auth->result->token;
             
-            $url = $this->apiUrl . '/'.$endPoint;            
+            $url = $this->apiUrl . '/' . $endPoint;
 
             $url .= $parameters;
 
@@ -70,10 +68,8 @@ class Requester
             
             
             return $response;
-
         } catch (\Throwable $th) {
             return var_dump($th->getMessage());
         }
     }
-
 }
