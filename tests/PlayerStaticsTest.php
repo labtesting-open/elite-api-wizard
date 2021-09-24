@@ -4,70 +4,32 @@ declare(strict_types=1);
 
 namespace Elitesports\Test;
 
+use Elitesports\Requester;
 use PHPUnit\Framework\TestCase;
-use GuzzleHttp\Client;
 
 class PlayerStaticsTest extends TestCase
 {
-    public $client;
-    public $apiUrl;
-    public $bodyWithCredentials;
-    public $settings;
-    
+    public $requester;
 
     protected function setUp(): void
-    {
-        $settings = new \Elitesports\Setting('remote');
-
-        $this->apiUrl = $settings->getApiUrl();
-        $this->bodyWithCredentials = $settings->getBodyWithCredentials();
-        $this->client = new Client();
+    {     
+       $this->requester = new Requester();
     }
 
 
     public function testPlayerStaticsResultStatus()
-    {
-
+    {       
         try {
-            $urlAuth = $this->apiUrl . '/login.php';
 
-            $requestAuth = $this->client->request(
-                'POST',
-                $urlAuth,
-                [
-                'body' => $this->bodyWithCredentials
-                ]
-            );
-        
-            $response = json_decode($requestAuth->getBody()->getContents());
-            
-            $token = $response->result->token;
-            
-            $url = $this->apiUrl . '/player.statics.php';
+            $parameters ="?id=5&country_code=GB";
 
-            $parameters = '?id=5
-            &country_code=GB';
-
-            $url .= $parameters;
-
-            $headers = [
-                'Content-Type' => 'application/x-www-form-urlencoded',
-                'Authorization' => 'Bearer ' . $token
-            ];
-
-            $requestCustom = $this->client->request(
-                'GET',
-                $url,
-                [
-                'headers' => $headers
-                ]
-            );
-        
-            $response = json_decode($requestCustom->getBody()->getContents());
+            $response = $this->requester->testRequest('GET', 'player.statics', $parameters);
 
             $this->assertEquals('ok', $response->status);
+
         } catch (\Throwable $th) {
             var_dump($th->getMessage());
         }
+
     }
 }

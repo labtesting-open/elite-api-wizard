@@ -21,8 +21,7 @@ class ClubTest extends TestCase
     {       
         try {
 
-            $parameters ="?club_id=1
-            &country_code=GB";    
+            $parameters ="?club_id=1&country_code=GB";
 
             $response = $this->requester->testRequest('GET', 'club', $parameters);
 
