@@ -32,10 +32,8 @@ class Requester
             'body' => $this->bodyWithCredentials
             ]
         );
-    
-        $responseAuth = json_decode($requestAuth->getBody()->getContents());
-        
-        return $responseAuth;
+
+        return json_decode($requestAuth->getBody()->getContents());
     }
 
 
@@ -64,12 +62,9 @@ class Requester
                 ]
             );
 
-            $response = json_decode($requestCustom->getBody()->getContents());
-            
-            
-            return $response;
+            return json_decode($requestCustom->getBody()->getContents());
         } catch (\Throwable $th) {
-            return var_dump($th->getMessage());
+            return $th->getMessage();
         }
     }
 }
