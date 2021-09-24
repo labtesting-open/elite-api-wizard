@@ -23,7 +23,7 @@ class Setting
 
     public function setLocalMode()
     {
-        $this->server = 'http://localhost';
+        $this->server = 'http://127.0.0.1';
         $this->user = 'elitesports17';
         $this->password = 'abc1234';
         $this->folder = '/elite-api-wizard';
@@ -33,7 +33,7 @@ class Setting
 
     public function setRemoteMode()
     {
-        $this->server = 'http://8258-83-37-111-125.ngrok.io';
+        $this->server = 'http://b16b-83-39-205-111.ngrok.io';
         $this->user = 'elitesports17';
         $this->password = 'abc1234';
         $this->folder = '/elite-api-wizard';
@@ -132,5 +132,23 @@ class Setting
     public function setParentFolder($parentFolder)
     {
         $this->parentFolder = $parentFolder;
+    }
+
+    public function getBodyWithCredentials()
+    {
+        return '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
+    }
+
+    public function getHeaderWithAuthorization($token)
+    {
+        return "[
+            Content-Type => application/x-www-form-urlencoded,
+            Authorization => Bearer $token
+        ]";
+    }
+
+    public function getApiUrl()
+    {
+        return $this->server . $this->parentFolder . $this->folder . $this->version;
     }
 }

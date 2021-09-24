@@ -24,205 +24,142 @@ class Team
 
     public function getClubTeams($json)
     {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+       
+        $datos = json_decode($json, true);
 
-        $responseHttp = $this->token->checkAndReturnResponse($json);
+        if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
+            $countryCode   = (isset($datos['country_code'])) ? $datos['country_code'] : null;
 
-        if ($responseHttp == null) {
-            $datos = json_decode($json, true);
+            $infoTeams = $this->team->getTeams($datos['club_id'], $countryCode);
 
-            if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
-                $countryCode   = (isset($datos['country_code'])) ? $datos['country_code'] : null;
-
-                $info = $this->team->getTeams($datos['club_id'], $countryCode);
-
-                $resultado = new stdClass();
-                $resultado->status = 'ok';
-                $resultado->result = new stdClass();
-                $resultado->result = $info;
-
-                $responseHttp = $resultado;
-            } else {
-                $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
-            }
+            $responseHttp = $this->respuestas->standarSuccess($infoTeams);
         }
-
+        
         return $responseHttp;
     }
 
 
     public function getInfoWithFilters($json)
     {
+        $paramsReceived = json_decode($json, true);
 
-        $responseHttp = $this->token->checkAndReturnResponse($json);
+        $paramsAcepted = array(
+            'continent_code' => null,
+            'country_code' => null,
+            'category_id' => null,
+            'division_id' => null,
+            'page' => 1,
+            'limit' => 100,
+            'order' => null,
+            'order_sense' => null,
+            'translate_code' => 'GB'
+        );
 
-        if ($responseHttp == null) {
-            $datos = json_decode($json, true);
-            
-            $continentCode = null;
-            if (isset($datos['continent_code']) &&  !empty($datos['continent_code'])) {
-                $continentCode = $datos['continent_code'];
-            }
-            $countryCode = null;
-            if (isset($datos['country_code']) &&  !empty($datos['country_code'])) {
-                $countryCode = $datos['country_code'];
-            }
-            $categoryId = null;
-            if (isset($datos['category_id']) &&  !empty($datos['category_id'])) {
-                $categoryId = $datos['category_id'];
-            }
-            $divisionId = null;
-            if (isset($datos['division_id']) &&  !empty($datos['division_id'])) {
-                $divisionId = $datos['division_id'];
-            }
-            $page = 1;
-            if (isset($datos['page']) &&  is_numeric($datos['page'])) {
-                $page = $datos['page'];
-            }
-            $cant = 100;
-            if (isset($datos['cant']) &&  is_numeric($datos['cant'])) {
-                $cant = $datos['cant'];
-            }
-            $order = null;
-            if (isset($datos['order']) &&  !empty($datos['order'])) {
-                $order = $datos['order'];
-            }
-            $orderSense = null;
-            if (isset($datos['order_sense']) &&  !empty($datos['order_sense'])) {
-                $orderSense = $datos['order_sense'];
-            }
-            $translateCode = 'GB';
-            if (isset($datos['language_id']) &&  !empty($datos['language_id'])) {
-                $translateCode = $datos['language_id'];
-            }
-            
-            $info = $this->team->getTeamsByFilters(
-                $continentCode,
-                $countryCode,
-                $categoryId,
-                $divisionId,
-                $page,
-                $cant,
-                $order,
-                $orderSense,
-                $translateCode
-            );
+        $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
+        
+        $infoTeams = $this->team->getTeamsByFilters(
+            $paramsNormaliced['continent_code'],
+            $paramsNormaliced['country_code'],
+            $paramsNormaliced['category_id'],
+            $paramsNormaliced['division_id'],
+            $paramsNormaliced['page'],
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['order'],
+            $paramsNormaliced['order_sense'],
+            $paramsNormaliced['translate_code']
+        );
 
-            $resultado = new stdClass();
-            $resultado->status = 'ok';
-            $resultado->result = new stdClass();
-            $resultado->result = $info;
-
-            $responseHttp = $resultado;
-        }
-
-        return $responseHttp;
+        return $this->respuestas->standarSuccess($infoTeams);
     }
 
 
 
     public function getAvailableFilters($json)
     {
-        $responseHttp = $this->token->checkAndReturnResponse($json);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        
+        $paramsReceived = json_decode($json, true);
 
-        if ($responseHttp == null) {
-            $datos = json_decode($json, true);
+        if (isset($paramsReceived['target']) && $this->checkTarget($paramsReceived['target'])) {
+            $paramsAcepted = array(
+                'continent_code' => null,
+                'country_code' => null,
+                'category_id' => null,
+                'division_id' => null
+            );
 
-            if (isset($datos['target']) && $this->checkTarget($datos['target'])) {
-                $resultado = new stdClass();
-                $resultado->status = 'ok';
-                $resultado->result = new stdClass();
+            $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
 
-                $continentCode = null;
-                if (isset($datos['continent_code']) &&  !empty($datos['continent_code'])) {
-                    $continentCode = $datos['continent_code'];
-                }
-                $countryCode = null;
-                if (isset($datos['country_code']) &&  !empty($datos['country_code'])) {
-                    $countryCode = $datos['country_code'];
-                }
-                $categoryId = null;
-                if (isset($datos['category_id']) &&  !empty($datos['category_id'])) {
-                    $categoryId = $datos['category_id'];
-                }
-                $divisionId = null;
-                if (isset($datos['division_id']) &&  !empty($datos['division_id'])) {
-                    $divisionId = $datos['division_id'];
-                }
-
-                $result = new stdClass();
-                
-                if ($datos['target'] == 'continents') {
-                    $result = $this->club->getAvailableContinents(
-                        $continentCode,
-                        $countryCode,
-                        $categoryId,
-                        $divisionId
-                    );
-                }
-                
-                if ($datos['target'] == 'countries') {
-                    $result = $this->club->getAvailableCountries(
-                        $continentCode,
-                        $countryCode,
-                        $categoryId,
-                        $divisionId
-                    );
-                }
-                
-                if ($datos['target'] == 'categories') {
-                    $result = $this->team->getAvailableCategories(
-                        $continentCode,
-                        $countryCode,
-                        $categoryId,
-                        $divisionId
-                    );
-                }
-                
-                if ($datos['target'] == 'divisions') {
-                    $result = $this->club->getAvailableDivisions(
-                        $continentCode,
-                        $countryCode,
-                        $categoryId,
-                        $divisionId
-                    );
-                }
-                
-                if ($datos['target'] == 'all') {
-                    $result->continents = $this->club->getAvailableContinents(
-                        $continentCode,
-                        $countryCode,
-                        $categoryId,
-                        $divisionId
-                    );
-
-                    $result->countries  = $this->club->getAvailableCountries(
-                        $continentCode,
-                        $countryCode,
-                        $categoryId,
-                        $divisionId
-                    );
-
-                    $result->categories = $this->team->getAvailableCategories(
-                        $continentCode,
-                        $countryCode,
-                        $categoryId,
-                        $divisionId
-                    );
-
-                    $result->divisions  = $this->club->getAvailableDivisions(
-                        $continentCode,
-                        $countryCode,
-                        $categoryId,
-                        $divisionId
-                    );
-                }
-
-                $resultado->result = $result;
-
-                $responseHttp = $resultado;
-            } else {
-                $responseHttp = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+            $result = new stdClass();
+            
+            if ($paramsReceived['target'] == 'continents') {
+                $result = $this->club->getAvailableContinents(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                );
             }
+            
+            if ($paramsReceived['target'] == 'countries') {
+                $result = $this->club->getAvailableCountries(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                );
+            }
+            
+            if ($paramsReceived['target'] == 'categories') {
+                $result = $this->team->getAvailableCategories(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                );
+            }
+            
+            if ($paramsReceived['target'] == 'divisions') {
+                $result = $this->club->getAvailableDivisions(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                );
+            }
+            
+            if ($paramsReceived['target'] == 'all') {
+                $result->continents = $this->club->getAvailableContinents(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                );
+
+                $result->countries  = $this->club->getAvailableCountries(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                );
+
+                $result->categories = $this->team->getAvailableCategories(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                );
+
+                $result->divisions  = $this->club->getAvailableDivisions(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                );
+            }
+
+            $responseHttp = $this->respuestas->standarSuccess($result);
         }
 
         return $responseHttp;

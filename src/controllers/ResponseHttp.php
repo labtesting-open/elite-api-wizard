@@ -12,4 +12,5 @@ class ResponseHttp
     public const INTERNALSERVERERROR = 'Internal server error';
     public const INCORRECTPASSWORD = 'Incorrect password';
     public const USERINACTIVE = 'user inactive';
+    public const NOTAUTHORISED = 'not authorised';
 }

@@ -20,39 +20,34 @@ class User
     }
 
 
-    public function getUserPlan($json)
+    public function getUserPlan($token)
     {
-            
-        $datos = json_decode($json, true);
-
-        $responseHttp = $this->respuestas->error401();
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
         
-        if (isset($datos['token'])) {
-            $arrayToken = $this->token->checkToken($datos['token']);
+        if (isset($token)) {
+            $arrayToken = $this->token->checkToken($token);
 
             if ($arrayToken) {
                    $userData = $this->user->getUserInfo($arrayToken[0]['user_id']);
                    $planServices = $this->user->getPlanServices($userData[0]['plan_id']);
+              
+                   $result = new stdClass();
                        
-                   $resultado = new stdClass();
-                   $resultado->status = 'ok';
-                   $resultado->result = new stdClass();
-                       
-                   $resultado->result->userInfo = new stdClass();
-                   $resultado->result->userInfo->id = $userData[0]['user_id'];
-                   $resultado->result->userInfo->name = $userData[0]['name'];
-                   $resultado->result->userInfo->surname = $userData[0]['surname'];
-                   $resultado->result->userInfo->surname = $userData[0]['surname'];
-                   $resultado->result->userInfo->img_perfil = $userData[0]['img_perfil_url'];
+                   $result->userInfo = new stdClass();
+                   $result->userInfo->id = $userData[0]['user_id'];
+                   $result->userInfo->name = $userData[0]['name'];
+                   $result->userInfo->surname = $userData[0]['surname'];
+                   $result->userInfo->surname = $userData[0]['surname'];
+                   $result->userInfo->img_perfil = $userData[0]['img_perfil_url'];
 
-                   $resultado->result->plan = new stdClass();
-                   $resultado->result->plan->id = $userData[0]['plan_id'];
-                   $resultado->result->plan->name = $userData[0]['plan_name'];
-                   $resultado->result->plan->active = $userData[0]['active'];
-                   $resultado->result->plan->services = new stdClass();
-                   $resultado->result->plan->services = $planServices;
-                       
-                   $responseHttp = $resultado;
+                   $result->plan = new stdClass();
+                   $result->plan->id = $userData[0]['plan_id'];
+                   $result->plan->name = $userData[0]['plan_name'];
+                   $result->plan->active = $userData[0]['active'];
+                   $result->plan->services = new stdClass();
+                   $result->plan->services = $planServices;
+                   
+                   $responseHttp = $this->respuestas->standarSuccess($result);
             } else {
                 $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
             }

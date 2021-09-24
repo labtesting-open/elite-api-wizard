@@ -20,31 +20,22 @@ class Club
 
     public function checkTokenAndReturnResponse($json)
     {
-        return $this->token->checkAndReturnResponse($json);
+        return $this->token->checkAndReturnResponseInBody($json);
     }
 
 
     public function getInfo($json)
     {
-        $result = $this->checkTokenAndReturnResponse($json);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
-        if (is_null($result)) {
-            $datos = json_decode($json, true);
-            if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
-                $info = $this->club->getBasicInfo($datos['club_id']);
+        $datos = json_decode($json, true);
 
-                $resultado = new stdClass();
-                $resultado->status = 'ok';
-                $resultado->result = new stdClass();
-                $resultado->result = $info;
-                    
-                $result = $resultado;
-            } else {
-                $result = $this->respuestas->error200(ResponseHttp::DATAINCORRECTORINCOMPLETE);
-            }
+        if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
+            $infoClub = $this->club->getBasicInfo($datos['club_id']);
+            $responseHttp = $this->respuestas->standarSuccess($infoClub);
         }
 
-        return $result;
+        return $responseHttp;
     }
     
     public function getInfoWithFilters($json)
