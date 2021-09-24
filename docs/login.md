@@ -42,14 +42,32 @@ Used to collect a Token for a registered User.
 
 **Condition** : If 'username' and 'password' combination is wrong.
 
+**Code** : `200 OK`
+
+**Content** :
+
+```json
+{
+   "status": "error",
+    "result": {
+        "error_id": "200",
+        "error_msg": "Incorrect password"
+    }
+}
+```
+
+**Condition** : if any of these parameters are not found.
+
 **Code** : `400 BAD REQUEST`
 
 **Content** :
 
 ```json
 {
-    "non_field_errors": [
-        "Unable to login with provided credentials."
-    ]
+     "status": "error",
+    "result": {
+        "error_id": "400",
+        "error_msg": "Bad Request"
+    }
 }
 ```

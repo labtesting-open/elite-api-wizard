@@ -1,29 +1,22 @@
 <?php
 
 include __DIR__."/../vendor/autoload.php";
+include('extras/headers.php');
 
-header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-header("Allow: GET, POST, OPTIONS, PUT, DELETE");
-
-header('content-type: application/json');
-
-$_login = new \Elitesports\Login();
-$_respuestas = new \Elitesports\Respuestas();
+$loginController = new \Elitesports\Login();
+$responsesController = new \Elitesports\Respuestas();
 
 
-if($_SERVER['REQUEST_METHOD'] == "POST"){
+if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
-
-    //recibir datos
-    $postBody = file_get_contents("php://input");
-    
-    //enviar datos al manejador
-    $datosArray = $_login->login($postBody);
-
-    //retornar respuesta
+    $httpResponse = $responsesController->error405();
    
+
+} else if($_SERVER['REQUEST_METHOD'] == "POST") {  
+    
+    $postBody = file_get_contents("php://input");
+
+    $datosArray = $loginController->login($postBody);
 
     if(isset($datosArray["result"]["error_id"])){
         $responseCode = $datosArray["result"]["error_id"];
@@ -32,10 +25,19 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         http_response_code(200);
     }
 
-    echo json_encode($datosArray);
+    $httpResponse = $datosArray;       
+
+}else if($_SERVER['REQUEST_METHOD'] == "PUT"){
+
+    $httpResponse = $responsesController->error405();    
+
+}else if($_SERVER['REQUEST_METHOD'] == "DELETE"){
+
+    $httpResponse = $responsesController->error405();
 
 }else{
-    header('content-type: application/json');
-    $datosArray = $_respuestas->error405();
-    echo json_encode($datosArray); 
+   
+    $httpResponse = $responsesController->error405();
 }
+
+echo json_encode($httpResponse);

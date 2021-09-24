@@ -36,4 +36,99 @@ class Utils
         }
         return true;
     }
+
+
+    private static function notEmptyAndNumeric($listKeys, $key)
+    {
+
+        $result = false;
+
+        foreach ($listKeys as $param => $value) {
+            if ($param == $key && !empty($value) && is_numeric($value)) {
+                $result = true;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    public static function checkParamsIssetAndNumeric($paramList, $keyList)
+    {
+        $utils = new Utils();
+
+        $checkResult = true;
+
+        if (count($paramList) > 0 && count($keyList) > 0) {
+            foreach ($keyList as $key) {
+                $chekValue = $utils->notEmptyAndNumeric($paramList, $key);
+
+                if (!$chekValue) {
+                    $checkResult = false;
+                    break;
+                }
+            }
+        } else {
+            $checkResult = false;
+        }
+
+        return $checkResult;
+    }
+
+
+    public static function getkey($keyList, $target, $type = null)
+    {
+        
+        $matchResult = null;
+
+        if (isset($target) && isset($keyList)) {
+            foreach ($keyList as $key => $value) {
+                if (strtolower($key) == $target) {
+                    $matchResult = $value;
+                }
+            }
+        }
+
+        if (isset($type) && $type == 'Bearer') {
+            $matchResult = substr($matchResult, strlen($type));
+        }
+
+        return trim($matchResult);
+    }
+    
+    
+    public static function getAllParams($requestList, $outputMode = null)
+    {
+
+        $paramList = array();
+
+        foreach ($requestList as $key => $value) {
+            $paramList[$key] = $value;
+        }
+
+        if (isset($outputMode) && $outputMode == OutputsTypes::JSON) {
+            $paramList = json_encode($paramList, true);
+        }
+        return $paramList;
+    }
+    
+
+    public static function normalizerParams($received, $acepted)
+    {
+        $normalized = array();
+
+        if (empty($received)) {
+            foreach ($acepted as $key => $value) {
+                if (array_key_exists($key, $received)) {
+                    $normalized[$key] = $received[$key];
+                } else {
+                    $normalized[$key] = $value;
+                }
+            }
+        } else {
+            $normalized = $acepted;
+        }
+
+        return $normalized;
+    }
 }

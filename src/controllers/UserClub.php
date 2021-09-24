@@ -20,28 +20,23 @@ class UserClub
     }
 
 
-    public function getOwnClub($json)
+    public function getOwnClub($token)
     {
-            
-        $datos = json_decode($json, true);
-        $responseHttp = $this->respuestas->error401();
 
-        if (isset($datos['token'])) {
-            $testToken = $this->token->checkToken($datos['token']);
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        
+        if (isset($token)) {
+            $arrayToken = $this->token->checkToken($token);
 
-            if ($testToken) {
-                    $clubId = $this->userClub->getUserClub($testToken[0]['user_id']);
-
-                    $resultado = new stdClass();
-                    $resultado->status = 'ok';
-                    $resultado->result = new stdClass();
-                    $resultado->result = $clubId;
-                        
-                    $responseHttp = $resultado;
+            if ($arrayToken) {
+                $clubId = $this->userClub->getUserClub($arrayToken[0]['user_id']);
+                
+                $responseHttp = $this->respuestas->standarSuccess($clubId);
             } else {
                 $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALIDOREXPIRED);
             }
         }
+        
         return $responseHttp;
     }
 }

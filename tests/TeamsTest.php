@@ -4,73 +4,25 @@ declare(strict_types=1);
 
 namespace Elitesports\Test;
 
+use Elitesports\Requester;
 use PHPUnit\Framework\TestCase;
-use GuzzleHttp\Client;
 
 class TeamsTest extends TestCase
 {
-    public $user;
-    public $password;
-    public $client;
-    public $server;
-    public $apiFolder;
-    public $parentFolder;
-    public $version;
-    
+    public $requester;
 
     protected function setUp(): void
     {
-        $settings = new \Elitesports\Setting('remote');
-
-        $this->server   = $settings->getServer();
-        $this->user     = $settings->getUser();
-        $this->password = $settings->getPassword();
-        $this->apiFolder = $settings->getApiFolder();
-        $this->parentFolder = $settings->getParentFolder();
-        $this->version = $settings->getVersion();
-
-        $this->client = new Client();
+        $this->requester = new Requester();
     }
 
 
     public function testTeamsResultStatus()
     {
-
         try {
-            $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
+            $parameters = '?club_id=1&country_code=GB';
 
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
-
-            $requestToken = $this->client->request(
-                'POST',
-                $url,
-                [
-                'body' => $body
-                ]
-            );
-        
-            $response = json_decode($requestToken->getBody()->getContents());
-            
-            $token = $response->result->token;
-            
-            $body = '{"token":"' . $token . '",
-                "club_id":"1",
-                "country_code":"GB"
-            }';
-            
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/teams.php';
-            
-            $requestBasic = $this->client->request(
-                'POST',
-                $url,
-                [
-                'body' => $body
-                ]
-            );
-        
-            $response = json_decode($requestBasic->getBody()->getContents());
-        
-            //var_dump($response->status);
+            $response = $this->requester->testRequest('GET', 'teams', $parameters);
 
             $this->assertEquals('ok', $response->status);
         } catch (\Throwable $th) {

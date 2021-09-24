@@ -18,7 +18,7 @@ class Respuestas
 
         $this->response['result'] = array(
             'error_id' => '405',
-            'error_msg' => 'Metodo no permitido'
+            'error_msg' => 'Method Not Allowed'
         );
 
         return $this->response;
@@ -38,20 +38,20 @@ class Respuestas
     }
 
 
-    public function error400()
+    public function error400($msg = 'Bad Request')
     {
         
         $this->response['status'] = 'error';
         
         $this->response['result'] = array(
             'error_id' => '400',
-            'error_msg' => 'Datos enviados incompletos o incorrectos'
+            'error_msg' => $msg
         );
 
         return $this->response;
     }
 
-    public function error500($valor = 'Error interno del servidor')
+    public function error500($valor = 'Internal Server Error')
     {
         
         $this->response['status'] = 'error';
@@ -64,14 +64,13 @@ class Respuestas
         return $this->response;
     }
 
-    public function error401($valor = 'No autorizado')
+    public function error401($msg = 'Unauthorized')
     {
-        
         $this->response['status'] = 'error';
         
         $this->response['result'] = array(
             'error_id' => '401',
-            'error_msg' => $valor
+            'error_msg' => $msg
         );
 
         return $this->response;
@@ -84,6 +83,27 @@ class Respuestas
         
         $this->response['result'] = array(
             "$key" => "$valor"
+        );
+
+        return $this->response;
+    }
+
+    public function standarSuccess($result = null, $code = 'ok')
+    {
+        $this->response['status'] = $code;
+
+        $this->response['result'] = $result;
+
+        return $this->response;
+    }
+
+    public function customResponse($code = 200, $msg = null)
+    {
+        $this->response['status'] = 'error';
+        
+        $this->response['result'] = array(
+            'error_id' => $code,
+            'error_msg' => $msg
         );
 
         return $this->response;

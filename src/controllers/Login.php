@@ -18,14 +18,11 @@ class Login
     }
 
 
-    public function logOut($json)
+    public function logOut($token)
     {
-        
-        $datos = json_decode($json, true);
         $responseHttp = $this->respuestas->error400();
 
-        if (isset($datos['token'])) {
-            $token = $datos['token'];
+        if (isset($token)) {
             $datos = $this->auth->getUserToken($token);
 
             if ($datos) {
@@ -35,13 +32,13 @@ class Login
                     if ($actualizar) {
                         $responseHttp = $this->respuestas->success200('token', 'disabled');
                     } else {
-                        $responseHttp =  $this->respuestas->error500(ResponseHttp::INTERNALERRORUPDATESFAIL);
+                        $responseHttp =  $this->respuestas->error500();
                     }
                 } else {
-                    $responseHttp =  $this->respuestas->error200(ResponseHttp::TOKENEXPIRED);
+                    $responseHttp =  $this->respuestas->error401(ResponseHttp::TOKENEXPIRED);
                 }
             } else {
-                $responseHttp = $this->respuestas->error200(ResponseHttp::TOKENINVALID);
+                $responseHttp = $this->respuestas->error401(ResponseHttp::TOKENINVALID);
             }
         }
         return $responseHttp;
@@ -69,7 +66,7 @@ class Login
                         if ($verificar) {
                             $responseHttp = $this->respuestas->success200('token', $verificar);
                         } else {
-                            $responseHttp = $this->respuestas->error500(ResponseHttp::INTERNALSERVERERROR);
+                            $responseHttp = $this->respuestas->error500();
                         }
                     } else {
                         $responseHttp = $this->respuestas->error200(ResponseHttp::USERINACTIVE);

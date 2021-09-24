@@ -4,75 +4,25 @@ declare(strict_types=1);
 
 namespace Elitesports\Test;
 
+use Elitesports\Requester;
 use PHPUnit\Framework\TestCase;
-use GuzzleHttp\Client;
 
 class SearchTest extends TestCase
 {
-    public $user;
-    public $password;
-    public $client;
-    public $server;
-    public $apiFolder;
-    public $parentFolder;
-    public $version;
-    
+    public $requester;
 
     protected function setUp(): void
     {
-        $settings = new \Elitesports\Setting('remote');
-
-        $this->server   = $settings->getServer();
-        $this->user     = $settings->getUser();
-        $this->password = $settings->getPassword();
-        $this->apiFolder = $settings->getApiFolder();
-        $this->parentFolder = $settings->getParentFolder();
-        $this->version = $settings->getVersion();
-
-        $this->client = new Client();
+        $this->requester = new Requester();
     }
 
 
     public function testSearchResultStatus()
     {
-
         try {
-            $body = '{"user":"' . $this->user . '","password":"' . $this->password . '"}';
+            $parameters = '?find=baye&fast=1&limit=10&country_code=GB';
 
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/login.php';
-
-            $requestToken = $this->client->request(
-                'POST',
-                $url,
-                [
-                'body' => $body
-                ]
-            );
-        
-            $response = json_decode($requestToken->getBody()->getContents());
-            
-            $token = $response->result->token;
-            
-            $body = '{"token":"' . $token . '",
-                "find":"baye",
-                "language_id":"GB", 
-                "fast":"1",
-                "limit":"10"
-            }';
-            
-            $url = $this->server . $this->parentFolder . $this->apiFolder . $this->version . '/search.php';
-            
-            $requestBasic = $this->client->request(
-                'POST',
-                $url,
-                [
-                'body' => $body
-                ]
-            );
-        
-            $response = json_decode($requestBasic->getBody()->getContents());
-        
-            //var_dump($response->status);
+            $response = $this->requester->testRequest('GET', 'search', $parameters);
 
             $this->assertEquals('ok', $response->status);
         } catch (\Throwable $th) {
