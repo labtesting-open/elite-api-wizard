@@ -33,7 +33,7 @@ class Search
 
         if (isset($params['find'])) {
             $find = $params['find'];
-            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
+            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : 'GB';
             $page = (isset($datos['page'])) ? $datos['page'] : 1;
             $modeFast = (isset($datos['fast'])) ? $datos['fast'] : 0;
             $limit = (isset($datos['limit'])) ? $datos['limit'] : 10;

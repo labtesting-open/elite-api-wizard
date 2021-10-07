@@ -91,7 +91,7 @@ class Player
            
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
             $actions = array();
-            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
+            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : 'GB';
             $positionId = $this->player->getPosition_id($params['id']);
             $actionList = $this->player->getActionIdList($positionId);
             $actionNameList = $this->player->getActionNameList($actionList, $countryCode);
@@ -172,7 +172,7 @@ class Player
         $keys = array('id');
            
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
-            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
+            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : 'GB';
             
             $playerPerfil = $this->player->getPlayerPerfil($params['id'], $countryCode);
             $playerSecondaryPositions = $this->player->getSecondaryPositions($params['id'], $countryCode);
