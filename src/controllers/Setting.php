@@ -24,7 +24,7 @@ class Setting
     public function setLocalMode()
     {
         $this->server = 'http://127.0.0.1';
-        $this->user = 'elitesports17';
+        $this->user = 'admin@wizard.com';
         $this->password = 'abc1234';
         $this->folder = '/elite-api-wizard';
         $this->parentFolder = '/labtest';
@@ -33,8 +33,8 @@ class Setting
 
     public function setRemoteMode()
     {
-        $this->server = 'http://b16b-83-39-205-111.ngrok.io';
-        $this->user = 'elitesports17';
+        $this->server = 'http://b1fa-83-39-205-111.ngrok.io';
+        $this->user = 'admin@wizard.com';
         $this->password = 'abc1234';
         $this->folder = '/elite-api-wizard';
         $this->parentFolder = '/labtest';
