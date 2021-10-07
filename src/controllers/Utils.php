@@ -117,7 +117,7 @@ class Utils
     {
         $normalized = array();
 
-        if (empty($received)) {
+        if (!empty($received)) {
             foreach ($acepted as $key => $value) {
                 if (array_key_exists($key, $received)) {
                     $normalized[$key] = $received[$key];
