@@ -32,11 +32,13 @@ class Search
         $params = json_decode($json, true);
 
         if (isset($params['find'])) {
-            $find = $params['find'];
+
+            $find = $params['find'];            
+           
+            $modeFast = (isset($params['fast'])) ? $params['fast'] : 0;
+            $page = (isset($params['page'])) ? $params['page'] : 1;
+            $limit = (isset($params['limit'])) ? $params['limit'] : 10;
             $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : 'GB';
-            $page = (isset($datos['page'])) ? $datos['page'] : 1;
-            $modeFast = (isset($datos['fast'])) ? $datos['fast'] : 0;
-            $limit = (isset($datos['limit'])) ? $datos['limit'] : 10;
 
             $resultPlayers = array();
             $resultClubs   = array();
@@ -46,7 +48,7 @@ class Search
                 $resultClubs   = $this->club->findClubs($find, $countryCode, $page);
             } elseif (isset($find) && !empty($find)) {
                 $resultPlayers = $this->player->findPlayersFast($find, $countryCode, $limit);
-                $resultClubs   = $this->club->findClubsFast($find, $countryCode, $page);
+                $resultClubs   = $this->club->findClubsFast($find, $countryCode, $limit);
             }
 
             $searchResult = new stdClass();
