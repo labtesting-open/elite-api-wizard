@@ -28,9 +28,7 @@ class Utils
     public static function checkIssetEmptyNumeric()
     {
         foreach (func_get_args() as $arg) {
-            if (isset($arg) && !empty($arg) && is_numeric($arg)) {
-                continue;
-            } else {
+            if (!isset($arg) || empty($arg) || !is_numeric($arg)) {
                 return false;
             }
         }
