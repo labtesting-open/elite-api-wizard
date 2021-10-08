@@ -17,9 +17,10 @@ class Search
 
     public function __construct()
     {
-        $this->player = new \Elitelib\Player();
-        $this->club = new \Elitelib\Club();
-        $this->token = new \Elitelib\Token();
+        $host = new HostConnection();
+        $this->player = new \Elitelib\Player($host->getParams());
+        $this->club = new \Elitelib\Club($host->getParams());
+        $this->token = new \Elitelib\Token($host->getParams());
         $this->respuestas = new Respuestas();
     }
 

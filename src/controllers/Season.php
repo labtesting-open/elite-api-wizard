@@ -15,8 +15,9 @@ class Season
 
     public function __construct()
     {
-        $this->season = new \Elitelib\Season();
-        $this->token = new \Elitelib\Token();
+        $host = new HostConnection();
+        $this->season = new \Elitelib\Season($host->getParams());
+        $this->token = new \Elitelib\Token($host->getParams());
         $this->respuestas = new Respuestas();
     }
 

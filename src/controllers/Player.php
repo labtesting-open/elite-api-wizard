@@ -18,10 +18,11 @@ class Player
 
     public function __construct()
     {
-        $this->player = new \Elitelib\Player();
-        $this->token = new \Elitelib\Token();
-        $this->club = new \Elitelib\Club();
-        $this->team = new \Elitelib\Team();
+        $host = new HostConnection();
+        $this->player = new \Elitelib\Player($host->getParams());
+        $this->token = new \Elitelib\Token($host->getParams());
+        $this->club = new \Elitelib\Club($host->getParams());
+        $this->team = new \Elitelib\Team($host->getParams());
         $this->respuestas  = new Respuestas();
     }
 

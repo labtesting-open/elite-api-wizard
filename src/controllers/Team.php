@@ -14,10 +14,11 @@ class Team
 
     public function __construct()
     {
-        $this->team = new \Elitelib\Team();
+        $host = new HostConnection();
+        $this->team = new \Elitelib\Team($host->getParams());
         $this->token = new Token();
         $this->respuestas  = new Respuestas();
-        $this->club = new \Elitelib\Club();
+        $this->club = new \Elitelib\Club($host->getParams());
     }
 
 

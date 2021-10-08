@@ -12,7 +12,8 @@ class Club
 
     public function __construct()
     {
-        $this->club = new \Elitelib\Club();
+        $host = new HostConnection();
+        $this->club = new \Elitelib\Club($host->getParams());
         $this->respuestas  = new Respuestas();
         $this->token = new Token();
     }
