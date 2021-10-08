@@ -44,8 +44,8 @@ class Search
             $resultClubs   = array();
 
             if (!$modeFast) {
-                $resultPlayers = $this->player->findPlayers($find, $countryCode, $page);
-                $resultClubs   = $this->club->findClubs($find, $countryCode, $page);
+                $resultPlayers = $this->player->findPlayers($find, $countryCode, $page, $limit);
+                $resultClubs   = $this->club->findClubs($find, $countryCode, $page, $limit);
             } elseif (isset($find) && !empty($find)) {
                 $resultPlayers = $this->player->findPlayersFast($find, $countryCode, $limit);
                 $resultClubs   = $this->club->findClubsFast($find, $countryCode, $limit);
