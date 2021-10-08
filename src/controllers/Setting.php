@@ -33,7 +33,7 @@ class Setting
 
     public function setRemoteMode()
     {
-        $this->server = 'http://b1fa-83-39-205-111.ngrok.io';
+        $this->server = 'http://4f12-83-39-205-111.ngrok.io';
         $this->user = 'admin@wizard.com';
         $this->password = 'abc1234';
         $this->folder = '/elite-api-wizard';
