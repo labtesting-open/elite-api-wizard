@@ -1,6 +1,13 @@
 <?php
 namespace Elitesports;
 
+/*
+Developer config file
+redname file
+    HostConnection.php.base to
+    HostConnection.php
+*/
+
 class HostConnection
 {
 
