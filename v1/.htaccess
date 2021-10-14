@@ -19,4 +19,5 @@ RewriteRule ^(.*)$ $1.html
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+?)/?$ index.html?url=$1 [L,QSA]
+SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
 
