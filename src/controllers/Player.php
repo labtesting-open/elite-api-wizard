@@ -224,6 +224,16 @@ class Player
             if (isset($params['division_id']) &&  !empty($params['division_id'])) {
                 $divisionId = $params['division_id'];
             }
+
+            $clubId = null;
+            if (isset($params['club_id']) &&  !empty($params['club_id'])) {
+                $clubId = $params['club_id'];
+            }
+
+            $nationalityCode = null;
+            if (isset($params['nationality_code']) &&  !empty($params['nationality_code'])) {
+                $nationalityCode = $params['nationality_code'];
+            }
             
             $result = new stdClass();
             
@@ -290,6 +300,24 @@ class Player
                     $countryCode,
                     $categoryId,
                     $divisionId
+                );
+
+                $result->clubs  = $this->club->getAvailableClubs(
+                    $continentCode,
+                    $countryCode,
+                    $categoryId,
+                    $divisionId,
+                    $clubId,
+                    $nationalityCode
+                );
+
+                $result->nationalities  = $this->player->getAvailableNationalities(
+                    $continentCode,
+                    $countryCode,
+                    $categoryId,
+                    $divisionId,
+                    $clubId,
+                    $nationalityCode
                 );
             }
             

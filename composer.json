@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=5.6.20",
-        "elitelib/persistence": "^0.0",
+        "elitelib/persistence": "0.*",
         "guzzlehttp/guzzle": "^7.0"
         
     },
