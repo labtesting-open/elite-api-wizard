@@ -234,6 +234,11 @@ class Player
             if (isset($params['nationality_code']) &&  !empty($params['nationality_code'])) {
                 $nationalityCode = $params['nationality_code'];
             }
+
+            $languageCode = null;
+            if (isset($params['language_code']) &&  !empty($params['language_code'])) {
+                $languageCode = $params['language_code'];
+            }
             
             $result = new stdClass();
             
@@ -319,10 +324,75 @@ class Player
                     $clubId,
                     $nationalityCode
                 );
+
+                $result->primaryPositions = $this->player->getAllPrimaryPositions(                    
+                    null, 
+                    null, 
+                    $languageCode
+                );
+
+                $result->secondaryPositions = $this->player->getAllSecondaryPositions(                    
+                    null, 
+                    null, 
+                    $languageCode
+                );
+                
             }
             
              $responseHttp = $this->respuestas->standarSuccess($result);
         }
         return $responseHttp;
     }
+
+    public function getPlayersWithFilters($json)
+    {
+        $paramsReceived = json_decode($json, true);
+
+        $paramsAcepted = array(
+            'continent_code' => null,
+            'country_code' => null,
+            'category_id' => null,
+            'division_id' => null,
+            'club_id' => null,
+            'nationality_code' => NULL,
+            'position_id' => null,
+            'second_positions_codes' => null,
+            'age_range' => null,
+            'height_range' => null,
+            'weight_range' => null,
+            'foot' => null,
+            'order' => null,
+            'order_sense' => null,
+            'page' => 1,
+            'limit' => 100,
+            'language_code' => 'GB'            
+        );
+
+        $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
+        
+        $infoTeams = $this->player->getAvailablePlayersWithFilters(
+            $paramsNormaliced['continent_code'],
+            $paramsNormaliced['country_code'],
+            $paramsNormaliced['category_id'],
+            $paramsNormaliced['division_id'],
+            $paramsNormaliced['club_id'],
+            $paramsNormaliced['nationality_code'],
+            $paramsNormaliced['position_id'],            
+            $paramsNormaliced['second_positions_codes'],
+            $paramsNormaliced['age_range'],
+            $paramsNormaliced['height_range'],
+            $paramsNormaliced['weight_range'],
+            $paramsNormaliced['foot'],
+            $paramsNormaliced['order'],
+            $paramsNormaliced['order_sense'],
+            $paramsNormaliced['page'],
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['language_code']              
+        );
+
+        return $this->respuestas->standarSuccess($infoTeams);
+    }
+
+
+
 }
