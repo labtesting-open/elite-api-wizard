@@ -30,13 +30,12 @@ class Season
 
         $keys = array('club_id', 'team_id');
 
-        $onlyWithMatches = ( isset($params['with_matches']))? $params['with_matches'] : 0;
+        $onlyWithMatches = ( isset($params['with_matches'])) ? $params['with_matches'] : 0;
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
-
             $seasons = $this->season->getSeasonsWithMatchesByClubTeam(
-                $params['club_id'], 
-                $params['team_id'], 
+                $params['club_id'],
+                $params['team_id'],
                 $onlyWithMatches
             );
 

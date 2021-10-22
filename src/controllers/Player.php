@@ -325,18 +325,17 @@ class Player
                     $nationalityCode
                 );
 
-                $result->primaryPositions = $this->player->getAllPrimaryPositions(                    
-                    null, 
-                    null, 
+                $result->primaryPositions = $this->player->getAllPrimaryPositions(
+                    null,
+                    null,
                     $languageCode
                 );
 
-                $result->secondaryPositions = $this->player->getAllSecondaryPositions(                    
-                    null, 
-                    null, 
+                $result->secondaryPositions = $this->player->getAllSecondaryPositions(
+                    null,
+                    null,
                     $languageCode
                 );
-                
             }
             
              $responseHttp = $this->respuestas->standarSuccess($result);
@@ -354,7 +353,7 @@ class Player
             'category_id' => null,
             'division_id' => null,
             'club_id' => null,
-            'nationality_code' => NULL,
+            'nationality_code' => null,
             'position_id' => null,
             'second_positions_codes' => null,
             'age_range' => null,
@@ -365,7 +364,7 @@ class Player
             'order_sense' => null,
             'page' => 1,
             'limit' => 100,
-            'language_code' => 'GB'            
+            'language_code' => 'GB'
         );
 
         $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
@@ -377,7 +376,7 @@ class Player
             $paramsNormaliced['division_id'],
             $paramsNormaliced['club_id'],
             $paramsNormaliced['nationality_code'],
-            $paramsNormaliced['position_id'],            
+            $paramsNormaliced['position_id'],
             $paramsNormaliced['second_positions_codes'],
             $paramsNormaliced['age_range'],
             $paramsNormaliced['height_range'],
@@ -387,12 +386,9 @@ class Player
             $paramsNormaliced['order_sense'],
             $paramsNormaliced['page'],
             $paramsNormaliced['limit'],
-            $paramsNormaliced['language_code']              
+            $paramsNormaliced['language_code']
         );
 
         return $this->respuestas->standarSuccess($infoTeams);
     }
-
-
-
 }
