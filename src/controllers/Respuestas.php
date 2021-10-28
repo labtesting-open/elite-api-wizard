@@ -97,6 +97,17 @@ class Respuestas
         return $this->response;
     }
 
+    public function standarSuccessPaginate($result = null, $paginate = null, $code = 'ok')
+    {
+        $this->response['status'] = $code;
+
+        $this->response['paginate'] = $paginate;
+
+        $this->response['result'] = $result;
+
+        return $this->response;
+    }
+
     public function customResponse($code = 200, $msg = null)
     {
         $this->response['status'] = 'error';

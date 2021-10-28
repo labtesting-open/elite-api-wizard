@@ -389,6 +389,28 @@ class Player
             $paramsNormaliced['language_code']
         );
 
-        return $this->respuestas->standarSuccess($infoTeams);
+        $totalRows = $this->player->getAvailablePlayersWithFiltersTotalRows(
+            $paramsNormaliced['continent_code'],
+            $paramsNormaliced['country_code'],
+            $paramsNormaliced['category_id'],
+            $paramsNormaliced['division_id'],
+            $paramsNormaliced['club_id'],
+            $paramsNormaliced['nationality_code'],
+            $paramsNormaliced['position_id'],
+            $paramsNormaliced['second_positions_codes'],
+            $paramsNormaliced['age_range'],
+            $paramsNormaliced['height_range'],
+            $paramsNormaliced['weight_range'],
+            $paramsNormaliced['foot'],
+            $paramsNormaliced['order'],
+            $paramsNormaliced['order_sense'],
+            $paramsNormaliced['page'],
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['language_code']
+        );
+
+        $paginate = Utils::getPaginateInfo($totalRows, $paramsNormaliced['limit'] );
+
+        return $this->respuestas->standarSuccessPaginate($infoTeams, $paginate);
     }
 }
