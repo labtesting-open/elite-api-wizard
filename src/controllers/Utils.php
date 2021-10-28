@@ -118,13 +118,11 @@ class Utils
         if (!empty($received)) {
             foreach ($acepted as $key => $value) {
                 if (array_key_exists($key, $received)) {
-                    
-                    if($key == 'limit' && $received[$key]<=0){
-                        $normalized[$key] = 100; 
-                    } else{
+                    if ($key == 'limit' && $received[$key] <= 0) {
+                        $normalized[$key] = 100;
+                    } else {
                         $normalized[$key] = $received[$key];
                     }
-                    
                 } else {
                     $normalized[$key] = $value;
                 }

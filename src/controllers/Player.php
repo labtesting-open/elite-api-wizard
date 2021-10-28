@@ -409,7 +409,7 @@ class Player
             $paramsNormaliced['language_code']
         );
 
-        $paginate = Utils::getPaginateInfo($totalRows, $paramsNormaliced['limit'] );
+        $paginate = Utils::getPaginateInfo($totalRows, $paramsNormaliced['limit']);
 
         return $this->respuestas->standarSuccessPaginate($infoTeams, $paginate);
     }
