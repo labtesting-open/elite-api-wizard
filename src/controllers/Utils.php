@@ -28,9 +28,7 @@ class Utils
     public static function checkIssetEmptyNumeric()
     {
         foreach (func_get_args() as $arg) {
-            if (isset($arg) && !empty($arg) && is_numeric($arg)) {
-                continue;
-            } else {
+            if (!isset($arg) || empty($arg) || !is_numeric($arg)) {
                 return false;
             }
         }
@@ -120,7 +118,11 @@ class Utils
         if (!empty($received)) {
             foreach ($acepted as $key => $value) {
                 if (array_key_exists($key, $received)) {
-                    $normalized[$key] = $received[$key];
+                    if ($key == 'limit' && $received[$key] <= 0) {
+                        $normalized[$key] = 100;
+                    } else {
+                        $normalized[$key] = $received[$key];
+                    }
                 } else {
                     $normalized[$key] = $value;
                 }
@@ -130,5 +132,17 @@ class Utils
         }
 
         return $normalized;
+    }
+
+    public static function getPaginateInfo($totalRows, $limit)
+    {
+        $totalPages = ceil($totalRows / $limit);
+
+        $paginate  = array(
+            'rows' => $totalRows,
+            'pages' => $totalPages
+        );
+
+        return $paginate;
     }
 }

@@ -6,7 +6,7 @@ use Elitesports\Utils;
 include __DIR__."/../vendor/autoload.php";
 include('extras/headers.php');
 
-$seasonController = new \Elitesports\Season();
+$teamController = new \Elitesports\Player();
 $responsesController = new \Elitesports\Respuestas();
 $tokenController = new \Elitesports\Token();
 
@@ -15,24 +15,19 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
     $headers = apache_request_headers();    
     $token = Utils::getkey($headers,'authorization', 'Bearer');
-    
+
     $httpResponse = $tokenController->checkAndReturnResponse($token);
 
     if ( is_null($httpResponse)) {
-        
+
         $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
 
-        if($params !='[]')
-        {
-            $httpResponse = $seasonController->getAvailableSeasons($params);
-        }else{
-            $httpResponse = $seasonController->getAllSeasons();
-        }
+        $httpResponse = $teamController->getPlayersWithFilters($params);
 
     }
 
 } else if($_SERVER['REQUEST_METHOD'] == "POST") {
-    
+
     $httpResponse = $responsesController->error405();
 
 }else if($_SERVER['REQUEST_METHOD'] == "PUT"){
@@ -44,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     $httpResponse = $responsesController->error405();
 
 }else{
-    
+
     $httpResponse = $responsesController->error405();
 }
 

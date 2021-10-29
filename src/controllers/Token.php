@@ -11,8 +11,9 @@ class Token
 
     public function __construct()
     {
+        $host = new HostConnection();
+        $this->token = new \Elitelib\Token($host->getParams());
         $this->respuestas  = new Respuestas();
-        $this->token = new \Elitelib\Token();
     }
 
     public function checkAndReturnResponseInBody($json)

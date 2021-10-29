@@ -14,8 +14,9 @@ class UserClub
     
     public function __construct()
     {
-        $this->userClub = new \Elitelib\UserClub();
-        $this->token = new \Elitelib\Token();
+        $host = new HostConnection();
+        $this->userClub = new \Elitelib\UserClub($host->getParams());
+        $this->token = new \Elitelib\Token($host->getParams());
         $this->respuestas = new Respuestas();
     }
 

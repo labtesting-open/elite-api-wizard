@@ -13,7 +13,8 @@ class Login
 
     public function __construct()
     {
-        $this->auth = new \Elitelib\Auth();
+        $host = new HostConnection();
+        $this->auth = new \Elitelib\Auth($host->getParams());
         $this->respuestas = new Respuestas();
     }
 

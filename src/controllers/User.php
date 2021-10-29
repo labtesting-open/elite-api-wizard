@@ -14,8 +14,9 @@ class User
 
     public function __construct()
     {
-        $this->user = new \Elitelib\User();
-        $this->token = new \Elitelib\Token();
+        $host = new HostConnection();
+        $this->user = new \Elitelib\User($host->getParams());
+        $this->token = new \Elitelib\Token($host->getParams());
         $this->respuestas = new Respuestas();
     }
 
