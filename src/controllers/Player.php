@@ -336,6 +336,8 @@ class Player
                     null,
                     $languageCode
                 );
+
+                $result->rangeMeasures = $this->player->getPlayersRangesOfMeasures();
             }
             
              $responseHttp = $this->respuestas->standarSuccess($result);
