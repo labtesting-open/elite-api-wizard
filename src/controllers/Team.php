@@ -41,7 +41,7 @@ class Team
     }
 
 
-    public function getInfoWithFilters($json)
+    public function getTeamsWithFilters($json)
     {
         $paramsReceived = json_decode($json, true);
 
@@ -54,24 +54,38 @@ class Team
             'limit' => 100,
             'order' => null,
             'order_sense' => null,
-            'translate_code' => 'GB'
+            'language_code' => 'GB'
         );
 
         $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
         
-        $infoTeams = $this->team->getTeamsByFilters(
+        $infoTeams = $this->team->getAvailableTeamsWithFilters(
             $paramsNormaliced['continent_code'],
             $paramsNormaliced['country_code'],
             $paramsNormaliced['category_id'],
-            $paramsNormaliced['division_id'],
-            $paramsNormaliced['page'],
-            $paramsNormaliced['limit'],
+            $paramsNormaliced['division_id'],            
             $paramsNormaliced['order'],
             $paramsNormaliced['order_sense'],
-            $paramsNormaliced['translate_code']
+            $paramsNormaliced['page'],
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['language_code']
         );
 
-        return $this->respuestas->standarSuccess($infoTeams);
+        $totalRows = $this->team->getAvailableTeamsWithFiltersTotalRows(
+            $paramsNormaliced['continent_code'],
+            $paramsNormaliced['country_code'],
+            $paramsNormaliced['category_id'],
+            $paramsNormaliced['division_id'],            
+            $paramsNormaliced['order'],
+            $paramsNormaliced['order_sense'],
+            $paramsNormaliced['page'],
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['language_code']
+        );
+
+        $paginate = Utils::getPaginateInfo($totalRows, $paramsNormaliced['limit']);
+
+        return $this->respuestas->standarSuccessPaginate($infoTeams, $paginate);
     }
 
 
