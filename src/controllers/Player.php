@@ -362,8 +362,8 @@ class Player
             'height_range' => null,
             'weight_range' => null,
             'foot' => null,
-            'order' => null,
-            'order_sense' => null,
+            'order' => 'player_name',
+            'order_sense' => 'ASC',
             'page' => 1,
             'limit' => 100,
             'language_code' => 'GB'
