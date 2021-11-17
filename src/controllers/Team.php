@@ -52,8 +52,8 @@ class Team
             'division_id' => null,
             'page' => 1,
             'limit' => 100,
-            'order' => null,
-            'order_sense' => null,
+            'order' => 'club_name',
+            'order_sense' => 'DESC',
             'language_code' => 'GB'
         );
 
