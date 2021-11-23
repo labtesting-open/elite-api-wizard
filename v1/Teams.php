@@ -26,15 +26,45 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 } else if($_SERVER['REQUEST_METHOD'] == "POST") {
     
-    $httpResponse = $responsesController->error405();
+    $headers = apache_request_headers();    
+    $token = Utils::getkey($headers,'authorization', 'Bearer');
+    
+    $httpResponse = $tokenController->checkAndReturnResponse($token);
+
+    if ( is_null($httpResponse)) {        
+        
+        $body = file_get_contents("php://input");
+        
+        $httpResponse = $teamController->addTeam($body);        
+    }
+
 
 }else if($_SERVER['REQUEST_METHOD'] == "PUT"){
 
-    $httpResponse = $responsesController->error405();
+    $headers = apache_request_headers();    
+    $token = Utils::getkey($headers,'authorization', 'Bearer');
+    
+    $httpResponse = $tokenController->checkAndReturnResponse($token);
+
+    if ( is_null($httpResponse)) {        
+        
+        $body = file_get_contents("php://input");
+        
+        $httpResponse = $teamController->updateTeam($body);        
+    }
 
 }else if($_SERVER['REQUEST_METHOD'] == "DELETE"){
 
-    $httpResponse = $responsesController->error405();
+    $headers = apache_request_headers();    
+    $token = Utils::getkey($headers,'authorization', 'Bearer');
+    
+    $httpResponse = $tokenController->checkAndReturnResponse($token);
+
+    if ( is_null($httpResponse)) {        
+        $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
+
+        $httpResponse = $teamController->deleteTeam($params);        
+    }    
 
 }else{
     

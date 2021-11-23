@@ -40,6 +40,107 @@ class Team
         return $responseHttp;
     }
 
+    public function addTeam($json)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+
+        $params = json_decode($json, true);
+
+        $keys = array('club_id', 'division_id', 'category_id');
+
+       if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
+
+            $imgTeam = (isset($params['img_team']))? $params['img_team'] : null;
+            
+            $actionResult = $this->team->add(
+                $params['club_id'],
+                $params['category_id'],
+                $params['division_id'],
+                $params['team_name'],
+                $imgTeam
+            );
+
+            $responseHttp = $this->respuestas->standarSuccess($actionResult);
+        }
+
+        return $responseHttp;
+    }
+
+
+    public function updateTeam($json)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+
+        $params = json_decode($json, true);
+
+        $keys = array('team_id', 'club_id', 'division_id', 'category_id');
+
+       if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
+
+            $imgTeam = (isset($params['img_team']))? $params['img_team'] : null;
+            
+            $actionResult = $this->team->update(
+                $params['team_id'],
+                $params['club_id'],
+                $params['category_id'],
+                $params['division_id'],
+                $params['team_name'],
+                $imgTeam
+            );
+
+            $responseHttp = $this->respuestas->standarSuccess($actionResult);
+        }
+
+        return $responseHttp;
+    }
+
+
+    public function deleteTeam($json)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+
+        $params = json_decode($json, true);
+
+        $keys = array('team_id');
+
+        if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
+            
+            $matchesPlayed = $this->team->getNumberOfMatchesPlayedByTeam($params['team_id']);
+
+            if($matchesPlayed[0]['matches'] == 0){           
+
+                $nacionalities = $this->team->deleteAllPlayersNacionalitiesFromTeam($params['team_id']);
+    
+               $injuries = $this->team->deleteAllPlayersInjuriesFromTeam($params['team_id']);
+    
+               $socialMedia = $this->team->deleteAllPlayersSocialMediaFromTeam($params['team_id']);
+    
+               $mapPositionsSecondary = $this->team->deleteAllPlayersMapPositionSecondaryFromTeam($params['team_id']);
+    
+               $teamPlayers = $this->team->deleteTeamPlayers($params['team_id']);
+                
+               $team = $this->team->delete($params['team_id']);
+
+                $affected = array(
+                    'nacionalities' => $nacionalities,
+                    'injuries' => $injuries,
+                    'socialMedia' => $socialMedia,
+                    'mapPositionsSecondary' => $mapPositionsSecondary,
+                    'teamPlayers' => $teamPlayers,
+                    'team' => $team                    
+                );
+
+                $responseHttp = $this->respuestas->standarSuccess($affected);
+    
+            }else{
+                $responseHttp = $this->respuestas->error401("The team has matches played, delete is not allowed");
+            } 
+            
+        }
+
+        return $responseHttp;
+    }
+
 
     public function getTeamsWithFilters($json)
     {
