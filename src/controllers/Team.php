@@ -288,4 +288,42 @@ class Team
 
         return in_array(strtolower($target), $filters);
     }
+
+    public function getTeamToEdit($json)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        
+        $params = json_decode($json, true);
+
+        $keys = array('team_id');
+
+        if (Utils::checkParamsIssetAndNumeric($params, $keys) ) {           
+
+            $result = new stdClass();
+
+            $team = $this->team->getTeam($params['team_id']);
+
+            $result->team = $team[0];
+
+            $result->categories = $this->team->getAvailableCategories(
+                null,
+                $team[0]['country_code'],
+                null,
+                null
+            );
+
+            $result->divisions  = $this->club->getAvailableDivisions(
+                null,
+                $team[0]['country_code'],
+                null,
+                null
+            );
+            
+
+            $responseHttp = $this->respuestas->standarSuccess($result);
+        }
+
+        return $responseHttp;
+    }
+
 }
