@@ -48,9 +48,8 @@ class Team
 
         $keys = array('club_id', 'division_id', 'category_id');
 
-       if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
-
-            $imgTeam = (isset($params['img_team']))? $params['img_team'] : null;
+        if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
+            $imgTeam = (isset($params['img_team'])) ? $params['img_team'] : null;
             
             $actionResult = $this->team->add(
                 $params['club_id'],
@@ -60,7 +59,7 @@ class Team
                 $imgTeam
             );
 
-            $responseHttp = $this->respuestas->standarSuccess($actionResult);
+             $responseHttp = $this->respuestas->standarSuccess($actionResult);
         }
 
         return $responseHttp;
@@ -75,9 +74,8 @@ class Team
 
         $keys = array('team_id', 'club_id', 'division_id', 'category_id');
 
-       if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
-
-            $imgTeam = (isset($params['img_team']))? $params['img_team'] : null;
+        if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
+            $imgTeam = (isset($params['img_team'])) ? $params['img_team'] : null;
             
             $actionResult = $this->team->update(
                 $params['team_id'],
@@ -88,7 +86,7 @@ class Team
                 $imgTeam
             );
 
-            $responseHttp = $this->respuestas->standarSuccess($actionResult);
+             $responseHttp = $this->respuestas->standarSuccess($actionResult);
         }
 
         return $responseHttp;
@@ -104,22 +102,20 @@ class Team
         $keys = array('team_id');
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
-            
             $matchesPlayed = $this->team->getNumberOfMatchesPlayedByTeam($params['team_id']);
 
-            if($matchesPlayed[0]['matches'] == 0){           
-
+            if ($matchesPlayed[0]['matches'] == 0) {
                 $nacionalities = $this->team->deleteAllPlayersNacionalitiesFromTeam($params['team_id']);
     
-               $injuries = $this->team->deleteAllPlayersInjuriesFromTeam($params['team_id']);
+                $injuries = $this->team->deleteAllPlayersInjuriesFromTeam($params['team_id']);
     
-               $socialMedia = $this->team->deleteAllPlayersSocialMediaFromTeam($params['team_id']);
+                $socialMedia = $this->team->deleteAllPlayersSocialMediaFromTeam($params['team_id']);
     
-               $mapPositionsSecondary = $this->team->deleteAllPlayersMapPositionSecondaryFromTeam($params['team_id']);
+                $mapPositionsSecondary = $this->team->deleteAllPlayersMapPositionSecondaryFromTeam($params['team_id']);
     
-               $teamPlayers = $this->team->deleteTeamPlayers($params['team_id']);
+                $teamPlayers = $this->team->deleteTeamPlayers($params['team_id']);
                 
-               $team = $this->team->delete($params['team_id']);
+                $team = $this->team->delete($params['team_id']);
 
                 $affected = array(
                     'nacionalities' => $nacionalities,
@@ -127,15 +123,13 @@ class Team
                     'socialMedia' => $socialMedia,
                     'mapPositionsSecondary' => $mapPositionsSecondary,
                     'teamPlayers' => $teamPlayers,
-                    'team' => $team                    
+                    'team' => $team
                 );
 
                 $responseHttp = $this->respuestas->standarSuccess($affected);
-    
-            }else{
-                $responseHttp = $this->respuestas->error401("The team has matches played, delete is not allowed");
-            } 
-            
+            } else {
+                $responseHttp = $this->respuestas->error401('The team has matches played, delete is not allowed');
+            }
         }
 
         return $responseHttp;
@@ -297,8 +291,7 @@ class Team
 
         $keys = array('team_id');
 
-        if (Utils::checkParamsIssetAndNumeric($params, $keys) ) {           
-
+        if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
             $result = new stdClass();
 
             $team = $this->team->getTeam($params['team_id']);
@@ -325,5 +318,4 @@ class Team
 
         return $responseHttp;
     }
-
 }
