@@ -24,7 +24,7 @@ class Respuestas
         return $this->response;
     }
 
-    public function error200($valor = 'Datos incorrectos')
+    public function error200($valor = 'Incorrect data')
     {
         
         $this->response['status'] = 'error';

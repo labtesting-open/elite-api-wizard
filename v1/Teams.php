@@ -33,9 +33,21 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
     if ( is_null($httpResponse)) {        
         
-        $body = file_get_contents("php://input");
+        if( isset($_FILES['img_team'])){
+
+            if( is_uploaded_file($_FILES['img_team']['tmp_name']) 
+            && $_FILES['img_team']['size'] <= 1024000
+            && Utils::isImage($_FILES['img_team']['type'])
+            && $_FILES['img_team']['error'] == UPLOAD_ERR_OK)
+            {
+                $httpResponse = $teamController->addTeam($_REQUEST, $_FILES['img_team']);               
+            }else{
+                $httpResponse = $responsesController->error400('Image type or size is incorrect');
+            }
+        }else{
+            $httpResponse = $teamController->addTeam($_REQUEST);
+        }
         
-        $httpResponse = $teamController->addTeam($body);        
     }
 
 

@@ -145,4 +145,15 @@ class Utils
 
         return $paginate;
     }
+
+
+    public static function isImage($fileType)
+    {
+        
+        if(strpos($fileType, 'image') !== false){
+            return true;
+        } 
+        
+        return false;
+    }
 }
