@@ -11,7 +11,7 @@ class Respuestas
     ];
 
 
-    public function error405($msg='Method Not Allowed')
+    public function error405($msg = 'Method Not Allowed')
     {
         
         $this->response['status'] = 'error';

@@ -8,7 +8,7 @@ class Team
 {
 
     private $team;
-    private $club;   
+    private $club;
     private $respuestas;
     private $folderWizardImage;
     private $pathLevel;
@@ -16,7 +16,7 @@ class Team
     public function __construct()
     {
         $host = new HostConnection();
-        $this->team = new \Elitelib\Team($host->getParams());        
+        $this->team = new \Elitelib\Team($host->getParams());
         $this->respuestas  = new Respuestas();
         $this->club = new \Elitelib\Club($host->getParams());
         $this->folderWizardImage = "\\wizard_images\\teams\\";
@@ -50,16 +50,13 @@ class Team
         $keys = array('club_id', 'division_id', 'category_id');
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
-
             $imgTeam = null;
 
-            if( isset($file)){
+            if (isset($file)) {
+                $pathServer = dirname(__FILE__, $this->pathLevel);
+                $uploadDir = $pathServer . $this->folderWizardImage . $file['name'];
 
-                $pathServer = dirname(__FILE__, $this->pathLevel);                
-                $uploadDir = $pathServer.$this->folderWizardImage.$file['name'];
-
-                if(move_uploaded_file($file['tmp_name'], $uploadDir)){
-
+                if (move_uploaded_file($file['tmp_name'], $uploadDir)) {
                     $imgTeam = $file['name'];
 
                     $actionResult = $this->team->add(
@@ -69,12 +66,10 @@ class Team
                         $params['team_name'],
                         $imgTeam
                     );
-                }else{
+                } else {
                     $responseHttp = $this->respuestas->error500('Image error on save');
-                }             
-               
-            }else{
-
+                }
+            } else {
                 $actionResult = $this->team->add(
                     $params['club_id'],
                     $params['category_id'],
@@ -82,7 +77,7 @@ class Team
                     $params['team_name'],
                     $imgTeam
                 );
-            }           
+            }
 
             $responseHttp = $this->respuestas->standarSuccess($actionResult);
         }
@@ -98,16 +93,13 @@ class Team
         $keys = array('team_id', 'club_id', 'category_id', 'division_id');
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
-
             $imgTeam = null;
 
-            if( isset($file)){
+            if (isset($file)) {
+                $pathServer = dirname(__FILE__, $this->pathLevel);
+                $uploadDir = $pathServer . $this->folderWizardImage . $file['name'];
 
-                $pathServer = dirname(__FILE__, $this->pathLevel);                
-                $uploadDir = $pathServer.$this->folderWizardImage.$file['name'];
-
-                if(move_uploaded_file($file['tmp_name'], $uploadDir)){
-
+                if (move_uploaded_file($file['tmp_name'], $uploadDir)) {
                     $imgTeam = $file['name'];
 
                     $actionResult = $this->team->update(
@@ -118,13 +110,10 @@ class Team
                         $params['team_name'],
                         $imgTeam
                     );
-
-                }else{
+                } else {
                     $responseHttp = $this->respuestas->error500('Image error on save');
-                }             
-               
-            }else{
-
+                }
+            } else {
                 $actionResult = $this->team->update(
                     $params['team_id'],
                     $params['club_id'],
@@ -133,13 +122,12 @@ class Team
                     $params['team_name'],
                     $imgTeam
                 );
-            }           
+            }
 
             $responseHttp = $this->respuestas->standarSuccess($actionResult);
         }
 
         return $responseHttp;
-       
     }
 
 
