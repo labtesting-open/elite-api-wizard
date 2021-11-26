@@ -91,30 +91,55 @@ class Team
     }
 
 
-    public function updateTeam($json)
+    public function updateTeam($params, $file = null)
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
-        $params = json_decode($json, true);
-
-        $keys = array('team_id', 'club_id', 'division_id', 'category_id');
+        $keys = array('team_id', 'club_id', 'category_id', 'division_id');
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
-            $imgTeam = (isset($params['img_team'])) ? $params['img_team'] : null;
-            
-            $actionResult = $this->team->update(
-                $params['team_id'],
-                $params['club_id'],
-                $params['category_id'],
-                $params['division_id'],
-                $params['team_name'],
-                $imgTeam
-            );
 
-             $responseHttp = $this->respuestas->standarSuccess($actionResult);
+            $imgTeam = null;
+
+            if( isset($file)){
+
+                $pathServer = dirname(__FILE__, $this->pathLevel);                
+                $uploadDir = $pathServer.$this->folderWizardImage.$file['name'];
+
+                if(move_uploaded_file($file['tmp_name'], $uploadDir)){
+
+                    $imgTeam = $file['name'];
+
+                    $actionResult = $this->team->update(
+                        $params['team_id'],
+                        $params['club_id'],
+                        $params['category_id'],
+                        $params['division_id'],
+                        $params['team_name'],
+                        $imgTeam
+                    );
+
+                }else{
+                    $responseHttp = $this->respuestas->error500('Image error on save');
+                }             
+               
+            }else{
+
+                $actionResult = $this->team->update(
+                    $params['team_id'],
+                    $params['club_id'],
+                    $params['category_id'],
+                    $params['division_id'],
+                    $params['team_name'],
+                    $imgTeam
+                );
+            }           
+
+            $responseHttp = $this->respuestas->standarSuccess($actionResult);
         }
 
         return $responseHttp;
+       
     }
 
 
