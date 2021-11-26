@@ -118,7 +118,7 @@ class Utils
         if (!empty($received)) {
             foreach ($acepted as $key => $value) {
                 if (array_key_exists($key, $received)) {
-                    if ($key == 'limit' && $received[$key] <= 0) {
+                    if ($key == 'limit' && (!is_numeric($received[$key]) || $received[$key] <= 0)) {
                         $normalized[$key] = 100;
                     } else {
                         $normalized[$key] = $received[$key];
@@ -144,5 +144,16 @@ class Utils
         );
 
         return $paginate;
+    }
+
+
+    public static function isImage($fileType)
+    {
+        
+        if (strpos($fileType, 'image') !== false) {
+            return true;
+        }
+        
+        return false;
     }
 }

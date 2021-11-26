@@ -40,6 +40,7 @@ class User
                    $result->userInfo->surname = $userData[0]['surname'];
                    $result->userInfo->surname = $userData[0]['surname'];
                    $result->userInfo->img_perfil = $userData[0]['img_perfil_url'];
+                   $result->userInfo->country_code = $userData[0]['country_code'];
 
                    $result->plan = new stdClass();
                    $result->plan->id = $userData[0]['plan_id'];

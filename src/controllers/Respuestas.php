@@ -11,20 +11,20 @@ class Respuestas
     ];
 
 
-    public function error405()
+    public function error405($msg = 'Method Not Allowed')
     {
         
         $this->response['status'] = 'error';
 
         $this->response['result'] = array(
             'error_id' => '405',
-            'error_msg' => 'Method Not Allowed'
+            'error_msg' => $msg
         );
 
         return $this->response;
     }
 
-    public function error200($valor = 'Datos incorrectos')
+    public function error200($valor = 'Incorrect data')
     {
         
         $this->response['status'] = 'error';
