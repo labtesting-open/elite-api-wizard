@@ -155,14 +155,18 @@ class Team
                 
                 $team = $this->team->delete($params['team_id']);
 
-                $affected = array(
-                    'nacionalities' => $nacionalities,
-                    'injuries' => $injuries,
-                    'socialMedia' => $socialMedia,
-                    'mapPositionsSecondary' => $mapPositionsSecondary,
-                    'teamPlayers' => $teamPlayers,
-                    'team' => $team
-                );
+                if (isset($params['club_id']) && is_numeric($params['club_id'])) {
+                    $affected = $this->team->getTeams($params['club_id'], 'GB');
+                } else {
+                    $affected = array(
+                        'nacionalities' => $nacionalities,
+                        'injuries' => $injuries,
+                        'socialMedia' => $socialMedia,
+                        'mapPositionsSecondary' => $mapPositionsSecondary,
+                        'teamPlayers' => $teamPlayers,
+                        'team' => $team
+                    );
+                }
 
                 $responseHttp = $this->respuestas->standarSuccess($affected);
             } else {
