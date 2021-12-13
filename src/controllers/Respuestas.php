@@ -119,4 +119,17 @@ class Respuestas
 
         return $this->response;
     }
+
+    public function customResult($code = 'ok', $affected = 0, $data= null)
+    {
+        $this->response['status'] = $code;
+        
+        $this->response['result'] = array(
+            'affected' => $affected,
+            'data' => $data
+        );
+
+        return $this->response;
+    }
+
 }

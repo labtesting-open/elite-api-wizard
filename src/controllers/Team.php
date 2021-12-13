@@ -50,7 +50,9 @@ class Team
         $keys = array('club_id', 'division_id', 'category_id');
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
+            
             $imgTeam = null;
+            $affected = 0;
 
             if (isset($file)) {
                 $pathServer = dirname(__FILE__, $this->pathLevel);
@@ -59,7 +61,7 @@ class Team
                 if (move_uploaded_file($file['tmp_name'], $uploadDir)) {
                     $imgTeam = $file['name'];
 
-                    $actionResult = $this->team->add(
+                    $affected = $this->team->add(
                         $params['club_id'],
                         $params['category_id'],
                         $params['division_id'],
@@ -67,10 +69,10 @@ class Team
                         $imgTeam
                     );
                 } else {
-                    $responseHttp = $this->respuestas->error500('Image error on save');
+                    $affected = -1;
                 }
             } else {
-                $actionResult = $this->team->add(
+                $affected = $this->team->add(
                     $params['club_id'],
                     $params['category_id'],
                     $params['division_id'],
@@ -79,7 +81,17 @@ class Team
                 );
             }
 
-            $responseHttp = $this->respuestas->standarSuccess($actionResult);
+            if($affected){
+
+                $reloadedTeams = $this->team->getTeams($params['club_id'], 'GB');
+                $responseHttp = $this->respuestas->customResult('ok', $affected, $reloadedTeams);
+
+            }else{
+
+                $responseHttp = $this->respuestas->error500('error on save');
+            }
+
+
         }
 
         return $responseHttp;
@@ -93,7 +105,9 @@ class Team
         $keys = array('team_id', 'club_id', 'category_id', 'division_id');
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
+            
             $imgTeam = null;
+            $affected = 0;
 
             if (isset($file)) {
                 $pathServer = dirname(__FILE__, $this->pathLevel);
@@ -102,7 +116,7 @@ class Team
                 if (move_uploaded_file($file['tmp_name'], $uploadDir)) {
                     $imgTeam = $file['name'];
 
-                    $actionResult = $this->team->update(
+                    $affected = $this->team->update(
                         $params['team_id'],
                         $params['club_id'],
                         $params['category_id'],
@@ -111,10 +125,10 @@ class Team
                         $imgTeam
                     );
                 } else {
-                    $responseHttp = $this->respuestas->error500('Image error on save');
+                    $affected = -1;
                 }
             } else {
-                $actionResult = $this->team->update(
+                $affected = $this->team->update(
                     $params['team_id'],
                     $params['club_id'],
                     $params['category_id'],
@@ -124,7 +138,16 @@ class Team
                 );
             }
 
-            $responseHttp = $this->respuestas->standarSuccess($actionResult);
+            if($affected){
+
+                $reloadedTeams = $this->team->getTeams($params['club_id'], 'GB');
+                $responseHttp = $this->respuestas->customResult('ok', $affected, $reloadedTeams);
+
+            }else{
+
+                $responseHttp = $this->respuestas->error500('error on update');
+            }
+
         }
 
         return $responseHttp;
@@ -155,20 +178,25 @@ class Team
                 
                 $team = $this->team->delete($params['team_id']);
 
+                $affected = array(
+                    'nacionalities' => $nacionalities,
+                    'injuries' => $injuries,
+                    'socialMedia' => $socialMedia,
+                    'mapPositionsSecondary' => $mapPositionsSecondary,
+                    'teamPlayers' => $teamPlayers,
+                    'team' => $team
+                );
+
+                $reloadedTeams = null;
+
                 if (isset($params['club_id']) && is_numeric($params['club_id'])) {
-                    $affected = $this->team->getTeams($params['club_id'], 'GB');
-                } else {
-                    $affected = array(
-                        'nacionalities' => $nacionalities,
-                        'injuries' => $injuries,
-                        'socialMedia' => $socialMedia,
-                        'mapPositionsSecondary' => $mapPositionsSecondary,
-                        'teamPlayers' => $teamPlayers,
-                        'team' => $team
-                    );
+
+                    $reloadedTeams = $this->team->getTeams($params['club_id'], 'GB');
+
                 }
 
-                $responseHttp = $this->respuestas->standarSuccess($affected);
+                $responseHttp = $this->respuestas->customResult('ok', $team, $reloadedTeams);
+
             } else {
                 $responseHttp = $this->respuestas->error401('The team has matches played, delete is not allowed');
             }
