@@ -368,19 +368,9 @@ class Team
 
             $result->team = $team[0];
 
-            $result->categories = $this->team->getAvailableCategories(
-                null,
-                $team[0]['country_code'],
-                null,
-                null
-            );
+            $result->categories = $this->team->getAllCategories();
 
-            $result->divisions  = $this->club->getAvailableDivisions(
-                null,
-                $team[0]['country_code'],
-                null,
-                null
-            );
+            $result->divisions  = $this->team->getAllDivisionsFromCountry($team[0]['country_code']);
             
 
             $responseHttp = $this->respuestas->standarSuccess($result);
