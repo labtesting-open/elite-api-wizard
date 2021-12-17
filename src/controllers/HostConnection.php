@@ -4,7 +4,6 @@ namespace Elitesports;
 
 class HostConnection
 {
-
     private $host = array('connection:' => array(
         'server' => 'localhost',
         'user' => 'root',

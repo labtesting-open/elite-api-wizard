@@ -7,7 +7,6 @@
 
 class UserClub
 {
-
     private $userClub;
     private $token;
     private $respuestas;

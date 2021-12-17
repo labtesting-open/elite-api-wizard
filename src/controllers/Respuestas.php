@@ -4,7 +4,6 @@ namespace Elitesports;
 
 class Respuestas
 {
-
     public $response = [
         'status' => 'ok',
         'result' => array()

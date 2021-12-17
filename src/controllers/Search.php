@@ -7,8 +7,6 @@ use stdClass;
 
 class Search
 {
-
-        
     private $token;
     private $respuestas;
     private $player;

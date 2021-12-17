@@ -6,7 +6,6 @@ use stdClass;
 
 class Team
 {
-
     private $team;
     private $club;
     private $respuestas;

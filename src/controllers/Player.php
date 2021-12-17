@@ -8,8 +8,6 @@ use Elitesports\Utils;
 
 class Player
 {
-    
-
     private $token;
     private $player;
     private $club;
