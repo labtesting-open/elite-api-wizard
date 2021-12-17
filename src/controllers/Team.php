@@ -12,13 +12,18 @@ class Team
     private $respuestas;
     private $folderWizardImage;
     private $pathLevel;
+    private $category;
+    private $division;
 
     public function __construct()
     {
         $host = new HostConnection();
-        $this->team = new \Elitelib\Team($host->getParams());
-        $this->respuestas  = new Respuestas();
+        $this->team = new \Elitelib\Team($host->getParams());       
         $this->club = new \Elitelib\Club($host->getParams());
+        $this->category = new \Elitelib\Category($host->getParams());
+        $this->division = new \Elitelib\Division($host->getParams());
+
+        $this->respuestas  = new Respuestas();
         $this->folderWizardImage = "\\wizard_images\\teams\\";
         $this->pathLevel = 4;
     }
@@ -292,7 +297,7 @@ class Team
             }
             
             if ($paramsReceived['target'] == 'categories') {
-                $result = $this->team->getAvailableCategories(
+                $result = $this->category->getAvailableCategories(
                     $paramsNormaliced['continent_code'],
                     $paramsNormaliced['country_code'],
                     $paramsNormaliced['category_id'],
@@ -301,7 +306,7 @@ class Team
             }
             
             if ($paramsReceived['target'] == 'divisions') {
-                $result = $this->club->getAvailableDivisions(
+                $result = $this->division->getAvailableDivisions(
                     $paramsNormaliced['continent_code'],
                     $paramsNormaliced['country_code'],
                     $paramsNormaliced['category_id'],
@@ -324,14 +329,14 @@ class Team
                     $paramsNormaliced['division_id']
                 );
 
-                $result->categories = $this->team->getAvailableCategories(
+                $result->categories = $this->category->getAvailableCategories(
                     $paramsNormaliced['continent_code'],
                     $paramsNormaliced['country_code'],
                     $paramsNormaliced['category_id'],
                     $paramsNormaliced['division_id']
                 );
 
-                $result->divisions  = $this->club->getAvailableDivisions(
+                $result->divisions  = $this->division->getAvailableDivisions(
                     $paramsNormaliced['continent_code'],
                     $paramsNormaliced['country_code'],
                     $paramsNormaliced['category_id'],
@@ -368,9 +373,9 @@ class Team
 
             $result->team = $team[0];
 
-            $result->categories = $this->team->getAllCategories();
+            $result->categories = $this->category->getAll();
 
-            $result->divisions  = $this->team->getAllDivisionsFromCountry($team[0]['country_code']);
+            $result->divisions  = $this->division->getAllDivisions($team[0]['country_code'], null);
             
 
             $responseHttp = $this->respuestas->standarSuccess($result);
