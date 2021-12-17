@@ -48,13 +48,13 @@ class Division
             $divisionId = null;
             if (isset($datos['division_id']) &&  !empty($datos['division_id'])) {
                 $divisionId = $datos['division_id'];
-            }            
+            }
             
             $info = $this->division->getAvailableDivisions(
                 $continentCode,
                 $countryCode,
                 $categoryId,
-                $divisionId               
+                $divisionId
             );
 
             $resultado = new stdClass();
@@ -84,11 +84,11 @@ class Division
             $categoryId = null;
             if (isset($datos['category_id']) &&  !empty($datos['category_id'])) {
                 $categoryId = $datos['category_id'];
-            }                     
+            }
             
-            $info = $this->division->getAllDivisions(                
+            $info = $this->division->getAllDivisions(
                 $countryCode,
-                $categoryId                          
+                $categoryId
             );
 
             $resultado = new stdClass();
@@ -101,5 +101,4 @@ class Division
 
         return $responseHttp;
     }
-
 }

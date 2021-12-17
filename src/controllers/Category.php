@@ -48,13 +48,13 @@ class Category
             $divisionId = null;
             if (isset($datos['division_id']) &&  !empty($datos['division_id'])) {
                 $divisionId = $datos['division_id'];
-            }            
+            }
             
             $info = $this->category->getAvailableCategories(
                 $continentCode,
                 $countryCode,
                 $categoryId,
-                $divisionId               
+                $divisionId
             );
 
             $resultado = new stdClass();
@@ -70,7 +70,7 @@ class Category
 
 
     public function getAllCategories()
-    { 
+    {
         $info = $this->category->getAll();
 
         $resultado = new stdClass();
@@ -82,5 +82,4 @@ class Category
 
         return $responseHttp;
     }
-
 }
