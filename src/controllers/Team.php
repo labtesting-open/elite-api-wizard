@@ -18,7 +18,7 @@ class Team
     public function __construct()
     {
         $host = new HostConnection();
-        $this->team = new \Elitelib\Team($host->getParams());       
+        $this->team = new \Elitelib\Team($host->getParams());
         $this->club = new \Elitelib\Club($host->getParams());
         $this->category = new \Elitelib\Category($host->getParams());
         $this->division = new \Elitelib\Division($host->getParams());
@@ -55,7 +55,6 @@ class Team
         $keys = array('club_id', 'division_id', 'category_id');
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
-            
             $imgTeam = null;
             $affected = 0;
 
@@ -86,17 +85,12 @@ class Team
                 );
             }
 
-            if($affected){
-
+            if ($affected) {
                 $reloadedTeams = $this->team->getTeams($params['club_id'], 'GB');
                 $responseHttp = $this->respuestas->customResult('ok', $affected, $reloadedTeams);
-
-            }else{
-
+            } else {
                 $responseHttp = $this->respuestas->error500('error on save');
             }
-
-
         }
 
         return $responseHttp;
@@ -110,7 +104,6 @@ class Team
         $keys = array('team_id', 'club_id', 'category_id', 'division_id');
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
-            
             $imgTeam = null;
             $affected = 0;
 
@@ -143,16 +136,12 @@ class Team
                 );
             }
 
-            if($affected){
-
+            if ($affected) {
                 $reloadedTeams = $this->team->getTeams($params['club_id'], 'GB');
                 $responseHttp = $this->respuestas->customResult('ok', $affected, $reloadedTeams);
-
-            }else{
-
+            } else {
                 $responseHttp = $this->respuestas->error500('error on update');
             }
-
         }
 
         return $responseHttp;
@@ -195,13 +184,10 @@ class Team
                 $reloadedTeams = null;
 
                 if (isset($params['club_id']) && is_numeric($params['club_id'])) {
-
                     $reloadedTeams = $this->team->getTeams($params['club_id'], 'GB');
-
                 }
 
                 $responseHttp = $this->respuestas->customResult('ok', $team, $reloadedTeams);
-
             } else {
                 $responseHttp = $this->respuestas->error401('The team has matches played, delete is not allowed');
             }

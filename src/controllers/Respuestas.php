@@ -120,7 +120,7 @@ class Respuestas
         return $this->response;
     }
 
-    public function customResult($code = 'ok', $affected = 0, $data= null)
+    public function customResult($code = 'ok', $affected = 0, $data = null)
     {
         $this->response['status'] = $code;
         
@@ -131,5 +131,4 @@ class Respuestas
 
         return $this->response;
     }
-
 }
