@@ -178,15 +178,13 @@ class Team
                     'mapPositionsSecondary' => $mapPositionsSecondary,
                     'teamPlayers' => $teamPlayers,
                     'team' => $team
-                );
-
-                $reloadedTeams = null;
+                );                
 
                 if (isset($params['club_id']) && is_numeric($params['club_id'])) {
-                    $reloadedTeams = $this->team->getTeams($params['club_id'], 'GB');
+                    $affected = $this->team->getTeams($params['club_id'], 'GB');
                 }
 
-                $responseHttp = $this->respuestas->customResult('ok', $team, $reloadedTeams);
+                $responseHttp = $this->respuestas->customResult('ok', $team, $affected);
             } else {
                 $responseHttp = $this->respuestas->error401('The team has matches played, delete is not allowed');
             }

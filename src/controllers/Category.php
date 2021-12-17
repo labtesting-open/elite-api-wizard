@@ -77,9 +77,7 @@ class Category
         $resultado->status = 'ok';
         $resultado->result = new stdClass();
         $resultado->result = $info;
-                
-        $responseHttp =  $resultado;
 
-        return $responseHttp;
+        return $resultado;
     }
 }
