@@ -45,9 +45,8 @@ class Category
             $paramsNormaliced['division_id']
         );
 
-        $responseHttp = $this->respuestas->standarSuccess($result);
-
-        return $responseHttp;
+        return $this->respuestas->standarSuccess($result);
+                
     }
 
 
