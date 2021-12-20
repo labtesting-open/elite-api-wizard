@@ -36,7 +36,7 @@ class Division
             'division_id' => null
         );
 
-        $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);        
+        $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
 
         $result = $this->division->getAvailableDivisions(
             $paramsNormaliced['continent_code'],
@@ -45,7 +45,7 @@ class Division
             $paramsNormaliced['division_id']
         );
 
-        $responseHttp = $this->respuestas->standarSuccess($result);       
+        $responseHttp = $this->respuestas->standarSuccess($result);
 
         return $responseHttp;
     }

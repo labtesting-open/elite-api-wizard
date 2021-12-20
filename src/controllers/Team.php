@@ -178,7 +178,7 @@ class Team
                     'mapPositionsSecondary' => $mapPositionsSecondary,
                     'teamPlayers' => $teamPlayers,
                     'team' => $team
-                );                
+                );
 
                 if (isset($params['club_id']) && is_numeric($params['club_id'])) {
                     $affected = $this->team->getTeams($params['club_id'], 'GB');

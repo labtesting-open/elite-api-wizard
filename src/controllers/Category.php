@@ -36,7 +36,7 @@ class Category
             'division_id' => null
         );
 
-        $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);        
+        $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
 
         $result = $this->category->getAvailableCategories(
             $paramsNormaliced['continent_code'],
@@ -45,7 +45,7 @@ class Category
             $paramsNormaliced['division_id']
         );
 
-        $responseHttp = $this->respuestas->standarSuccess($result);       
+        $responseHttp = $this->respuestas->standarSuccess($result);
 
         return $responseHttp;
     }
