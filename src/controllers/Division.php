@@ -46,7 +46,6 @@ class Division
         );
 
         return $this->respuestas->standarSuccess($result);
-        
     }
 
 

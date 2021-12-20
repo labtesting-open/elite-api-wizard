@@ -46,7 +46,6 @@ class Category
         );
 
         return $this->respuestas->standarSuccess($result);
-                
     }
 
 
