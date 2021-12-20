@@ -8,12 +8,12 @@ use Elitesports\Utils;
 
 class Player
 {
-    
-
     private $token;
     private $player;
     private $club;
     private $team;
+    private $category;
+    private $division;
     private $respuestas;
 
     public function __construct()
@@ -23,6 +23,8 @@ class Player
         $this->token = new \Elitelib\Token($host->getParams());
         $this->club = new \Elitelib\Club($host->getParams());
         $this->team = new \Elitelib\Team($host->getParams());
+        $this->category = new \Elitelib\Category($host->getParams());
+        $this->division = new \Elitelib\Division($host->getParams());
         $this->respuestas  = new Respuestas();
     }
 
@@ -261,7 +263,7 @@ class Player
             }
             
             if ($params['target'] == 'categories') {
-                $result = $this->team->getAvailableCategories(
+                $result = $this->category->getAvailableCategories(
                     $continentCode,
                     $countryCode,
                     $categoryId,
@@ -270,7 +272,7 @@ class Player
             }
 
             if ($params['target'] == 'divisions') {
-                $result = $this->club->getAvailableDivisions(
+                $result = $this->division->getAvailableDivisions(
                     $continentCode,
                     $countryCode,
                     $categoryId,
@@ -293,14 +295,14 @@ class Player
                     $divisionId
                 );
                 
-                $result->categories = $this->team->getAvailableCategories(
+                $result->categories = $this->category->getAvailableCategories(
                     $continentCode,
                     $countryCode,
                     $categoryId,
                     $divisionId
                 );
 
-                $result->divisions  = $this->club->getAvailableDivisions(
+                $result->divisions  = $this->division->getAvailableDivisions(
                     $continentCode,
                     $countryCode,
                     $categoryId,

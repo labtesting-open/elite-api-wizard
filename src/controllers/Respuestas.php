@@ -4,7 +4,6 @@ namespace Elitesports;
 
 class Respuestas
 {
-
     public $response = [
         'status' => 'ok',
         'result' => array()
@@ -115,6 +114,18 @@ class Respuestas
         $this->response['result'] = array(
             'error_id' => $code,
             'error_msg' => $msg
+        );
+
+        return $this->response;
+    }
+
+    public function customResult($code = 'ok', $affected = 0, $data = null)
+    {
+        $this->response['status'] = $code;
+        
+        $this->response['result'] = array(
+            'affected' => $affected,
+            'data' => $data
         );
 
         return $this->response;

@@ -6,7 +6,6 @@ use Elitesports\Respuestas;
 
 class Login
 {
-
     private $auth;
     private $respuestas;
 

@@ -7,7 +7,6 @@ use stdClass;
 
 class User
 {
-
     private $user;
     private $token;
     private $respuestas;

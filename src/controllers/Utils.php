@@ -4,7 +4,6 @@ namespace Elitesports;
 
 class Utils
 {
-
     public static function getStringArray($data, $value)
     {
 

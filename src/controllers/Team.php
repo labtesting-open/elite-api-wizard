@@ -6,19 +6,23 @@ use stdClass;
 
 class Team
 {
-
     private $team;
     private $club;
     private $respuestas;
     private $folderWizardImage;
     private $pathLevel;
+    private $category;
+    private $division;
 
     public function __construct()
     {
         $host = new HostConnection();
         $this->team = new \Elitelib\Team($host->getParams());
-        $this->respuestas  = new Respuestas();
         $this->club = new \Elitelib\Club($host->getParams());
+        $this->category = new \Elitelib\Category($host->getParams());
+        $this->division = new \Elitelib\Division($host->getParams());
+
+        $this->respuestas  = new Respuestas();
         $this->folderWizardImage = "\\wizard_images\\teams\\";
         $this->pathLevel = 4;
     }
@@ -51,6 +55,7 @@ class Team
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
             $imgTeam = null;
+            $affected = 0;
 
             if (isset($file)) {
                 $pathServer = dirname(__FILE__, $this->pathLevel);
@@ -59,7 +64,7 @@ class Team
                 if (move_uploaded_file($file['tmp_name'], $uploadDir)) {
                     $imgTeam = $file['name'];
 
-                    $actionResult = $this->team->add(
+                    $affected = $this->team->add(
                         $params['club_id'],
                         $params['category_id'],
                         $params['division_id'],
@@ -67,10 +72,10 @@ class Team
                         $imgTeam
                     );
                 } else {
-                    $responseHttp = $this->respuestas->error500('Image error on save');
+                    $affected = -1;
                 }
             } else {
-                $actionResult = $this->team->add(
+                $affected = $this->team->add(
                     $params['club_id'],
                     $params['category_id'],
                     $params['division_id'],
@@ -79,7 +84,12 @@ class Team
                 );
             }
 
-            $responseHttp = $this->respuestas->standarSuccess($actionResult);
+            if ($affected) {
+                $reloadedTeams = $this->team->getTeams($params['club_id'], 'GB');
+                $responseHttp = $this->respuestas->customResult('ok', $affected, $reloadedTeams);
+            } else {
+                $responseHttp = $this->respuestas->error500('error on save');
+            }
         }
 
         return $responseHttp;
@@ -94,6 +104,7 @@ class Team
 
         if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
             $imgTeam = null;
+            $affected = 0;
 
             if (isset($file)) {
                 $pathServer = dirname(__FILE__, $this->pathLevel);
@@ -102,7 +113,7 @@ class Team
                 if (move_uploaded_file($file['tmp_name'], $uploadDir)) {
                     $imgTeam = $file['name'];
 
-                    $actionResult = $this->team->update(
+                    $affected = $this->team->update(
                         $params['team_id'],
                         $params['club_id'],
                         $params['category_id'],
@@ -111,10 +122,10 @@ class Team
                         $imgTeam
                     );
                 } else {
-                    $responseHttp = $this->respuestas->error500('Image error on save');
+                    $affected = -1;
                 }
             } else {
-                $actionResult = $this->team->update(
+                $affected = $this->team->update(
                     $params['team_id'],
                     $params['club_id'],
                     $params['category_id'],
@@ -124,7 +135,12 @@ class Team
                 );
             }
 
-            $responseHttp = $this->respuestas->standarSuccess($actionResult);
+            if ($affected) {
+                $reloadedTeams = $this->team->getTeams($params['club_id'], 'GB');
+                $responseHttp = $this->respuestas->customResult('ok', $affected, $reloadedTeams);
+            } else {
+                $responseHttp = $this->respuestas->error500('error on update');
+            }
         }
 
         return $responseHttp;
@@ -164,7 +180,11 @@ class Team
                     'team' => $team
                 );
 
-                $responseHttp = $this->respuestas->standarSuccess($affected);
+                if (isset($params['club_id']) && is_numeric($params['club_id'])) {
+                    $affected = $this->team->getTeams($params['club_id'], 'GB');
+                }
+
+                $responseHttp = $this->respuestas->customResult('ok', $team, $affected);
             } else {
                 $responseHttp = $this->respuestas->error401('The team has matches played, delete is not allowed');
             }
@@ -260,7 +280,7 @@ class Team
             }
             
             if ($paramsReceived['target'] == 'categories') {
-                $result = $this->team->getAvailableCategories(
+                $result = $this->category->getAvailableCategories(
                     $paramsNormaliced['continent_code'],
                     $paramsNormaliced['country_code'],
                     $paramsNormaliced['category_id'],
@@ -269,7 +289,7 @@ class Team
             }
             
             if ($paramsReceived['target'] == 'divisions') {
-                $result = $this->club->getAvailableDivisions(
+                $result = $this->division->getAvailableDivisions(
                     $paramsNormaliced['continent_code'],
                     $paramsNormaliced['country_code'],
                     $paramsNormaliced['category_id'],
@@ -292,14 +312,14 @@ class Team
                     $paramsNormaliced['division_id']
                 );
 
-                $result->categories = $this->team->getAvailableCategories(
+                $result->categories = $this->category->getAvailableCategories(
                     $paramsNormaliced['continent_code'],
                     $paramsNormaliced['country_code'],
                     $paramsNormaliced['category_id'],
                     $paramsNormaliced['division_id']
                 );
 
-                $result->divisions  = $this->club->getAvailableDivisions(
+                $result->divisions  = $this->division->getAvailableDivisions(
                     $paramsNormaliced['continent_code'],
                     $paramsNormaliced['country_code'],
                     $paramsNormaliced['category_id'],
@@ -336,19 +356,9 @@ class Team
 
             $result->team = $team[0];
 
-            $result->categories = $this->team->getAvailableCategories(
-                null,
-                $team[0]['country_code'],
-                null,
-                null
-            );
+            $result->categories = $this->category->getAll();
 
-            $result->divisions  = $this->club->getAvailableDivisions(
-                null,
-                $team[0]['country_code'],
-                null,
-                null
-            );
+            $result->divisions  = $this->division->getAllDivisions($team[0]['country_code'], null);
             
 
             $responseHttp = $this->respuestas->standarSuccess($result);
