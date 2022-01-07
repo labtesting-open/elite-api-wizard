@@ -52,7 +52,7 @@ class Division
     public function getAllDivisions($json)
     {
 
-        $responseHttp = $this->checkTokenAndReturnResponse($json);
+        $responseHttp = null;
 
         if (is_null($responseHttp)) {
             $datos = json_decode($json, true);

@@ -358,7 +358,7 @@ class Team
 
             $result->categories = $this->category->getAll();
 
-            $result->divisions  = $this->division->getAllDivisions($team[0]['country_code'], null);
+            $result->divisions  = $this->division->getAllDivisions($team[0]['country_code'], $team[0]['category_id']);
             
 
             $responseHttp = $this->respuestas->standarSuccess($result);
