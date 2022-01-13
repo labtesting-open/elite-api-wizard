@@ -21,7 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     if ( is_null($httpResponse)) {        
         $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
 
-        $httpResponse = $teamController->getClubTeams($params);        
+        $paramsDecoded = json_decode($params, true);
+
+        if (isset($paramsDecoded['team_id'])){
+            $httpResponse = $teamController->getTeam($params);
+        }else{
+            $httpResponse = $teamController->getClubTeams($params);
+        }
     }    
 
 } else if($_SERVER['REQUEST_METHOD'] == "POST") {

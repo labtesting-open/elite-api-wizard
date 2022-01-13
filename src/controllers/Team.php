@@ -33,16 +33,33 @@ class Team
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
        
-        $datos = json_decode($json, true);
+        $params = json_decode($json, true);
 
-        if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
-            $countryCode   = (isset($datos['country_code'])) ? $datos['country_code'] : null;
+        if (isset($params['club_id']) && is_numeric($params['club_id'])) {
 
-            $infoTeams = $this->team->getTeams($datos['club_id'], $countryCode);
+            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
+
+            $infoTeams = $this->team->getTeams($params['club_id'], $countryCode);
 
             $responseHttp = $this->respuestas->standarSuccess($infoTeams);
         }
         
+        return $responseHttp;
+    }
+
+    public function getTeam($json)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+       
+        $params = json_decode($json, true);
+
+        if (isset($params['team_id']) && is_numeric($params['team_id'])) {           
+
+            $teamInfo = $this->team->getTeam($params['team_id']);
+
+            $responseHttp = $this->respuestas->standarSuccess($teamInfo);
+        }
+
         return $responseHttp;
     }
     
