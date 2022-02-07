@@ -13,10 +13,14 @@ class Team
     private $pathLevel;
     private $category;
     private $division;
+    private $continent;
+    private $country;
 
     public function __construct()
     {
         $host = new HostConnection();
+        $this->continent = new \Elitelib\Continent($host->getParams());
+        $this->country = new \Elitelib\Country($host->getParams());
         $this->team = new \Elitelib\Team($host->getParams());
         $this->club = new \Elitelib\Club($host->getParams());
         $this->category = new \Elitelib\Category($host->getParams());
@@ -254,6 +258,61 @@ class Team
         $paginate = Utils::getPaginateInfo($totalRows, $paramsNormaliced['limit']);
 
         return $this->respuestas->standarSuccessPaginate($infoTeams, $paginate);
+    }
+
+    
+
+
+    public function getAvailableFiltersV2($json)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        
+        $paramsReceived = json_decode($json, true);
+
+        
+            $paramsAcepted = array(
+                'continent_code' => null,
+                'country_code' => null,
+                'category_id' => null,
+                'division_id' => null
+            );
+
+            $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
+
+            $result = new stdClass();
+
+                $result->continents = $this->continent->getAvailableContinentsWithTeams(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                ); 
+
+                $result->countries  = $this->country->getAvailableCountriesWithTeams(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                );               
+
+                $result->categories = $this->category->getAvailableCategories(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                );
+
+                $result->divisions  = $this->division->getAvailableDivisions(
+                    $paramsNormaliced['continent_code'],
+                    $paramsNormaliced['country_code'],
+                    $paramsNormaliced['category_id'],
+                    $paramsNormaliced['division_id']
+                );            
+
+            $responseHttp = $this->respuestas->standarSuccess($result);
+       
+
+        return $responseHttp;
     }
 
 
