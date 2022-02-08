@@ -91,4 +91,50 @@ class Club
 
         return $responseHttp;
     }
+
+
+    public function getClubsWithFilters($json)
+    {
+        $paramsReceived = json_decode($json, true);
+
+        $paramsAcepted = array(
+            'continent_code' => null,
+            'country_code' => null,            
+            'page' => 1,
+            'limit' => 100,
+            'order' => 'club_name',
+            'order_sense' => 'DESC',
+            'language_code' => 'GB'
+        );
+
+        $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
+        
+        $infoTeams = $this->club->getAvailableClubsWithFilters(
+            $paramsNormaliced['continent_code'],
+            $paramsNormaliced['country_code'],        
+            $paramsNormaliced['order'],
+            $paramsNormaliced['order_sense'],
+            $paramsNormaliced['page'],
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['language_code']
+        );
+
+        $totalRows = $this->club->getAvailableClubsWithFiltersTotalRows(
+            $paramsNormaliced['continent_code'],
+            $paramsNormaliced['country_code'],       
+            $paramsNormaliced['order'],
+            $paramsNormaliced['order_sense'],
+            $paramsNormaliced['page'],
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['language_code']
+        );
+
+        $paginate = Utils::getPaginateInfoWithTypeItem($totalRows, $paramsNormaliced['limit'], 'club');
+
+
+        return $this->respuestas->standarSuccessPaginate($infoTeams, $paginate);
+
+    }
+
+
 }

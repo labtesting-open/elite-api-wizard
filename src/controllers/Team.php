@@ -255,7 +255,7 @@ class Team
             $paramsNormaliced['language_code']
         );
 
-        $paginate = Utils::getPaginateInfo($totalRows, $paramsNormaliced['limit']);
+        $paginate = Utils::getPaginateInfoWithTypeItem($totalRows, $paramsNormaliced['limit'], 'team');
 
         return $this->respuestas->standarSuccessPaginate($infoTeams, $paginate);
     }

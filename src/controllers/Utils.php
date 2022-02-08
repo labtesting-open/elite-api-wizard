@@ -146,6 +146,20 @@ class Utils
     }
 
 
+    public static function getPaginateInfoWithTypeItem($totalRows, $limit, $typeItem = null)
+    {
+        $totalPages = ceil($totalRows / $limit);
+
+        $paginate  = array(
+            'rows' => $totalRows,
+            'pages' => $totalPages,
+            'type_item' => $typeItem
+        );
+
+        return $paginate;
+    }
+
+
     public static function isImage($fileType)
     {
         
