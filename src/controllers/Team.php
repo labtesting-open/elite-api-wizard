@@ -286,14 +286,14 @@ class Team
                     $paramsNormaliced['country_code'],
                     $paramsNormaliced['category_id'],
                     $paramsNormaliced['division_id']
-                ); 
+                );
 
                 $result->countries  = $this->country->getAvailableCountriesWithTeams(
                     $paramsNormaliced['continent_code'],
                     $paramsNormaliced['country_code'],
                     $paramsNormaliced['category_id'],
                     $paramsNormaliced['division_id']
-                );               
+                );
 
                 $result->categories = $this->category->getAvailableCategories(
                     $paramsNormaliced['continent_code'],
@@ -307,7 +307,7 @@ class Team
                     $paramsNormaliced['country_code'],
                     $paramsNormaliced['category_id'],
                     $paramsNormaliced['division_id']
-                );            
+                );
 
             $responseHttp = $this->respuestas->standarSuccess($result);
        

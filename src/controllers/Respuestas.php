@@ -100,7 +100,7 @@ class Respuestas
     {
         $this->response['status'] = $code;
 
-        $this->response['paginate'] = $paginate;       
+        $this->response['paginate'] = $paginate;
 
         $this->response['result'] = $result;
 
