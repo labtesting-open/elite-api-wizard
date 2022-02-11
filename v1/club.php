@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
         $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
 
-        $httpResponse = $clubController->getInfo($params);
+        $httpResponse = $clubController->getClubInfoWithTeams($params);
     }
 
 } else if($_SERVER['REQUEST_METHOD'] == "POST") {

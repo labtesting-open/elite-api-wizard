@@ -38,6 +38,28 @@ class Club
 
         return $responseHttp;
     }
+
+    public function getClubInfoWithTeams($json)
+    {
+
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+
+        $datos = json_decode($json, true);
+
+        if (isset($datos['club_id']) && is_numeric($datos['club_id'])) {
+
+            $result = new stdClass();            
+
+            $result->info = $this->club->getBasicInfo($datos['club_id']);
+
+            $result->divisions = $this->club->getAvailablesDivisionsForClub($datos['club_id']);
+
+            $responseHttp = $this->respuestas->standarSuccess($result);
+        }
+
+        return $responseHttp;
+       
+    }
     
     public function getInfoWithFilters($json)
     {
