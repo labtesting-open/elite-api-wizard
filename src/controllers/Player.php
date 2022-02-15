@@ -28,6 +28,95 @@ class Player
         $this->respuestas  = new Respuestas();
     }
 
+    public function getTeamPlayersWithStatics($json)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+       
+        $paramsReceived = json_decode($json, true);
+
+        $keys = array('club_id', 'team_id', 'season_id');
+
+        if (Utils::checkParamsIssetAndNumeric($paramsReceived, $keys) ) {            
+
+            $paramsAcepted = array(
+                'club_id' => null,
+                'team_id' => null,
+                'season_id' => null,
+                'position_id' => null,
+                'language_code' => 'GB',
+                'order' => 'player_name',
+                'order_sense' => 'DESC',
+                'find' => null
+            );
+
+            $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
+
+            if( isset($paramsNormaliced['position_id'])){
+
+                $playersList = $this->player->getTeamPlayersInfoAndStaticsByPositionV2(
+                    $paramsNormaliced['club_id'],
+                    $paramsNormaliced['team_id'],
+                    $paramsNormaliced['season_id'],
+                    $paramsNormaliced['position_id'],
+                    $paramsNormaliced['language_code'],
+                    $paramsNormaliced['order'],                
+                    $paramsNormaliced['order_sense'],                
+                    $paramsNormaliced['find']
+                );
+
+                $positions = array();
+
+                $categoriesList = $this->player->getCategoriesByLanguage($paramsNormaliced['language_code']);
+
+                $itemPlayersCategory = new stdClass();
+                $itemPlayersCategory->name = $categoriesList[$paramsNormaliced['position_id'] - 1]['name'];
+                $itemPlayersCategory->players = $playersList;
+                
+                array_push($positions, $itemPlayersCategory);
+                
+                $playersResult = new stdClass();
+                $playersResult->positions = $positions;
+                
+                $responseHttp = $this->respuestas->standarSuccess($playersResult);
+
+            }else{
+                
+                $positions = array();
+
+                $categoriesList = $this->player->getCategoriesByLanguage($paramsNormaliced['language_code']);
+
+                for ($positionId = 1; $positionId <= 4; $positionId++)
+                {
+                    $playersList = $this->player->getTeamPlayersInfoAndStaticsByPositionV2(
+                        $paramsNormaliced['club_id'],
+                        $paramsNormaliced['team_id'],
+                        $paramsNormaliced['season_id'],
+                        $positionId,
+                        $paramsNormaliced['language_code'],
+                        $paramsNormaliced['order'],                
+                        $paramsNormaliced['order_sense'],                
+                        $paramsNormaliced['find']
+                    );
+
+                    $itemPlayersCategory = new stdClass();
+                    $itemPlayersCategory->name = $categoriesList[$positionId - 1]['name'];
+                    $itemPlayersCategory->players = $playersList;
+                    
+                    array_push($positions, $itemPlayersCategory);
+                }
+
+                $playersResult = new stdClass();
+                $playersResult->positions = $positions;
+                
+                $responseHttp = $this->respuestas->standarSuccess($playersResult);
+
+            }
+
+        }
+       
+        return $responseHttp;
+    }
+
 
     public function getTeamSeasonPlayers($json)
     {
