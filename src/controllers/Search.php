@@ -20,42 +20,53 @@ class Search
         $this->club = new \Elitelib\Club($host->getParams());
         $this->token = new \Elitelib\Token($host->getParams());
         $this->respuestas = new Respuestas();
-    }
+    }   
 
 
-    public function find($json)
+    public function findV2($json)
     {
-          
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
        
-        $params = json_decode($json, true);
+        $paramsReceived = json_decode($json, true);
+        
+        $paramsAcepted = array(
+            'find' => null,
+            'limit' => 10,               
+            'language_code' => 'GB',
+            'order' => 'name',
+            'order_sense' => 'DESC'               
+        );
 
-        if (isset($params['find'])) {
-            $find = $params['find'];
-           
-            $modeFast = (isset($params['fast'])) ? $params['fast'] : 0;
-            $page = (isset($params['page'])) ? $params['page'] : 1;
-            $limit = (isset($params['limit'])) ? $params['limit'] : 10;
-            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : 'GB';
+        $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
 
-            $resultPlayers = array();
-            $resultClubs   = array();
+        $resultPlayers = array();
+        $resultClubs   = array();
 
-            if (!$modeFast) {
-                $resultPlayers = $this->player->findPlayers($find, $countryCode, $page, $limit);
-                $resultClubs   = $this->club->findClubs($find, $countryCode, $page, $limit);
-            } elseif (isset($find) && !empty($find)) {
-                $resultPlayers = $this->player->findPlayersFast($find, $countryCode, $limit);
-                $resultClubs   = $this->club->findClubsFast($find, $countryCode, $limit);
-            }
+        $resultPlayers = $this->player->searchQuick(
+            $paramsNormaliced['find'], 
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['language_code'],
+            $paramsNormaliced['order'],
+            $paramsNormaliced['order_sense']
+        );
 
-            $searchResult = new stdClass();
-            $searchResult->players = $resultPlayers;
-            $searchResult->clubs = $resultClubs;
-            
-            $responseHttp = $this->respuestas->standarSuccess($searchResult);
-        }
+        $resultClubs = $this->club->searchQuick(
+            $paramsNormaliced['find'], 
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['language_code'],
+            $paramsNormaliced['order'],
+            $paramsNormaliced['order_sense']
+        );           
+
+        $searchResult = new stdClass();
+        $searchResult->players = $resultPlayers;
+        $searchResult->clubs = $resultClubs;
+        
+        $responseHttp = $this->respuestas->standarSuccess($searchResult);
 
         return $responseHttp;
+       
     }
+
+
 }
