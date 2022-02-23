@@ -40,9 +40,9 @@ class Team
         $params = json_decode($json, true);
 
         if (isset($params['club_id']) && is_numeric($params['club_id'])) {
-            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : null;
+            $languageCode   = (isset($params['language_code'])) ? $params['language_code'] : null;
 
-            $infoTeams = $this->team->getTeams($params['club_id'], $countryCode);
+            $infoTeams = $this->team->getTeams($params['club_id'], $languageCode);
 
             $responseHttp = $this->respuestas->standarSuccess($infoTeams);
         }
