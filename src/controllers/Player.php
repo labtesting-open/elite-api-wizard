@@ -15,6 +15,7 @@ class Player
     private $category;
     private $division;
     private $respuestas;
+    private $matchActions;
 
     public function __construct()
     {
@@ -25,6 +26,7 @@ class Player
         $this->team = new \Elitelib\Team($host->getParams());
         $this->category = new \Elitelib\Category($host->getParams());
         $this->division = new \Elitelib\Division($host->getParams());
+        $this->matchActions = new \Elitelib\MatchActions($host->getParams());
         $this->respuestas  = new Respuestas();
     }
 
@@ -200,6 +202,45 @@ class Player
 
             $playersResult = new stdClass();
             $playersResult->actions = $actions;
+            
+            $responseHttp = $this->respuestas->standarSuccess($playersResult);
+        }
+
+        return $responseHttp;
+    }
+
+    public function getTeamSeasonPlayerStaticsV2($json)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+
+        $paramsReceived = json_decode($json, true);
+
+        $keys = array('player_id');
+           
+        if (Utils::checkParamsIssetAndNumeric($paramsReceived, $keys)) {
+
+            $paramsAcepted = array(
+                'player_id' => null,
+                'season_id' => null,                
+                'match_id_list' => null,
+                'action_id_list' => null,
+                'order' => null,
+                'order_sense' => null,
+                'language_code' => 'GB'
+            );
+
+            $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);           
+
+            $playersResult = new stdClass();
+
+            $playersResult->actions = $this->matchActions->getPlayerActions(
+                $paramsNormaliced['player_id'],
+                $paramsNormaliced['season_id'],
+                $paramsNormaliced['match_id_list'],
+                $paramsNormaliced['action_id_list'],
+                $paramsNormaliced['order'],                
+                $paramsNormaliced['order_sense']
+            );
             
             $responseHttp = $this->respuestas->standarSuccess($playersResult);
         }
