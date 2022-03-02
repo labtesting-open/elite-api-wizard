@@ -27,6 +27,7 @@ class Player
         $this->category = new \Elitelib\Category($host->getParams());
         $this->division = new \Elitelib\Division($host->getParams());
         $this->matchActions = new \Elitelib\MatchActions($host->getParams());
+        $this->user = new \Elitelib\User($host->getParams());
         $this->respuestas  = new Respuestas();
     }
 
@@ -209,7 +210,7 @@ class Player
         return $responseHttp;
     }
 
-    public function getTeamSeasonPlayerStaticsV2($json)
+    public function getTeamSeasonPlayerStaticsV2($json, $token = null)
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
@@ -229,7 +230,20 @@ class Player
                 'language_code' => 'GB'
             );
 
-            $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);           
+            $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
+            
+            $listNormaliced = Utils::normalizerStringList($paramsNormaliced['match_id_list'], 'int');
+
+            $arrayToken = $this->token->checkToken($token);
+
+            $user_id = null;
+
+            if ($arrayToken)
+            {
+                $user_id = $arrayToken[0]['user_id'];
+            }
+
+            $totalActiveAccounts = $this->user->getTotalActiveAccounts();
 
             $playersResult = new stdClass();
 
@@ -239,9 +253,13 @@ class Player
                 $paramsNormaliced['match_id_list'],
                 $paramsNormaliced['action_id_list'],
                 $paramsNormaliced['order'],                
-                $paramsNormaliced['order_sense']
+                $paramsNormaliced['order_sense'],
+                $user_id,
+                $totalActiveAccounts[0]['total_users']
             );
             
+            $playersResult->test = $listNormaliced;
+
             $responseHttp = $this->respuestas->standarSuccess($playersResult);
         }
 

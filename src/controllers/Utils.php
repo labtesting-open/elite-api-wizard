@@ -169,4 +169,33 @@ class Utils
         
         return false;
     }
+
+
+    public static function normalizerStringList($list, $valueType = 'int')
+    { 
+        if(!empty($list)){
+
+            $stringToArray= explode(',', $list);
+
+            if(is_array($stringToArray)) {
+                $utils = new Utils();
+                return implode(',',$utils->trimArray($stringToArray));
+            }
+        }
+
+        return null;       
+    }
+
+
+    public function trimArray($arrayList, $valueType = 'int')
+    {
+        // foreach ($arrayList as $value) {
+        //     /if( trim($value) === '' || (!is_numeric($value) && $valueType =='int')) {               
+        //         $index = array_search($value, $arrayList);
+        //         unset($arrayList[$index]);   
+        //    // }
+        // }
+        return $arrayList;
+    }
+
 }
