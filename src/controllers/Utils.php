@@ -171,7 +171,7 @@ class Utils
     }
 
 
-    public static function normalizerStringList($list, $valueType = 'int')
+    public static function normalizerStringList($list, $valueType = null)
     { 
         if(!empty($list)){
 
@@ -179,7 +179,7 @@ class Utils
 
             if(is_array($stringToArray)) {
                 $utils = new Utils();
-                return implode(',',$utils->trimArray($stringToArray));
+                return implode(',',$utils->trimArray($stringToArray, $valueType));
             }
         }
 
@@ -187,14 +187,14 @@ class Utils
     }
 
 
-    public function trimArray($arrayList, $valueType = 'int')
+    public function trimArray($arrayList, $valueType = null)
     {
-        // foreach ($arrayList as $value) {
-        //     /if( trim($value) === '' || (!is_numeric($value) && $valueType =='int')) {               
-        //         $index = array_search($value, $arrayList);
-        //         unset($arrayList[$index]);   
-        //    // }
-        // }
+        foreach ($arrayList as $value) {
+            if( (trim($value) === '') || ($valueType == OutputsTypes::NUMBER) && (!is_numeric($value)) ) {               
+                $index = array_search($value, $arrayList);
+                unset($arrayList[$index]);   
+            }
+        }
         return $arrayList;
     }
 

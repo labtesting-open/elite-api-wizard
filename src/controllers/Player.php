@@ -232,7 +232,9 @@ class Player
 
             $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
             
-            $listNormaliced = Utils::normalizerStringList($paramsNormaliced['match_id_list'], 'int');
+            $matchIdListNormaliced = Utils::normalizerStringList($paramsNormaliced['match_id_list'], OutputsTypes::NUMBER);
+
+            $actionIdListNormaliced = Utils::normalizerStringList($paramsNormaliced['action_id_list'], OutputsTypes::NUMBER);
 
             $arrayToken = $this->token->checkToken($token);
 
@@ -250,15 +252,13 @@ class Player
             $playersResult->actions = $this->matchActions->getPlayerActions(
                 $paramsNormaliced['player_id'],
                 $paramsNormaliced['season_id'],
-                $paramsNormaliced['match_id_list'],
-                $paramsNormaliced['action_id_list'],
+                $matchIdListNormaliced,
+                $actionIdListNormaliced,
                 $paramsNormaliced['order'],                
                 $paramsNormaliced['order_sense'],
                 $user_id,
                 $totalActiveAccounts[0]['total_users']
-            );
-            
-            $playersResult->test = $listNormaliced;
+            );            
 
             $responseHttp = $this->respuestas->standarSuccess($playersResult);
         }

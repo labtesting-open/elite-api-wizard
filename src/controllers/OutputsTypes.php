@@ -6,4 +6,6 @@ class OutputsTypes
 {
     public const JSON = 'json';
     public const XML = 'xml';
+    public const NUMBER = 'NUMBER';
+    public const VARCHAR = 'VARCHAR'; 
 }
