@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
         $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
 
-        $httpResponse = $favouriteController->getActions($params);
+        $httpResponse = $favouriteController->getActions($params, $token);
     }
 
 } else if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
         
         $httpResponse = $responsesController->error400('Data incorrect or incomplete');
         
-        $httpResponse = $favouriteController->addFavotite($_REQUEST);       
+        $httpResponse = $favouriteController->addFavotite($_REQUEST, $token);       
         
     }
 
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     if ( is_null($httpResponse)) {        
         $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
 
-        $httpResponse = $favouriteController->deleteFavourite($params);        
+        $httpResponse = $favouriteController->deleteFavourite($params, $token);        
     }    
 
 }else{

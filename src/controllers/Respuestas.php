@@ -50,6 +50,32 @@ class Respuestas
         return $this->response;
     }
 
+    public function error410($msg = 'Resource is no longer available')
+    {
+        
+        $this->response['status'] = 'error';
+        
+        $this->response['result'] = array(
+            'error_id' => '410',
+            'error_msg' => $msg
+        );
+
+        return $this->response;
+    }
+
+    public function error409($msg = 'Conflict')
+    {
+        
+        $this->response['status'] = 'error';
+        
+        $this->response['result'] = array(
+            'error_id' => '409',
+            'error_msg' => $msg
+        );
+
+        return $this->response;
+    }
+
     public function error500($valor = 'Internal Server Error')
     {
         

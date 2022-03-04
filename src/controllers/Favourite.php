@@ -7,27 +7,48 @@ use stdClass;
 class Favourite
 {
     private $favourite;    
-    private $respuestas;    
+    private $respuestas;
+    private $token;
 
     public function __construct()
     {
         $host = new HostConnection();       
         $this->favourite = new \Elitelib\Favourite($host->getParams());
-        $this->respuestas  = new Respuestas();       
+        $this->respuestas  = new Respuestas();
+        $this->token = new \Elitelib\Token($host->getParams());      
         
+    }
+
+    public function getUserId($token)
+    {
+        $user_id = null;
+
+        if(isset($token)){
+            $arrayToken = $this->token->checkToken($token);            
+    
+            if ($arrayToken)
+            {
+                $user_id = $arrayToken[0]['user_id'];
+            }
+        }        
+
+        return $user_id;
     }
 
 
 
-    public function getActions($json)
+    public function getActions($json, $token)
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
        
-        $params = json_decode($json, true);
+        //$params = json_decode($json, true);
 
-        if (isset($params['user_id']) && is_numeric($params['user_id'])) {
+        $user_id = $this->getUserId($token);
 
-            $actions = $this->favourite->getActionsByUser($params['user_id']);
+        if (!is_null($user_id))
+        {
+
+            $actions = $this->favourite->getActionsByUser($user_id);
 
             $responseHttp = $this->respuestas->standarSuccess($actions);
         }
@@ -36,25 +57,30 @@ class Favourite
     }
    
 
-    public function addFavotite($params)
+    public function addFavotite($params, $token)
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
-        $keys = array('user_id', 'match_action_id');
+        $user_id = $this->getUserId($token);
 
-        if (Utils::checkParamsIssetAndNumeric($params, $keys) )
-        {           
-            $affected = 0;
-           
-            $affected = $this->favourite->add(
-                $params['user_id'],
-                $params['match_action_id']
-            );
+        if (!is_null($user_id))
+        {
+            $keys = array('match_action_id');
 
-            if ($affected) {                
-                $responseHttp = $this->respuestas->customResult('ok', $affected);
-            } else {
-                $responseHttp = $this->respuestas->error500('error on save');
+            if (Utils::checkParamsIssetAndNumeric($params, $keys) )
+            {           
+                $affected = 0;
+               
+                $affected = $this->favourite->add(
+                    $user_id,
+                    $params['match_action_id']
+                );
+    
+                if ($affected) {                
+                    $responseHttp = $this->respuestas->customResult('ok', $affected);
+                } else {
+                    $responseHttp = $this->respuestas->error409();
+                }
             }
         }
 
@@ -63,25 +89,29 @@ class Favourite
     
 
 
-    public function deleteFavourite($json)
+    public function deleteFavourite($json, $token)
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
-        $params = json_decode($json, true);
+        $user_id = $this->getUserId($token);
 
-        $keys = array('user_id', 'match_action_id');
+        if (!is_null($user_id)) 
+        {
+            $params = json_decode($json, true);
 
-        if (Utils::checkParamsIssetAndNumeric($params, $keys)) {                         
-                
-            $affected = $this->favourite->delete($params['user_id'], $params['match_action_id']);               
-
-            if ($affected) {                
-                $responseHttp = $this->respuestas->customResult('ok', $affected);
-            } else {
-                $responseHttp = $this->respuestas->error500('error on save');
+            $keys = array('match_action_id');
+    
+            if (Utils::checkParamsIssetAndNumeric($params, $keys)) {                         
+                    
+                $affected = $this->favourite->delete($user_id, $params['match_action_id']);               
+    
+                if ($affected) {                
+                    $responseHttp = $this->respuestas->customResult('ok', $affected);
+                } else {
+                    $responseHttp = $this->respuestas->error410();
+                }                
             }
-            
-        }
+        }       
 
         return $responseHttp;
     }  
