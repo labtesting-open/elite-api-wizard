@@ -31,7 +31,7 @@ class Player
         $this->respuestas  = new Respuestas();
     }
 
-    public function getTeamPlayersWithStatics($json)
+    public function getTeamPlayersWithStatics($json, $token=null)
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
        
@@ -54,6 +54,15 @@ class Player
 
             $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
 
+            $arrayToken = $this->token->checkToken($token);
+
+            $user_id = null;
+
+            if ($arrayToken)
+            {
+                $user_id = $arrayToken[0]['user_id'];
+            }
+
             if( isset($paramsNormaliced['position_id'])){
 
                 $playersList = $this->player->getTeamPlayersInfoAndStaticsByPositionV2(
@@ -64,7 +73,8 @@ class Player
                     $paramsNormaliced['language_code'],
                     $paramsNormaliced['order'],                
                     $paramsNormaliced['order_sense'],                
-                    $paramsNormaliced['find']
+                    $paramsNormaliced['find'],
+                    $user_id
                 );
 
                 $positions = array();
@@ -98,7 +108,8 @@ class Player
                         $paramsNormaliced['language_code'],
                         $paramsNormaliced['order'],                
                         $paramsNormaliced['order_sense'],                
-                        $paramsNormaliced['find']
+                        $paramsNormaliced['find'],
+                        $user_id
                     );
 
                     $itemPlayersCategory = new stdClass();
@@ -313,21 +324,30 @@ class Player
     }
 
 
-    public function getPerfil($json)
+    public function getPerfil($json, $token = null)
     {
 
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
         $params = json_decode($json, true);
 
-        $keys = array('id');
+        $keys = array('player_id');
            
         if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
-            $countryCode   = (isset($params['country_code'])) ? $params['country_code'] : 'GB';
+            $languageCode   = (isset($params['language_code'])) ? $params['language_code'] : 'GB';
+
+            $arrayToken = $this->token->checkToken($token);
+
+            $user_id = null;
+
+            if ($arrayToken)
+            {
+                $user_id = $arrayToken[0]['user_id'];
+            }
             
-            $playerPerfil = $this->player->getPlayerPerfil($params['id'], $countryCode);
-            $playerSecondaryPositions = $this->player->getSecondaryPositions($params['id'], $countryCode);
-            $playerHistoryInjuries = $this->player->getInjuriesHistory($params['id'], $countryCode);
+            $playerPerfil = $this->player->getPlayerPerfil($params['player_id'], $languageCode, $user_id);
+            $playerSecondaryPositions = $this->player->getSecondaryPositions($params['player_id'], $languageCode);
+            $playerHistoryInjuries = $this->player->getInjuriesHistory($params['player_id'], $languageCode);
 
             $playerInfo = new stdClass();
             $playerInfo->perfil = $playerPerfil[0];
