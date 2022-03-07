@@ -8,7 +8,7 @@ include('extras/headers.php');
 
 $teamController = new \Elitesports\Team();
 $responsesController = new \Elitesports\Respuestas();
-$favouriteController = new \Elitesports\Favourite();
+$favouriteActionController = new \Elitesports\FavouriteAction();
 $tokenController = new \Elitesports\Token();
 
 
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
         $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
 
-        $httpResponse = $favouriteController->getActions($params, $token);
+        $httpResponse = $favouriteActionController->getActions($params, $token);
     }
 
 } else if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
         
         $httpResponse = $responsesController->error400('Data incorrect or incomplete');
         
-        $httpResponse = $favouriteController->addFavotite($_REQUEST, $token);       
+        $httpResponse = $favouriteActionController->addFavotite($_REQUEST, $token);       
         
     }
 
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     if ( is_null($httpResponse)) {        
         $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
 
-        $httpResponse = $favouriteController->deleteFavourite($params, $token);        
+        $httpResponse = $favouriteActionController->deleteFavourite($params, $token);        
     }    
 
 }else{

@@ -4,16 +4,16 @@ namespace Elitesports;
 
 use stdClass;
 
-class Favourite
+class FavouriteAction
 {
-    private $favourite;    
+    private $favouriteAction;    
     private $respuestas;
     private $token;
 
     public function __construct()
     {
         $host = new HostConnection();       
-        $this->favourite = new \Elitelib\Favourite($host->getParams());
+        $this->favouriteAction = new \Elitelib\FavouriteAction($host->getParams());
         $this->respuestas  = new Respuestas();
         $this->token = new \Elitelib\Token($host->getParams());      
         
@@ -48,7 +48,7 @@ class Favourite
         if (!is_null($user_id))
         {
 
-            $actions = $this->favourite->getActionsByUser($user_id);
+            $actions = $this->favouriteAction->getActionsByUser($user_id);
 
             $responseHttp = $this->respuestas->standarSuccess($actions);
         }
@@ -71,7 +71,7 @@ class Favourite
             {           
                 $affected = 0;
                
-                $affected = $this->favourite->add(
+                $affected = $this->favouriteAction->add(
                     $user_id,
                     $params['match_action_id']
                 );
@@ -103,7 +103,7 @@ class Favourite
     
             if (Utils::checkParamsIssetAndNumeric($params, $keys)) {                         
                     
-                $affected = $this->favourite->delete($user_id, $params['match_action_id']);               
+                $affected = $this->favouriteAction->delete($user_id, $params['match_action_id']);               
     
                 if ($affected) {                
                     $responseHttp = $this->respuestas->customResult('ok', $affected);
