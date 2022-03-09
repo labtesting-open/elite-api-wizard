@@ -114,7 +114,34 @@ class FavouritePlayer
         }       
 
         return $responseHttp;
-    }  
+    }
+
+
+    public function updateFavouriteList($list, $token)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+
+        $user_id = $this->getUserId($token);
+
+        if (!is_null($user_id))
+        {             
+            $affected = 0;          
+
+            $arrayTempIN = Utils::getValueItemsFromArray($list, true);
+            $arrayTempOut = Utils::getValueItemsFromArray($list, false);       
+           
+
+
+            if ($affected) {                
+                $responseHttp = $this->respuestas->customResult('ok', $affected, $arrayTempIN);
+            } else {
+                $responseHttp = $this->respuestas->error409();
+            }
+           
+        }
+
+        return $responseHttp;
+    }
 
 
    

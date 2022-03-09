@@ -198,4 +198,33 @@ class Utils
         return $arrayList;
     }
 
+    public static function isValidJSON($json)
+    {
+        $jsonDecoded = json_decode($json);
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $jsonDecoded;
+        }
+
+        return false;
+    }
+
+
+    public static function getValueItemsFromArray($arrayList, $valueItem)
+    {
+        $returnArray = array();              
+
+        foreach ($arrayList as $value)
+        { 
+            if( $value->status == $valueItem) {
+                array_push($returnArray, $value->player_id);
+            } 
+        }
+
+        return $returnArray;
+       
+    }
+    
+
+
 }

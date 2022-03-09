@@ -34,11 +34,17 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     $httpResponse = $tokenController->checkAndReturnResponse($token);
 
     if ( is_null($httpResponse)) {
+
+        $postBody = file_get_contents("php://input");       
         
+        $jsonValidated = Utils::isValidJSON($postBody);
+
         $httpResponse = $responsesController->error400('Data incorrect or incomplete');
-        
-        $httpResponse = $favouritePlayerController->addPlayer($_REQUEST, $token);       
-        
+
+        if($jsonValidated){
+            $httpResponse = $favouritePlayerController->updateFavouriteList($jsonValidated, $token);
+        }
+
     }
 
 

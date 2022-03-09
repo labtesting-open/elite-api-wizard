@@ -515,7 +515,7 @@ class Player
         return $responseHttp;
     }
 
-    public function getPlayersWithFilters($json)
+    public function getPlayersWithFilters($json, $token)
     {
         $paramsReceived = json_decode($json, true);
 
@@ -540,6 +540,15 @@ class Player
         );
 
         $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
+
+        $arrayToken = $this->token->checkToken($token);
+
+        $user_id = null;
+
+        if ($arrayToken)
+        {
+            $user_id = $arrayToken[0]['user_id'];
+        }
         
         $infoTeams = $this->player->getAvailablePlayersWithFilters(
             $paramsNormaliced['continent_code'],
@@ -558,7 +567,8 @@ class Player
             $paramsNormaliced['order_sense'],
             $paramsNormaliced['page'],
             $paramsNormaliced['limit'],
-            $paramsNormaliced['language_code']
+            $paramsNormaliced['language_code'],
+            $user_id
         );
 
         $totalRows = $this->player->getAvailablePlayersWithFiltersTotalRows(

@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
         $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
 
-        $httpResponse = $teamController->getPlayersWithFilters($params);
+        $httpResponse = $teamController->getPlayersWithFilters($params, $token);
 
     }
 
