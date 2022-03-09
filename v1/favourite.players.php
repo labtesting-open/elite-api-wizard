@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
         $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
 
-        $httpResponse = $favouritePlayerController->getPlayers($params, $token);
+        $httpResponse = $favouritePlayerController->getPlayersList($params, $token);
     }
 
 } else if($_SERVER['REQUEST_METHOD'] == "POST") {

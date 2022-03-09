@@ -35,6 +35,59 @@ class FavouritePlayer
         return $user_id;
     }
 
+    public function getPlayersList($json, $token)
+    {
+        $paramsReceived = json_decode($json, true);
+
+        $paramsAcepted = array(
+            'user_id' => null,
+            'player_id' => null,           
+            'order' => 'player_name',
+            'order_sense' => 'ASC',
+            'page' => 1,
+            'limit' => 100,
+            'language_code' => 'GB'
+        );
+
+        $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
+
+        $arrayToken = $this->token->checkToken($token);
+
+        $user_id = null;
+
+        if ($arrayToken)
+        {
+            $user_id = $arrayToken[0]['user_id'];
+        }
+
+        $players = $this->favouritePlayer->getFavouritePlayers(
+            $user_id,
+            $paramsNormaliced['player_id'],
+            $paramsNormaliced['order'],
+            $paramsNormaliced['order_sense'],
+            $paramsNormaliced['page'],
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['language_code']
+        );
+
+
+        $totalRows = $this->favouritePlayer->getFavouritePlayersTotalRows(
+            $user_id,
+            $paramsNormaliced['player_id'],
+            $paramsNormaliced['order'],
+            $paramsNormaliced['order_sense'],
+            $paramsNormaliced['page'],
+            $paramsNormaliced['limit'],
+            $paramsNormaliced['language_code']
+        );
+
+
+        $paginate = Utils::getPaginateInfo($totalRows, $paramsNormaliced['limit']);
+
+        return $this->respuestas->standarSuccessPaginate($players, $paginate);
+
+    }
+
 
 
     public function getPlayers($json, $token)
