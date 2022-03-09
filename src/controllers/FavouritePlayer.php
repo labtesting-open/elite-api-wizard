@@ -130,10 +130,12 @@ class FavouritePlayer
             $arrayTempIN = Utils::getValueItemsFromArray($list, true);
             $arrayTempOut = Utils::getValueItemsFromArray($list, false);       
            
+            $affectedIN = $this->favouritePlayer->addList($user_id, $arrayTempIN);
+            $affectedOUT = $this->favouritePlayer->deleteList($user_id, $arrayTempOut);
 
 
-            if ($affected) {                
-                $responseHttp = $this->respuestas->customResult('ok', $affected, $arrayTempIN);
+            if ($affectedIN) {                
+                $responseHttp = $this->respuestas->customResult('ok', $affectedIN, null);
             } else {
                 $responseHttp = $this->respuestas->error409();
             }
