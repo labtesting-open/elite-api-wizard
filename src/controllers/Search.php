@@ -23,7 +23,7 @@ class Search
     }   
 
 
-    public function findV2($json)
+    public function findV2($json, $token= null)
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
        
@@ -37,6 +37,15 @@ class Search
             'order_sense' => 'DESC'               
         );
 
+        $arrayToken = $this->token->checkToken($token);
+
+        $user_id = null;
+
+        if ($arrayToken)
+        {
+            $user_id = $arrayToken[0]['user_id'];
+        }
+
         $paramsNormaliced = Utils::normalizerParams($paramsReceived, $paramsAcepted);
 
         $resultPlayers = array();
@@ -47,7 +56,8 @@ class Search
             $paramsNormaliced['limit'],
             $paramsNormaliced['language_code'],
             $paramsNormaliced['order'],
-            $paramsNormaliced['order_sense']
+            $paramsNormaliced['order_sense'],
+            $user_id
         );
 
         $resultClubs = $this->club->searchQuick(
