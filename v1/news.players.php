@@ -27,17 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     }
 
 } else if($_SERVER['REQUEST_METHOD'] == "POST") {
-
-    $headers = apache_request_headers();    
-    $token = Utils::getkey($headers,'authorization', 'Bearer');
-    
-    $httpResponse = $tokenController->checkAndReturnResponse($token);
-
-    if ( is_null($httpResponse)) { 
-
-        $httpResponse = $newsFavouritePlayerController->setListViewed($_REQUEST, $token);       
-        
-    }
+   
+    $httpResponse = $responsesController->error405();
 
 }else if($_SERVER['REQUEST_METHOD'] == "PUT"){
 

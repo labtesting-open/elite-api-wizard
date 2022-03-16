@@ -127,21 +127,21 @@ class NewsFavouritePlayer
 
         $user_id = $this->getUserId($token);
 
-        $matchActionIdListNormaliced = null;
+        $playerIdListNormaliced = null;
 
-        if (!empty($list['match_action_id_list']))
+        if (!empty($list['player_id_list']))
         {
-            $matchActionIdListNormaliced = Utils::normalizerStringList($list['match_action_id_list'], OutputsTypes::NUMBER);
+            $playerIdListNormaliced = Utils::normalizerStringList($list['player_id_list'], OutputsTypes::NUMBER);
         }
 
-        if (!is_null($user_id) && !empty($matchActionIdListNormaliced))
+        if (!is_null($user_id) && !empty($playerIdListNormaliced))
         {
 
-            $matchActionIdListNormalicedArr = explode(',',$matchActionIdListNormaliced);
+            $playerIdListNormalicedArr = explode(',',$playerIdListNormaliced);
 
             $affected = 0;                              
            
-            $affected = $this->NewsFavouritePlayer->setActionListAsViewed($user_id, $matchActionIdListNormalicedArr);
+            $affected = $this->NewsFavouritePlayer->setActionListAsViewed($user_id, $playerIdListNormalicedArr);
 
             if ($affected) {                
                 $responseHttp = $this->respuestas->customResult('ok', $affected, null);
@@ -155,38 +155,49 @@ class NewsFavouritePlayer
     }
 
 
+     
+
     public function updateDataCheckNews($params, $token)
     {
         $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
 
-        $user_id = $this->getUserId($token);
+        $user_id = $this->getUserId($token);       
 
-        if (!is_null($user_id)) 
-        {            
-    
-            $paramsAcepted = array(                
-                'player_id' => null 
+        $dateChecked = null;
+
+        if(!empty($params['date_checked']) && Utils::validateDate($params['date_checked'])){
+            $dateChecked = $params['date_checked'];
+        }
+
+        if (!is_null($user_id))
+        {
+
+            $playerIdListNormalicedArr = null;
+
+            if (!empty($params['player_id_list']))
+            {
+                $playerIdListNormaliced = Utils::normalizerStringList($params['player_id_list'], OutputsTypes::NUMBER);
+                $playerIdListNormalicedArr = explode(',',$playerIdListNormaliced);
+            }            
+
+            $affected = 0;                              
+           
+            $affected = $this->NewsFavouritePlayer->setPlayerListAsViewed(
+                $user_id, 
+                $playerIdListNormalicedArr,
+                $dateChecked
             );
-    
-            $paramsNormaliced = Utils::normalizerParams($params, $paramsAcepted);
-                
-            $dateChecked = null;
-
-            if(!empty($params['date_checked']) && Utils::validateDate($params['date_checked'])){
-                $dateChecked = $params['date_checked'];
-            }
-                
-            $affected = $this->NewsFavouritePlayer->updateDateChecked($user_id, $paramsNormaliced['player_id'], $dateChecked);               
 
             if ($affected) {                
-                $responseHttp = $this->respuestas->customResult('ok', $affected);
+                $responseHttp = $this->respuestas->customResult('ok', $affected, null);
             } else {
-                $responseHttp = $this->respuestas->error410();
-            }                
-            
-        }       
+                $responseHttp = $this->respuestas->error409();
+            }
+           
+        }
 
         return $responseHttp;
+       
     }
 
 
