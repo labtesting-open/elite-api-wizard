@@ -224,6 +224,17 @@ class Utils
         return $returnArray;
        
     }
+
+    public static function validateDate($string)
+    {  
+        $valid = false;
+
+        // If the string can be converted to UNIX timestamp
+        if (strtotime($string)) $valid = true;           
+        
+        return $valid;
+     
+    }    
     
 
 
