@@ -19,6 +19,22 @@ class User
         $this->respuestas = new Respuestas();
     }
 
+    public function getUserId($token)
+    {
+        $user_id = null;
+
+        if(isset($token)){
+            $arrayToken = $this->token->checkToken($token);            
+    
+            if ($arrayToken)
+            {
+                $user_id = $arrayToken[0]['user_id'];
+            }
+        }        
+
+        return $user_id;
+    }
+
 
     public function getUserPlan($token)
     {
