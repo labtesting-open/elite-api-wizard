@@ -106,4 +106,31 @@ class SavedSearch
         return $responseHttp;
     }
 
+    public function update($json, $token)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+
+        $paramsReceived = json_decode($json, true);       
+
+        $userId = $this->user->getUserId($token); 
+        
+        $saved_search_id = !empty($paramsReceived['saved_search_id'])? $paramsReceived['saved_search_id']: null;
+
+        $searchResult = !empty($paramsReceived['result'])? $paramsReceived['result'] : null;
+
+        $searchName = !empty($paramsReceived['search_name'])? $paramsReceived['search_name'] : null;
+
+        if(!empty($userId) && !empty($saved_search_id))
+        {
+            $responseHttp = $this->savedSearch->update(
+                $saved_search_id, 
+                $json,
+                $searchResult,
+                $searchName
+            );            
+        }
+
+        return $responseHttp;
+    }
+
 }
