@@ -81,8 +81,16 @@ class SavedSearch
         $searchName = !empty($paramsReceived['search_name'])? $paramsReceived['search_name'] : null;
 
         if(!empty($userId) && $this->validTarget($target))
-        {
-            $responseHttp = $this->savedSearch->add($userId, $target, $json, $searchName, $searchResult);            
+        {  
+            $affected = 0;
+            
+            $affected  = $this->savedSearch->add($userId, $target, $json, $searchName, $searchResult);
+
+            if ($affected) {                
+                $responseHttp = $this->respuestas->customResult('ok', $affected);
+            } else {
+                $responseHttp = $this->respuestas->error409();
+            }
         }
 
         return $responseHttp;
@@ -100,7 +108,15 @@ class SavedSearch
 
         if(!empty($userId) && !empty($saved_search_id))
         {
-            $responseHttp = $this->savedSearch->delete($saved_search_id, $userId, null);            
+            $affected = 0;
+
+            $affected = $this->savedSearch->delete($saved_search_id, $userId, null); 
+
+            if ($affected) {                
+                $responseHttp = $this->respuestas->customResult('ok', $affected);
+            } else {
+                $responseHttp = $this->respuestas->error409();
+            }                        
         }
         
         return $responseHttp;
@@ -121,13 +137,21 @@ class SavedSearch
         $searchName = !empty($paramsReceived['search_name'])? $paramsReceived['search_name'] : null;
 
         if(!empty($userId) && !empty($saved_search_id))
-        {
-            $responseHttp = $this->savedSearch->update(
+        {   
+            $affected = 0;
+
+            $affected = $this->savedSearch->update(
                 $saved_search_id, 
                 $json,
                 $searchResult,
                 $searchName
-            );            
+            );
+
+            if ($affected) {                
+                $responseHttp = $this->respuestas->customResult('ok', $affected);
+            } else {
+                $responseHttp = $this->respuestas->error409();
+            }
         }
 
         return $responseHttp;
