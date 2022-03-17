@@ -18,7 +18,7 @@ class SavedSearch
     {
         $host = new HostConnection();
         $this->user = new User();
-        //$this->savedSearch = new \Elitelib\SavedSearch($host->getParams());
+        $this->savedSearch = new \Elitelib\SavedSearch($host->getParams());
         $this->token = new \Elitelib\Token($host->getParams());
         $this->respuestas = new Respuestas();
         
@@ -44,17 +44,23 @@ class SavedSearch
 
     public function get($json, $token)
     {
-        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);       
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        
+        $paramsReceived = json_decode($json, true);
         
         $userId = $this->user->getUserId($token);
 
-        $target = !empty($paramsReceived['target'])? $paramsReceived['target']: null;
+        $target = ( isset($paramsReceived['target']) && $this->validTarget($paramsReceived['target']))? $paramsReceived['target']: null;      
 
         $saved_search_id = !empty($paramsReceived['saved_search_id'])? $paramsReceived['saved_search_id']: null;
 
         if(!empty($userId))
         {
-            //$this->savedSearch->get($userId, $target, $saved_search_id);            
+            $data = $this->savedSearch->get($userId, $target, $saved_search_id);
+            
+            $paginate = Utils::getPaginateInfo(count($data), 100);
+
+            return $this->respuestas->standarSuccessPaginate($data, $paginate);
         }
         
         return $responseHttp;
@@ -72,12 +78,31 @@ class SavedSearch
 
         $searchResult = !empty($paramsReceived['result'])? $paramsReceived['result'] : 0;
 
+        $searchName = !empty($paramsReceived['search_name'])? $paramsReceived['search_name'] : null;
+
         if(!empty($userId) && $this->validTarget($target))
         {
-            //$this->savedSearch->add($userId, $target, $json, $searchResult);
-            $responseHttp = $json;
+            $responseHttp = $this->savedSearch->add($userId, $target, $json, $searchName, $searchResult);            
         }
 
+        return $responseHttp;
+    }
+
+    public function delete($json, $token)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+        
+        $paramsReceived = json_decode($json, true);
+        
+        $userId = $this->user->getUserId($token);             
+
+        $saved_search_id = !empty($paramsReceived['saved_search_id'])? $paramsReceived['saved_search_id']: null;
+
+        if(!empty($userId) && !empty($saved_search_id))
+        {
+            $responseHttp = $this->savedSearch->delete($saved_search_id, $userId, null);            
+        }
+        
         return $responseHttp;
     }
 

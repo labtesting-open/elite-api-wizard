@@ -28,7 +28,7 @@ class User
     
             if ($arrayToken)
             {
-                $user_id = $arrayToken[0]['user_id'];
+                $user_id = (int)$arrayToken[0]['user_id'];
             }
         }        
 

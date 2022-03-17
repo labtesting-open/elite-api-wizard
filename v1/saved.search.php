@@ -50,7 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 }else if($_SERVER['REQUEST_METHOD'] == "DELETE"){
 
-    $httpResponse = $responsesController->error405();
+    $headers = apache_request_headers();    
+    $token = Utils::getkey($headers,'authorization', 'Bearer');
+    
+    $httpResponse = $tokenController->checkAndReturnResponse($token);
+
+    if ( is_null($httpResponse)) {        
+        $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
+
+        $httpResponse = $savedSearchControlledController->delete($params, $token);        
+    }    
 
 }else{
 
