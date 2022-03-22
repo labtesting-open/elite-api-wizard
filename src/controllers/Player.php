@@ -375,6 +375,7 @@ class Player
         $params = json_decode($json, true);
             
         if (isset($params['target']) && $this->checkTarget($params['target'])) {
+
             $continentCode = null;
             if (isset($params['continent_code']) &&  !empty($params['continent_code'])) {
                 $continentCode = $params['continent_code'];
@@ -400,10 +401,10 @@ class Player
                 $clubId = $params['club_id'];
             }
 
-            $nationalityCode = null;
-            if (isset($params['nationality_code']) &&  !empty($params['nationality_code'])) {
-                $nationalityCode = $params['nationality_code'];
-            }
+            $nationalityCodeList = null;
+            if (isset($params['nationality_code_list']) &&  !empty($params['nationality_code_list'])) {                
+                $nationalityCodeList = Utils::normalizerStringList($params['nationality_code_list'], OutputsTypes::VARCHAR);
+            }            
 
             $languageCode = null;
             if (isset($params['language_code']) &&  !empty($params['language_code'])) {
@@ -483,7 +484,7 @@ class Player
                     $categoryId,
                     $divisionId,
                     $clubId,
-                    $nationalityCode
+                    $nationalityCodeList
                 );
 
                 $result->nationalities  = $this->player->getAvailableNationalities(
@@ -492,7 +493,7 @@ class Player
                     $categoryId,
                     $divisionId,
                     $clubId,
-                    $nationalityCode
+                    $nationalityCodeList
                 );
 
                 $result->primaryPositions = $this->player->getAllPrimaryPositions(
