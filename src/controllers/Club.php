@@ -7,6 +7,8 @@ use stdClass;
 class Club
 {
     private $club;
+    private $userClub;
+    private $user;
     private $token;
     private $respuestas;
 
@@ -14,8 +16,10 @@ class Club
     {
         $host = new HostConnection();
         $this->club = new \Elitelib\Club($host->getParams());
+        $this->userClub = new \Elitelib\UserClub($host->getParams());        
         $this->respuestas  = new Respuestas();
         $this->token = new Token();
+        $this->user = new User();
     }
 
 
@@ -156,4 +160,38 @@ class Club
 
         return $this->respuestas->standarSuccessPaginate($infoTeams, $paginate);
     }
+
+
+    public function update($json, $token)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+
+        $paramsReceived = json_decode($json, true);       
+
+        $userId = $this->user->getUserId($token);
+        
+        $clubId = $this->userClub->getUserClub($userId);     
+
+        if(!empty($paramsReceived['club_id']) &&  $paramsReceived['club_id'] == $clubId['club_id'] && !empty($paramsReceived['club_name']))
+        {   
+            $affected = 0;
+
+            $affected = $this->club->update(
+                $paramsReceived['club_id'], 
+                $paramsReceived['club_name'],
+                null,
+                null                
+            );
+
+            if ($affected) {                
+                $responseHttp = $this->respuestas->customResult('ok', $affected);
+            } else {
+                $responseHttp = $this->respuestas->error409();
+            }
+        }
+
+        return $responseHttp;
+    }
+
+
 }

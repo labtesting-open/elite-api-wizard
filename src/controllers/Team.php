@@ -121,7 +121,8 @@ class Team
 
         $keys = array('team_id', 'club_id', 'category_id', 'division_id');
 
-        if (Utils::checkParamsIssetAndNumeric($params, $keys) && isset($params['team_name'])) {
+        if (Utils::checkParamsIssetAndNumeric($params, $keys) && !empty($params['team_name'])) {
+            
             $imgTeam = null;
             $affected = 0;
 

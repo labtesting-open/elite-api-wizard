@@ -404,7 +404,7 @@ class Player
             $nationalityCodeList = null;
             if (isset($params['nationality_code_list']) &&  !empty($params['nationality_code_list'])) {                
                 $nationalityCodeList = Utils::normalizerStringList($params['nationality_code_list'], OutputsTypes::VARCHAR);
-            }            
+            }       
 
             $languageCode = null;
             if (isset($params['language_code']) &&  !empty($params['language_code'])) {
@@ -526,7 +526,7 @@ class Player
             'category_id' => null,
             'division_id' => null,
             'club_id' => null,
-            'nationality_code' => null,
+            'nationality_code_list' => null,
             'position_id' => null,
             'second_positions_codes' => null,
             'age_range' => null,
@@ -550,6 +550,12 @@ class Player
         {
             $user_id = $arrayToken[0]['user_id'];
         }
+
+        $nationalityCodeList = null;
+
+        if (!empty($paramsReceived['nationality_code_list'])) {                
+            $nationalityCodeList = Utils::normalizerStringList($paramsReceived['nationality_code_list'], OutputsTypes::VARCHAR);
+        }       
         
         $infoTeams = $this->player->getAvailablePlayersWithFilters(
             $paramsNormaliced['continent_code'],
@@ -557,7 +563,7 @@ class Player
             $paramsNormaliced['category_id'],
             $paramsNormaliced['division_id'],
             $paramsNormaliced['club_id'],
-            $paramsNormaliced['nationality_code'],
+            $nationalityCodeList,
             $paramsNormaliced['position_id'],
             $paramsNormaliced['second_positions_codes'],
             $paramsNormaliced['age_range'],
@@ -578,7 +584,7 @@ class Player
             $paramsNormaliced['category_id'],
             $paramsNormaliced['division_id'],
             $paramsNormaliced['club_id'],
-            $paramsNormaliced['nationality_code'],
+            $nationalityCodeList,
             $paramsNormaliced['position_id'],
             $paramsNormaliced['second_positions_codes'],
             $paramsNormaliced['age_range'],

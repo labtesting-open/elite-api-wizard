@@ -172,18 +172,43 @@ class Utils
 
 
     public static function normalizerStringList($list, $valueType = null)
-    { 
+    {
+        $utils = new Utils();
+
         if(!empty($list)){
 
             $stringToArray= explode(',', $list);
 
-            if(is_array($stringToArray)) {
-                $utils = new Utils();
+            if(is_array($stringToArray) && $valueType == OutputsTypes::NUMBER) {
+               
                 return implode(',',$utils->trimArray($stringToArray, $valueType));
             }
+
+            if(is_array($stringToArray) && $valueType == OutputsTypes::VARCHAR) {
+                
+                return $utils->arrayCodeToString($stringToArray, 2);
+            }
+
         }
 
         return null;       
+    }
+
+
+    public function arrayCodeToString($arrayList, $lenghtCode = 2)
+    {
+        $strResult ='';
+        
+        foreach ($arrayList as $key => $value)
+        {
+            if( !empty($value) && strlen(trim($value)) == $lenghtCode )
+            {
+                $strResult.=($key > 0)?',':'';
+                $strResult.="'".trim($value)."'";
+            }
+        }
+
+        return $strResult;
     }
 
 
