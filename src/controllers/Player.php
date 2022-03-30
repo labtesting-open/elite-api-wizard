@@ -10,24 +10,29 @@ class Player
 {
     private $token;
     private $player;
-    private $club;
-    private $team;
+    private $club;    
     private $category;
     private $division;
     private $respuestas;
     private $matchActions;
+    private $folderWizardImage;
+    private $pathLevel;
+    private $nationality;
 
     public function __construct()
     {
         $host = new HostConnection();
         $this->player = new \Elitelib\Player($host->getParams());
         $this->token = new \Elitelib\Token($host->getParams());
-        $this->club = new \Elitelib\Club($host->getParams());
-        $this->team = new \Elitelib\Team($host->getParams());
+        $this->club = new \Elitelib\Club($host->getParams());        
         $this->category = new \Elitelib\Category($host->getParams());
         $this->division = new \Elitelib\Division($host->getParams());
         $this->matchActions = new \Elitelib\MatchActions($host->getParams());
         $this->user = new \Elitelib\User($host->getParams());
+        $this->nationality = new \Elitelib\Nationality($host->getParams());
+        $this->folderWizardImage = "\\wizard_images\\players_profile\\";
+        $this->pathLevel = 4;
+
         $this->respuestas  = new Respuestas();
     }
 
@@ -602,4 +607,119 @@ class Player
 
         return $this->respuestas->standarSuccessPaginate($infoTeams, $paginate);
     }
+
+
+    public function addPlayer($params, $file = null)
+    {
+
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE); 
+
+        $paramsAcepted = array(
+            'club_id' => null,
+            'team_id' => null,
+            'player_name' => null,
+            'player_surname' => null,
+            'position_id' => null,
+            'birthdate' => null,
+            'height' => null,  
+            'weight' => null,  
+            'foot_code' => null,  
+            'jersey_nro' => null,  
+            'map_position' => null,
+            'nationality_code_list' => null,      
+        );
+
+        $nationalityCodeList = null;
+        if (isset($params['nationality_code_list']) &&  !empty($params['nationality_code_list'])) {                
+            $nationalityCodeList = Utils::normalizerStringList($params['nationality_code_list'], OutputsTypes::VARCHAR);
+        }
+
+        $birthdateChecked = null;
+
+        if(!empty($params['birthdate']) && Utils::validateDate($params['birthdate'])){
+            $birthdateChecked = $params['birthdate'];
+        }
+
+        $paramsNormaliced = Utils::normalizerParams($params, $paramsAcepted);
+
+        if( !empty($paramsNormaliced['club_id']) &&
+            !empty($paramsNormaliced['team_id']) &&
+            !empty($paramsNormaliced['player_name']) && 
+            !empty($paramsNormaliced['player_surname']) &&
+            !empty($paramsNormaliced['position_id']) &&
+            !empty($birthdateChecked) &&
+            !empty($nationalityCodeList)
+        )
+        {
+            $responseHttp = $params;
+            $imgTeam = null;
+            $affected = 0;
+
+            if (isset($file)) {
+                $pathServer = dirname(__FILE__, $this->pathLevel);
+                $uploadDir = $pathServer . $this->folderWizardImage . $file['name'];
+
+                if (move_uploaded_file($file['tmp_name'], $uploadDir)) {
+
+                    $imgTeam = $file['name'];
+
+                    $affected = $this->player->add(
+                        $paramsNormaliced['club_id'],
+                        $paramsNormaliced['team_id'],
+                        $paramsNormaliced['player_name'],
+                        $paramsNormaliced['player_surname'],
+                        $paramsNormaliced['position_id'],
+                        $birthdateChecked,
+                        $paramsNormaliced['height'],
+                        $paramsNormaliced['weight'],
+                        $paramsNormaliced['foot_code'],
+                        $paramsNormaliced['jersey_nro'],
+                        $paramsNormaliced['map_position'],                        
+                        $imgTeam
+                    );
+
+                } else {
+                    $affected = -1;
+                }
+
+            } else {
+                $affected = $this->player->add(
+                    $paramsNormaliced['club_id'],
+                    $paramsNormaliced['team_id'],
+                    $paramsNormaliced['player_name'],
+                    $paramsNormaliced['player_surname'],
+                    $paramsNormaliced['position_id'],
+                    $birthdateChecked,
+                    $paramsNormaliced['height'],
+                    $paramsNormaliced['weight'],
+                    $paramsNormaliced['foot_code'],
+                    $paramsNormaliced['jersey_nro'],
+                    $paramsNormaliced['map_position'],                        
+                    $imgTeam
+                );
+            }
+
+
+
+            if ($affected > 0) {
+
+                $playerId = $this->player->getPlayerId(
+                    $paramsNormaliced['club_id'],
+                    $paramsNormaliced['team_id'],
+                    $paramsNormaliced['player_name'],
+                    $paramsNormaliced['player_surname']
+                );
+
+                $this->nationality->add($playerId, $nationalityCodeList);
+
+                $responseHttp = $this->respuestas->standarSuccess('ok', $affected);
+            } else {
+                $responseHttp = $this->respuestas->error409();
+            }
+
+        }
+
+        return $responseHttp;
+    }
+
 }
