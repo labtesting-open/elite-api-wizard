@@ -699,8 +699,6 @@ class Player
                 );
             }
 
-
-
             if ($affected > 0) {
 
                 $playerId = $this->player->getPlayerId(
@@ -717,6 +715,153 @@ class Player
                 $responseHttp = $this->respuestas->error409();
             }
 
+        }
+
+        return $responseHttp;
+    }
+
+    public function updatePlayer($params, $file = null)
+    {
+
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE); 
+
+        $paramsAcepted = array( 
+            'player_id' => null,                      
+            'player_name' => null,
+            'player_surname' => null,
+            'position_id' => null,
+            'birthdate' => null,
+            'height' => null,  
+            'weight' => null,  
+            'foot_code' => null,  
+            'jersey_nro' => null,  
+            'map_position' => null,
+            'nationality_code_list' => null,     
+        );
+
+        $nationalityCodeList = null;
+        if (isset($params['nationality_code_list']) &&  !empty($params['nationality_code_list'])) {                
+            $nationalityCodeList = Utils::normalizerStringList($params['nationality_code_list'], OutputsTypes::VARCHAR);
+        }
+
+        $birthdateChecked = null;
+
+        if(!empty($params['birthdate']) && Utils::validateDate($params['birthdate'])){
+            $birthdateChecked = $params['birthdate'];
+        }
+
+        $paramsNormaliced = Utils::normalizerParams($params, $paramsAcepted);
+
+        //Utils::allNullParams($paramsNormaliced);        
+
+        if( !empty($paramsNormaliced['player_id']))
+        {
+            $responseHttp = $params;
+            $imgTeam = null;
+            $affected = 0;
+            $nationalitiesAffected = 0;
+
+            if (isset($file)) {
+                $pathServer = dirname(__FILE__, $this->pathLevel);
+                $uploadDir = $pathServer . $this->folderWizardImage . $file['name'];
+
+                if (move_uploaded_file($file['tmp_name'], $uploadDir)) {
+
+                    $imgTeam = $file['name'];
+
+                    $affected = $this->player->update(
+                        $paramsNormaliced['player_id'],                        
+                        $paramsNormaliced['player_name'],
+                        $paramsNormaliced['player_surname'],
+                        $paramsNormaliced['position_id'],
+                        $birthdateChecked,
+                        $paramsNormaliced['height'],
+                        $paramsNormaliced['weight'],
+                        $paramsNormaliced['foot_code'],
+                        $paramsNormaliced['jersey_nro'],
+                        $paramsNormaliced['map_position'],                        
+                        $imgTeam
+                    );
+
+                } else {
+                    $affected = -1;
+                }
+
+            } else {
+                $affected = $this->player->update(
+                    $paramsNormaliced['player_id'],                   
+                    $paramsNormaliced['player_name'],
+                    $paramsNormaliced['player_surname'],
+                    $paramsNormaliced['position_id'],
+                    $birthdateChecked,
+                    $paramsNormaliced['height'],
+                    $paramsNormaliced['weight'],
+                    $paramsNormaliced['foot_code'],
+                    $paramsNormaliced['jersey_nro'],
+                    $paramsNormaliced['map_position'],                        
+                    $imgTeam
+                );
+            }            
+
+            if(!empty($nationalityCodeList)){
+                $this->nationality->delete($paramsNormaliced['player_id']);
+                $nationalitiesAffected = $this->nationality->add($paramsNormaliced['player_id'], $nationalityCodeList);
+            }            
+
+            $totalAffected =   $affected +   $nationalitiesAffected;
+
+            if ($totalAffected > 0) {              
+                
+                $responseHttp = $this->respuestas->standarSuccess('ok', $totalAffected);
+
+            } else {
+                $responseHttp = $this->respuestas->error409();
+            }
+
+        }
+
+        return $responseHttp;
+    }
+
+    public function deletePlayer($json)
+    {
+        $responseHttp = $this->respuestas->error400(ResponseHttp::DATAINCORRECTORINCOMPLETE);
+
+        $params = json_decode($json, true);
+
+        $keys = array('player_id');
+
+        if (Utils::checkParamsIssetAndNumeric($params, $keys)) {
+            $matchesPlayed = $this->player->getNumberOfMatchesPlayed($params['player_id']);
+
+            if ($matchesPlayed == 0) {
+
+                $nacionalities = $this->nationality->delete($params['player_id']);
+    
+                $injuries = $this->player->deleteAllPlayersInjuries($params['player_id']);
+    
+                $socialMedia = $this->player->deleteAllPlayersSocialMedia($params['player_id']);
+    
+                $mapPositionsSecondary = $this->player->deleteAllPlayersMapPositionSecondary($params['player_id']);
+    
+                $playersImages = $this->player->deleteImages($params['player_id']);
+                
+                $player = $this->player->delete($params['player_id']);
+
+                $affected = array(
+                    'nacionalities' => $nacionalities,
+                    'injuries' => $injuries,
+                    'socialMedia' => $socialMedia,
+                    'mapPositionsSecondary' => $mapPositionsSecondary,
+                    'images' => $playersImages,
+                    'player' => $player
+                );              
+
+                $responseHttp = $this->respuestas->standarSuccess('ok', $affected);
+
+            } else {
+                $responseHttp = $this->respuestas->error401('The player has matches played, delete is not allowed');
+            }
         }
 
         return $responseHttp;

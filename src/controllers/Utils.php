@@ -133,6 +133,21 @@ class Utils
         return $normalized;
     }
 
+
+    public static function allNullParams($params)
+    {
+        $allEmpty = true;
+
+        foreach ($params as $value) {
+            if( !empty($value)){
+                $allEmpty = false;
+                break;
+            }
+        }
+
+        return $allEmpty;
+    }
+
     public static function getPaginateInfo($totalRows, $limit)
     {
         $totalPages = ceil($totalRows / $limit);

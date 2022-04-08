@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
                     $httpResponse = $playerController->addPlayer($_REQUEST, $_FILES['img_profile_url']);
                 }
                 if(isset($_REQUEST['_method']) && $_REQUEST['_method'] == 'PUT'){
-                    $httpResponse = $playerController->addPlayer($_REQUEST, $_FILES['img_profile_url']);
+                    $httpResponse = $playerController->updatePlayer($_REQUEST, $_FILES['img_profile_url']);
                 }
                                
             }else{
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
                 $httpResponse = $playerController->addPlayer($_REQUEST);
             }
             if(isset($_REQUEST['_method']) && $_REQUEST['_method'] == 'PUT'){
-                //$httpResponse = $playerController->updatePlayer($_REQUEST);
+                $httpResponse = $playerController->updatePlayer($_REQUEST);
             }
 
         }
@@ -73,7 +73,16 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 }else if($_SERVER['REQUEST_METHOD'] == "DELETE"){
 
-    $httpResponse = $responsesController->error405();
+    $headers = apache_request_headers();    
+    $token = Utils::getkey($headers,'authorization', 'Bearer');
+    
+    $httpResponse = $tokenController->checkAndReturnResponse($token);
+
+    if ( is_null($httpResponse)) {        
+        $params = Utils::getAllParams($_GET, OutputsTypes::JSON);
+
+        $httpResponse = $playerController->deletePlayer($params);        
+    }    
 
 }else{
     
